@@ -4,7 +4,7 @@
     justify-content: space-between;
     padding: 0.5rem 2rem;
     background-color: #ffffff;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Josefin Slab', serif;
     
     /* Línea negra ligera */
     border-bottom: 5px solid rgb(0, 0, 0); /* negro muy tenue */
@@ -31,10 +31,17 @@
 
 .nav-links li {
     cursor: pointer;
+    text-decoration: underline;
 }
 
 .menu-btn {
     display: none; /* aparecerá solo en mobile */
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: black;
+    cursor: pointer;
+    padding: 0;
 }
 
 /* Buscador */
