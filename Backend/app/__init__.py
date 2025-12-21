@@ -8,7 +8,6 @@ from .config import Config
 from .extensions import db, migrate, jwt
 from .resources import register_namespaces
 
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
