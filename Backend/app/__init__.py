@@ -2,6 +2,8 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restx import Api
 from sqlalchemy import text
+from werkzeug.security import generate_password_hash
+from app.models.user import User
 
 from app.utils.cloudinary import init_cloudinary
 from .config import Config
@@ -52,5 +54,14 @@ def create_app():
         except Exception:
             print("⚠️ Tablas no existen, creando automáticamente...")
             db.create_all()
-
+        if not User.query.filter_by(email="admin@admin.com").first():
+                admin = User(
+                    email="admin@admin.com",
+                    phone="0000000000",
+                    password=generate_password_hash("admin123"),
+                    role="admin"
+                )
+                db.session.add(admin)
+                db.session.commit()
+                print("✅ Usuario admin creado")
     return app
