@@ -1,16 +1,20 @@
 <nav class="navbar">
     <div class="nav-left">
-        <!-- Cambia esta ruta según tu estructura -->
         <img src="assets/logo.png" alt="Logo" class="logo">
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <div class="search-container">
+    <span class="search-icon"><i class="fas fa-search"></i></span>
+    <input type="text" placeholder="Buscar...">
+    <span class="clear-icon" onclick="clearSearch()"><i class="fas fa-times"></i></span>
+</div>
     </div>
-    <ul>
-        <li>Home</li>
-        <li>Categorias</li>
-        <li>Mis pedidos</li>
-        <li>Carrito</li>
-        <li>Mi cuenta</li>
+
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+    <ul class="nav-links">
+        <li><i class="fas fa-home"></i> Home</li>
+        <li><i class="fas fa-list"></i> Categorias</li>
+        <li><i class="fas fa-box"></i> Mis pedidos</li>
+        <li><i class="fas fa-shopping-cart"></i> Carrito</li>
+        <li><i class="fas fa-user"></i> Mi cuenta</li>
     </ul>
-     <!-- Enlace de google fonts para exportar el tipo de letra que se usa en el navbar -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 </nav>

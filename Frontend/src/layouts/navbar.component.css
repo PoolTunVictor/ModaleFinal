@@ -1,47 +1,84 @@
-.navbar
-{
-    background-color: #ffffff; /*un color de la barra de navegacion en este caso optamos por verde ya que la empresa prefiere eso*/
-    color: rgb(0, 0, 0); /*Efecto de color de todo lo que estara dentro del navbar en este caso los coles de los textos son blancos*/
-    padding: 1rem; 
-    position: relative; /*usamos relative para poder posicionar objetos dentro del navbar*/
-    min-height: 25px; /*estableciomos una altura minar de 25 para coordine con la altura cuando se cree la barra de navegacion sandwich*/
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+    background-color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    
+    /* Línea negra ligera */
+    border-bottom: 5px solid rgb(0, 0, 0); /* negro muy tenue */
 }
-ul
-{
-    font-family: 'Montserrat', sans-serif; /*es el tipo de letra que uso para el contenido del ul en mi HTML*/
-    list-style: none; /*Lo uso para quitar todos los puntos que trae por defecto el HTML*/
-    display: flex; /*Lo usamos de contenedor flexible para tener mas control sobre los elemntos li en ul*/
-    margin: 0; /*margen esterior es 0*/
-    padding: 0; /*espacio interior es 0*/
-    justify-content: center; /*todo lo que esta detro de ul pasa al centro*/
-    gap: 80px; /*reliza un espaciado entre los elementos*/
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* espacio entre logo y búsqueda */
 }
+
+.logo {
+    max-height: 60px;
+    width: auto;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    cursor: pointer;
+}
+
 .menu-btn {
-    font-size: 20px; /*Establecemos el tamaño de nuestro boton*/
-    background: none; /*Le digo que no va tener fondo*/
-    border: none; /*cero borde*/
-    cursor: pointer; /*usamos para convertir el puntero del mause en una mano*/
-    display: none; /*Lo olcutamos por defecto hasta que en @media tenga que hacer la funcion cuando se encuentre con una pantalla mas pequeña*/
-    color: white; /*el color por defecto sera blanco*/
-    position: absolute; /*gracias al relative del navbar podemos usar el absolute para ubicar en cualquier lugar el menu-btn del contenedor navbar*/
-    top: 50%; /*lo posicionamos a la altura del contenedor*/
-    right: 10px; /*colocamos a 10 pixeles del borde derecho del contenedor*/
-    transform: translateY(-75%); /*Mover de forma vertical el menu-btn*/
+    display: none; /* aparecerá solo en mobile */
 }
 
+/* Buscador */
+.search-container {
+    position: relative;
+}
 
+.search-container input {
+    padding: 5px 25px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 5px;
+    top: 50%;               /* apunta al medio del input */
+    transform: translateY(-50%); /* centra verticalmente */
+    pointer-events: none;
+}
+
+.clear-icon {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: none;
+}
+
+/* Responsive */
 @media (max-width: 768px){
-    .menu-btn{
+    .menu-btn {
         display: block;
     }
 
-    ul{
-        display: none;
+    .nav-links {
+        display: none; /* se activará con el botón */
         flex-direction: column;
         position: absolute;
-        top: 40px;
-        left: 0;
+        top: 60px;
+        right: 0;
         width: 100%;
-        text-align: center;
+        background-color: white;
+        gap: 10px;
+        padding: 10px 0;
     }
 }
+
