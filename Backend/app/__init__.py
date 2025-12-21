@@ -47,7 +47,7 @@ def create_app():
     )
 
     register_namespaces(api)
-
+    
     with app.app_context():
         try:
             db.session.execute(text("SELECT 1 FROM users LIMIT 1"))
