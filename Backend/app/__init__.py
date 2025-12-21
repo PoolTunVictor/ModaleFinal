@@ -7,7 +7,7 @@ from app.utils.cloudinary import init_cloudinary
 from .config import Config
 from .extensions import db, migrate, jwt
 from .resources import register_namespaces
-
+#p
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
