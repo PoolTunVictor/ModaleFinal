@@ -1,0 +1,47 @@
+.navbar
+{
+    background-color: #ffffff; /*un color de la barra de navegacion en este caso optamos por verde ya que la empresa prefiere eso*/
+    color: rgb(0, 0, 0); /*Efecto de color de todo lo que estara dentro del navbar en este caso los coles de los textos son blancos*/
+    padding: 1rem; 
+    position: relative; /*usamos relative para poder posicionar objetos dentro del navbar*/
+    min-height: 25px; /*estableciomos una altura minar de 25 para coordine con la altura cuando se cree la barra de navegacion sandwich*/
+}
+ul
+{
+    font-family: 'Montserrat', sans-serif; /*es el tipo de letra que uso para el contenido del ul en mi HTML*/
+    list-style: none; /*Lo uso para quitar todos los puntos que trae por defecto el HTML*/
+    display: flex; /*Lo usamos de contenedor flexible para tener mas control sobre los elemntos li en ul*/
+    margin: 0; /*margen esterior es 0*/
+    padding: 0; /*espacio interior es 0*/
+    justify-content: center; /*todo lo que esta detro de ul pasa al centro*/
+    gap: 80px; /*reliza un espaciado entre los elementos*/
+}
+.menu-btn {
+    font-size: 20px; /*Establecemos el tamaño de nuestro boton*/
+    background: none; /*Le digo que no va tener fondo*/
+    border: none; /*cero borde*/
+    cursor: pointer; /*usamos para convertir el puntero del mause en una mano*/
+    display: none; /*Lo olcutamos por defecto hasta que en @media tenga que hacer la funcion cuando se encuentre con una pantalla mas pequeña*/
+    color: white; /*el color por defecto sera blanco*/
+    position: absolute; /*gracias al relative del navbar podemos usar el absolute para ubicar en cualquier lugar el menu-btn del contenedor navbar*/
+    top: 50%; /*lo posicionamos a la altura del contenedor*/
+    right: 10px; /*colocamos a 10 pixeles del borde derecho del contenedor*/
+    transform: translateY(-75%); /*Mover de forma vertical el menu-btn*/
+}
+
+
+@media (max-width: 768px){
+    .menu-btn{
+        display: block;
+    }
+
+    ul{
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 40px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+    }
+}
