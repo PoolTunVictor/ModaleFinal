@@ -45,23 +45,10 @@ h2 {
   border-radius: 4px;
 }
 
-.options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  margin-bottom: 1.5rem;
-}
-
-.options label {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
 .link {
   color: #1976d2;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .link:hover {
@@ -88,3 +75,18 @@ h2 {
   margin-top: 1.5rem;
   font-size: 0.9rem;
 }
+
+/* SOLO PARA REGISTER */
+.terms {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.terms label {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
