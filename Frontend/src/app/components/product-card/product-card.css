@@ -1,0 +1,51 @@
+:host {
+  display: block; /* Para que la tarjeta ocupe su espacio en el grid */
+}
+
+.card {
+  background: #f8f8f8; /* Gris muy claro de fondo */
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Efecto al pasar el mouse */
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply; /* Ayuda a que el fondo de la foto se mezcle con el gris */
+}
+
+.info h3 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 15px 0 10px;
+  color: #333;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eee; /* Fondo gris para la zona de precio */
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.price {
+  color: #ff4081; /* Rosa para el precio */
+  font-weight: bold;
+}
+
+.btn-add {
+  background-color: #0d1117; /* Negro azulado como tu imagen */
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}

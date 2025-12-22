@@ -1,0 +1,66 @@
+/* Estilo del Banner */
+.hero-banner {
+    background-color: #fce4ec; /* Rosa suave */
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.category-title {
+    font-size: 3.5rem; /* Letras muy grandes como en la foto */
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-family: 'Josefin Slab', serif;
+    font-weight: 400;
+}
+
+.hero-banner p {
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: #333;
+}
+
+/* Breadcrumb con Cursor de Manito */
+.breadcrumb {
+    padding: 20px 5%;
+    font-size: 0.9rem;
+    color: #666;
+    font-family: 'Josefin Slab', serif;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #666;
+    cursor: pointer !important; /* Fuerza la manito */
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+    color: #000;
+}
+
+.breadcrumb .current-page {
+    color: #999;
+    text-transform: lowercase; /* Mantiene el estilo de tu imagen */
+}
+
+/* Cuadrícula de 5 columnas */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 25px;
+    padding: 20px 5% 60px;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 1024px) {
+    .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .product-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        padding: 20px 3%;
+    }
+    .category-title { font-size: 2rem; }
+}

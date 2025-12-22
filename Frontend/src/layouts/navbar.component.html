@@ -12,11 +12,31 @@
   <button class="menu-btn" (click)="toggleMenu()">☰</button>
 
   <!-- Menú -->
-  <ul class="nav-links" [class.active]="menuOpen">
-    <li><i class="fas fa-home"></i> Home</li>
-    <li><i class="fas fa-list"></i> Categorias</li>
-    <li><i class="fas fa-box"></i> Mis pedidos</li>
-    <li><i class="fas fa-shopping-cart"></i> Carrito</li>
-    <li><i class="fas fa-user"></i> Mi cuenta</li>
-  </ul>
+ <ul class="nav-links" [class.active]="menuOpen">
+  <li>
+    <a routerLink="/home" (click)="toggleMenu()">
+      <i class="fas fa-home"></i> Home
+    </a>
+  </li>
+  <li>
+    <a routerLink="/categorias" (click)="toggleMenu()">
+      <i class="fas fa-list"></i> Categorias
+    </a>
+  </li>
+  <li>
+    <a routerLink="/pedidos" (click)="toggleMenu()">
+      <i class="fas fa-box"></i> Mis pedidos
+    </a>
+  </li>
+  <li>
+    <a routerLink="/carrito" (click)="toggleMenu()">
+      <i class="fas fa-shopping-cart"></i> Carrito
+    </a>
+  </li>
+  <li>
+    <a routerLink="/cuenta" (click)="toggleMenu()">
+      <i class="fas fa-user"></i> Mi cuenta
+    </a>
+  </li>
+</ul>
 </nav>
