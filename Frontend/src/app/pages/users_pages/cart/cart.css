@@ -1,0 +1,255 @@
+/* ================= GENERAL ================= */
+.cart-page {
+  padding: 40px 150px 120px 60px;
+  font-family: Arial, sans-serif;
+  color: #111;
+  background: #fafafa;
+}
+
+/* ================= HERO ================= */
+.brand-hero {
+  background: #ffd9ec;
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.brand-hero h1 {
+  font-size: 90px;
+  letter-spacing: 4px;
+}
+
+.brand-hero p {
+  font-size: 20px;
+}
+
+/* ================= BREADCRUMB ================= */
+.breadcrumb {
+  margin: 30px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+/* ================= TITLE ================= */
+.cart-title {
+  font-size: 29px;
+  margin-bottom: 40px;
+}
+
+/* ================= LAYOUT ================= */
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* ================= LISTA ================= */
+.cart-list {
+  background: #ffffff;
+  border-radius: 26px;
+  padding: 30px 30px 10px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* ================= HEADER ================= */
+.cart-header {
+  display: grid;
+  grid-template-columns: 2.4fr 1fr 1fr 1fr;
+  font-size: 14px;
+  color: #000000;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+/* ================= ITEM ================= */
+.cart-item {
+  display: grid;
+  grid-template-columns: 2.4fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* ================= PRODUCT INFO ================= */
+.product-info {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.product-info img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  border-radius: 14px;
+  background: #f6f6f6;
+  padding: 6px;
+}
+
+.product-info strong {
+  font-size: 16px;
+}
+
+.product-info p {
+  font-size: 12px;
+  color: #888;
+}
+
+.remove {
+  background: none;
+  border: none;
+  color: #c38;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ================= QUANTITY (SIEMPRE FIJO) ================= */
+.quantity-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 90px;
+  height: 34px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+}
+
+.quantity-control button {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+}
+
+.quantity-control span {
+  width: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* ================= PRICE ================= */
+.price,
+.total {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* ================= SUMMARY ================= */
+.summary {
+  background: #fff;
+  padding: 32px;
+  border-radius: 26px;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+  width: 380px;
+}
+
+/* ================= SUMMARY FORM ================= */
+.summary h3 {
+  margin-bottom: 20px;
+}
+
+.summary label {
+  display: block;
+  margin-top: 14px;
+  color: #ff3c7d;
+  font-size: 14px;
+}
+
+.summary input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+}
+
+/* ================= TOTAL ================= */
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
+  font-size: 20px;
+}
+
+/* ================= BUTTON ================= */
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  background: #12111f;
+  color: #fff;
+  border-radius: 30px;
+  border: none;
+}
+
+.continue {
+  display: block;
+  text-align: center;
+  margin-top: 18px;
+  color: #ff3c7d;
+}
+
+/* ================= TABLET ================= */
+@media (max-width: 1100px) {
+  .cart-page {
+    padding: 40px;
+  }
+
+  .cart-layout {
+    gap: 60px;
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 900px) {
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .summary {
+    width: 100%;
+  }
+
+  .cart-header {
+    display: none;
+  }
+
+  .cart-item {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* ================= MOBILE PEQUEÑO ================= */
+@media (max-width: 480px) {
+  .cart-page {
+    padding: 20px 14px;
+  }
+
+  .product-info {
+    align-items: flex-start;
+  }
+
+  .product-info img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .cart-item {
+    padding: 16px 0;
+  }
+
+  .price,
+  .total {
+    font-size: 14px;
+  }
+
+  .summary {
+    padding: 22px;
+  }
+
+  .summary-total {
+    font-size: 18px;
+  }
+}
