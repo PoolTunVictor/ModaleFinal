@@ -1,0 +1,25 @@
+.footer {
+  width: 100%;
+  padding: 40px 0 24px;
+  text-align: center;
+  background: transparent;
+}
+
+/* Logo */
+.footer img {
+  width: 200px;              /* 👈 MÁS GRANDE */
+  max-width: 100%;
+  display: block;
+  margin: 0 auto 10px;
+  opacity: 1;               /* 👈 QUITAMOS OPACIDAD */
+  filter: none;             /* 👈 SIN FILTROS */
+}
+
+/* Texto */
+.footer span {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #222;              /* 👈 NEGRO REAL */
+  font-weight: 500;
+}

@@ -1,0 +1,162 @@
+<div class="inventory-page">
+
+  <!-- Header -->
+  <h1 class="title">GESTIÓN DE INVENTARIO</h1>
+  <p class="subtitle">Administra tu inventario..</p>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <span class="stat-label">STOCK TOTAL</span>
+      <span class="stat-value">20%</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">BAJO STOCK (ALERTAS)</span>
+      <span class="stat-value">20%</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Alertas STOCK (ALERTITOS)</span>
+      <span class="stat-value pink">5%</span>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-box">
+    <span class="material-symbols-outlined">search</span>
+    <input type="text" placeholder="Buscar producto">
+    <span class="material-symbols-outlined clear">close</span>
+  </div>
+
+  <!-- Table -->
+  <div class="inventory-card">
+
+    <div class="inventory-header">
+      <span class="header-title">PRODUCTOS</span>
+      <div class="header-tags">
+        <span class="tag-text">Usuarios</span>
+        <span class="tag-pill">Codudo</span>
+      </div>
+    </div>
+
+    <table class="inventory-table">
+      <tbody>
+
+        <!-- Grupo -->
+        <tr class="group">
+          <td colspan="4">Exelurtos</td>
+        </tr>
+
+        <tr>
+          <td class="product-cell">
+            <img src="/assets/prod1.jpg">
+            <div>
+              <strong>Monitor UltraWide</strong>
+              <small>SKU-CF-7386</small>
+              <span class="category">Ropa</span>
+            </div>
+          </td>
+          <td>
+            <div class="bar orange"></div>
+          </td>
+          <td><span class="dot green"></span></td>
+          <td>5</td>
+        </tr>
+
+        <tr>
+          <td class="product-cell">
+            <img src="/assets/prod2.jpg">
+            <div>
+              <strong>Monitor UltraWide</strong>
+              <small>SKU-MD-31923</small>
+              <span class="category yellow">$1</span>
+            </div>
+          </td>
+          <td>
+            <div class="bar yellow"></div>
+          </td>
+          <td><span class="dot green"></span></td>
+          <td>0</td>
+        </tr>
+
+        <tr>
+          <td class="product-cell">
+            <img src="/assets/prod3.jpg">
+            <div>
+              <strong>Tenor UltraWide+</strong>
+              <small>SKU-MD-15195</small>
+              <span class="category green">$9</span>
+            </div>
+          </td>
+          <td>
+            <div class="bar green"></div>
+          </td>
+          <td><span class="dot green"></span></td>
+          <td>0</td>
+        </tr>
+
+        <!-- Grupo -->
+        <tr class="group">
+          <td colspan="4">Crítico <span class="status-text">Bro Sritiod</span></td>
+        </tr>
+
+        <tr>
+          <td class="product-cell">
+            <img src="/assets/prod4.jpg">
+            <div>
+              <strong>Televisor Fase 34"</strong>
+              <small>SKU-MD-30301</small>
+              <span class="category">Ropa</span>
+            </div>
+          </td>
+          <td><div class="bar orange"></div></td>
+          <td><span class="dot green"></span></td>
+          <td>8</td>
+        </tr>
+
+        <tr>
+          <td class="product-cell">
+            <span class="circle red"></span>
+            <strong>Críclio</strong>
+            <span class="category green">En Stock</span>
+          </td>
+          <td></td>
+          <td><span class="dot green"></span></td>
+          <td>15</td>
+        </tr>
+
+        <tr>
+          <td class="product-cell">
+            <span class="circle red"></span>
+            <strong>Epols</strong>
+            <span class="category green">Saludable</span>
+          </td>
+          <td></td>
+          <td><span class="dot green"></span></td>
+          <td>111</td>
+        </tr>
+
+        <tr>
+          <td class="product-cell">
+            <span class="circle red"></span>
+            <strong>Agotato</strong>
+            <span class="category green">Saludable</span>
+          </td>
+          <td></td>
+          <td><span class="dot green"></span></td>
+          <td>100</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button class="page active">1</button>
+      <button class="page">2</button>
+      <button class="page">3</button>
+      <span>→</span>
+    </div>
+
+  </div>
+
+</div>
