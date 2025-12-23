@@ -1,0 +1,55 @@
+<!-- HERO ROSADO -->
+<section class="brand-hero">
+  <h1>MIS PEDIDOS</h1>
+  <p>Todo lo que compraste, organizado para ti</p>
+</section>
+
+<div class="orders-page">
+
+  
+
+  <!-- FILTROS -->
+  <div class="order-filters">
+    <button (click)="setFilter('Todos')" [class.active]="selectedFilter === 'Todos'">Todos</button>
+    <button (click)="setFilter('En proceso')" [class.active]="selectedFilter === 'En proceso'">En proceso</button>
+    <button (click)="setFilter('Enviado')" [class.active]="selectedFilter === 'Enviado'">Enviado</button>
+    <button (click)="setFilter('Entregado')" [class.active]="selectedFilter === 'Entregado'">Entregado</button>
+  </div>
+
+  <!-- TABLA -->
+  <div class="orders-table">
+
+    <div class="table-header">
+      <span>N° Pedido</span>
+      <span>Fecha</span>
+      <span>Estado</span>
+      <span>Artículos</span>
+      <span>Total</span>
+      <span>Acciones</span>
+    </div>
+
+    <div class="table-row" *ngFor="let order of filteredOrders">
+
+      <span class="order-id">#{{ order.id }}</span>
+      <span>{{ order.date }}</span>
+
+      <span class="status" [ngClass]="order.status.replace(' ', '')">
+        {{ order.status }}
+      </span>
+
+      <div class="items">
+        <img *ngFor="let img of order.items" [src]="img" alt="producto">
+        <span *ngIf="order.extra">+{{ order.extra }}</span>
+      </div>
+
+      <span class="total">${{ order.total }}</span>
+
+      <button class="action-btn">
+        {{ order.action }}
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
