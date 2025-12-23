@@ -1,27 +1,34 @@
 <div class="login-container">
   <div class="login-card">
-
     <img src="assets/logo.png" alt="Logo" class="logo" />
-
     <h2>Crea tu cuenta</h2>
 
-    <form>
-      <div class="input-group">
-        <label for="name">Nombre</label>
-        <input
-          type="text"
-          id="name"
-          placeholder="Ingresa tu nombre"
-        />
-      </div>
-
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="input-group">
         <label for="email">Correo electrónico o usuario</label>
         <input
           type="text"
           id="email"
           placeholder="Ingresa tu correo o usuario"
+          formControlName="email"
         />
+        <span class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          El correo o usuario es obligatorio.
+        </span>
+      </div>
+
+      <div class="input-group">
+        <label for="phone">Número de teléfono</label>
+        <input
+          type="tel"
+          id="phone"
+          placeholder="Ingresa tu número de teléfono (ej: +1234567890)"
+          formControlName="phone"
+        />
+        <span class="error-message" *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+          <span *ngIf="registerForm.get('phone')?.errors?.['required']">El número de teléfono es obligatorio.</span>
+          <span *ngIf="registerForm.get('phone')?.errors?.['pattern']">Ingresa un número válido (solo números, ej: +1234567890).</span>
+        </span>
       </div>
 
       <div class="input-group">
@@ -30,7 +37,11 @@
           type="password"
           id="password"
           placeholder="Ingresa tu contraseña"
+          formControlName="password"
         />
+        <span class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          La contraseña es obligatoria.
+        </span>
       </div>
 
       <div class="input-group">
@@ -39,17 +50,25 @@
           type="password"
           id="confirmPassword"
           placeholder="Confirma tu contraseña"
+          formControlName="confirmPassword"
         />
+        <span class="error-message" *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Confirma tu contraseña.</span>
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']">Las contraseñas no coinciden.</span>
+        </span>
       </div>
 
       <div class="terms">
         <label>
-          <input type="checkbox" />
+          <input type="checkbox" formControlName="terms" />
           Acepto términos y condiciones
         </label>
+        <span class="error-message" *ngIf="registerForm.get('terms')?.invalid && registerForm.get('terms')?.touched">
+          Debes aceptar los términos y condiciones.
+        </span>
       </div>
 
-      <button type="submit" class="btn-login">
+      <button type="submit" class="btn-login" [disabled]="registerForm.invalid">
         Crear cuenta
       </button>
     </form>
@@ -58,6 +77,5 @@
       <span>¿Ya tienes cuenta?</span>
       <a routerLink="/" class="link">Iniciar sesión</a>
     </div>
-
   </div>
 </div>

@@ -50,7 +50,12 @@ h2 {
   text-decoration: none;
   cursor: pointer;
 }
-
+.error-message {
+  color: #ff0000;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+  display: block;  /* Ahora visible cuando se activa */
+}
 .link:hover {
   text-decoration: underline;
 }
