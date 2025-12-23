@@ -1,10 +1,14 @@
 <div class="app-container">
-
-  <!-- Contenido principal -->
   <main class="main-content">
-    <app-navbar></app-navbar>
+    @if (showLayout)
+    {
+      <app-navbar></app-navbar>
+    }
     <router-outlet></router-outlet>
-  </main>
-    <!-- Sidebar importado -->
-   <app-user-sidebar></app-user-sidebar>
+  </main> 
+    @if (showLayout)
+    {
+      <app-user-sidebar></app-user-sidebar>
+    }
+   
 </div>
