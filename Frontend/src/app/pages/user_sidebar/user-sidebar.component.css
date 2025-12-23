@@ -15,14 +15,14 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   font-family: 'Josefin Slab', serif;
 
-  height: 100vh;
+   height: 87vh; /* toda la pantalla menos la altura del navbar */
   display: flex;
   flex-direction: column;
 }
 
 .breadcrumb {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #7f6b80;
   margin-bottom: 1rem;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .menu a:hover {
-  background-color: #f9fafb;
+  background-color: #ffd9f1;
 }
 
 .menu a.active {
