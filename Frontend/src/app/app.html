@@ -1,14 +1,15 @@
 <div class="app-container">
-  <main class="main-content">
-    @if (showLayout)
-    {
-      <app-navbar></app-navbar>
-    }
-    <router-outlet></router-outlet>
-  </main> 
+  @if (showLayout)
+  {
+    <app-navbar></app-navbar>
+  }
+  <div class="sidebar-and-content">  <!-- Nuevo sub-contenedor para sidebar y main -->
     @if (showLayout)
     {
       <app-user-sidebar></app-user-sidebar>
     }
-   
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main> 
+  </div>
 </div>

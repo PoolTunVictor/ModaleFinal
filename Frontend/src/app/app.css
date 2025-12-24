@@ -1,0 +1,31 @@
+.app-container {
+  display: flex;
+  flex-direction: column;  /* Layout vertical: navbar arriba, luego sidebar+content */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Asumiendo que tu navbar tiene una clase como .navbar o similar; ajusta si es necesario */
+.navbar {  /* O la clase real de <app-navbar>, ej: app-navbar */
+  width: 100%;  /* Ocupa todo el ancho */
+  height: 60px;  /* Ajusta según la altura real de tu navbar */
+  /* Agrega otros estilos si es fijo, ej: position: sticky; top: 0; */
+}
+
+.sidebar-and-content {
+  display: flex;  /* Layout horizontal para sidebar y main */
+  flex: 1;  /* Ocupa el espacio restante después del navbar */
+  overflow: hidden;
+}
+
+.sidebar-card {
+  width: 280px;
+  height: 100%;  /* Relativo al .sidebar-and-content, no a 100vh */
+  /* El resto de tu CSS del sidebar permanece igual */
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;  /* Scroll solo en el contenido si es necesario */
+  /* Agrega padding si quieres espacio interno */
+}
