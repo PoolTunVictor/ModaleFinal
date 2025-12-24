@@ -1,3 +1,6 @@
+.orders{
+  font-family: 'Josefin Slab', serif;
+}
 h2 {
   margin-bottom: 1rem;
 }
@@ -56,6 +59,7 @@ tbody tr {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+  font-family: 'Josefin Slab', serif;
 }
 
 .card {

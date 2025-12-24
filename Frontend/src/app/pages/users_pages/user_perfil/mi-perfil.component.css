@@ -4,8 +4,9 @@
   background: #fff;
   border-radius: 16px;
   padding: 20px;
-  font-family: sans-serif;
+  font-family: 'Josefin Slab', serif;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+   
 }
 
 .header {
