@@ -1,0 +1,74 @@
+<div class="categories-page">
+  <section class="hero-banner">
+    <h1>MODALE & CO</h1>
+    <p>Encuentra lo último en tendencia, solo aquí</p>
+  </section>
+
+  <div class="breadcrumb">
+    <a routerLink="/home">Inicio</a> / <span>Categorias</span>
+  </div>
+
+  <h2 class="section-title">EXPLORA POR CATEGORÍA</h2>
+
+  <div class="categories-grid">
+    <a class="category-card" [routerLink]="['/categorias', 'accesorios']">
+      <div class="image-box">
+        <img src="assets/accesorios.jpg" alt="Accesorios">
+      </div>
+      <div class="category-info">
+        <span>ACCESORIOS</span>
+        <i class="fas fa-caret-right"></i>
+      </div>
+    </a>
+
+    <a class="category-card" [routerLink]="['/categorias', 'maquillaje']">
+      <div class="image-box">
+        <img src="assets/maquillaje.jpg" alt="Maquillaje">
+      </div>
+      <div class="category-info">
+        <span>MAQUILLAJE</span>
+        <i class="fas fa-caret-right"></i>
+      </div>
+    </a>
+
+    <a class="category-card" [routerLink]="['/categorias', 'prendas']">
+      <div class="image-box">
+        <img src="assets/prendas.jpg" alt="Prendas">
+      </div>
+      <div class="category-info">
+        <span>PRENDAS</span>
+        <i class="fas fa-caret-right"></i>
+      </div>
+    </a>
+
+    <a class="category-card" [routerLink]="['/categorias', 'cuidado-corporal']">
+      <div class="image-box">
+        <img src="assets/corporal.jpg" alt="Cuidado Corporal">
+      </div>
+      <div class="category-info">
+        <span>CUIDADO CORPORAL</span>
+        <i class="fas fa-caret-right"></i>
+      </div>
+    </a>
+
+    <a class="category-card" [routerLink]="['/categorias', 'cuidado-facial']">
+      <div class="image-box">
+        <img src="assets/facial.jpg" alt="Cuidado Facial">
+      </div>
+      <div class="category-info">
+        <span>CUIDADO FACIAL</span>
+        <i class="fas fa-caret-right"></i>
+      </div>
+    </a>
+
+    <a class="category-card" [routerLink]="['/categorias', 'perfumes']">
+      <div class="image-box">
+        <img src="assets/perfumes.jpg" alt="Perfumes">
+      </div>
+      <div class="category-info">
+        <span>PERFUMES</span>
+        <i class="fas fa-caret-right"></i>
+      </div>
+    </a>
+  </div>
+</div>

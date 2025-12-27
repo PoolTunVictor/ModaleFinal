@@ -1,0 +1,84 @@
+.categories-page {
+  font-family: 'Josefin Slab', serif;
+  text-align: center;
+}
+
+.hero-banner {
+  background-color: #fce4ec; /* Rosa suave del diseño */
+  padding: 40px 20px;
+  margin-bottom: 20px;
+}
+
+/* LIMPIEZA DE BREADCRUMB */
+.breadcrumb {
+  text-align: left;
+  padding: 10px 5%;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.breadcrumb a {
+  text-decoration: none; /* Quita subrayado azul */
+  color: inherit;        /* Usa el color gris del padre */
+  cursor: pointer;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  margin: 30px 0;
+  font-weight: normal;
+}
+
+/* CUADRÍCULA DE 3 COLUMNAS */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 0 5% 50px;
+}
+
+/* --- CORRECCIÓN DE LINKS AZULES EN TARJETAS --- */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer !important; /* Asegura la manito */
+  text-decoration: none !important; /* MATA EL SUBRAYADO AZUL */
+  color: #000000 !important;        /* FUERZA EL COLOR NEGRO */
+}
+
+.image-box {
+  width: 100%;
+  aspect-ratio: 1 / 1; 
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Barra inferior gris */
+.category-info {
+  background-color: #efefef; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  color: #000; /* Asegura que el texto interno sea negro */
+}
+
+.category-info i {
+  font-size: 1.2rem;
+}
+
+/* Responsivo para celulares */
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: 1fr; 
+  }
+}

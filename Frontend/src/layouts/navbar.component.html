@@ -1,0 +1,42 @@
+<nav class="navbar">
+  <div class="nav-left">
+    <img src="assets/logo.png" alt="Logo" class="logo">
+    <div class="search-container">
+      <span class="search-icon"><i class="fas fa-search"></i></span>
+      <input type="text" placeholder="Buscar..." [(ngModel)]="searchTerm">
+      <span class="clear-icon" *ngIf="searchTerm" (click)="clearSearch()"><i class="fas fa-times"></i></span>
+    </div>
+  </div>
+
+  <!-- Botón hamburger -->
+  <button class="menu-btn" (click)="toggleMenu()">☰</button>
+
+  <!-- Menú -->
+ <ul class="nav-links" [class.active]="menuOpen">
+  <li>
+    <a routerLink="/home" (click)="toggleMenu()">
+      <i class="fas fa-home"></i> Home
+    </a>
+  </li>
+  <li>
+    <a routerLink="/categorias" (click)="toggleMenu()">
+      <i class="fas fa-list"></i> Categorias
+    </a>
+  </li>
+  <li>
+    <a routerLink="/pedidos" (click)="toggleMenu()">
+      <i class="fas fa-box"></i> Mis pedidos
+    </a>
+  </li>
+  <li>
+    <a routerLink="/carrito" (click)="toggleMenu()">
+      <i class="fas fa-shopping-cart"></i> Carrito
+    </a>
+  </li>
+  <li>
+    <a routerLink="/cuenta" (click)="toggleMenu()">
+      <i class="fas fa-user"></i> Mi cuenta
+    </a>
+  </li>
+</ul>
+</nav>
