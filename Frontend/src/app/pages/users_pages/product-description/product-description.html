@@ -1,0 +1,92 @@
+<!-- HERO ROSADO -->
+<section class="brand-hero">
+  <h1>MODALE & CO</h1>
+  <p>Encuentra lo último en tendencia, solo aquí</p>
+</section>
+
+<div class="product-page">
+
+  <!-- Breadcrumb -->
+  <p class="breadcrumb">Home / Perfume / Perfume Miss Dior</p>
+
+  <!-- PRODUCTO -->
+  <div class="product-container">
+
+    <!-- Imagen -->
+    <div class="product-image">
+      <img [src]="product.image" alt="Perfume Miss Dior">
+    </div>
+
+    <!-- Info -->
+    <div class="product-info">
+      <h1>{{ product.name }}</h1>
+      <p class="price">${{ product.price }}.00</p>
+
+      <p class="description">
+        {{ product.description }}
+      </p>
+
+      <!-- Tamaños -->
+      <div class="sizes">
+        <p class="label">Tamaño</p>
+        <div class="size-options">
+          <button
+            *ngFor="let size of sizes"
+            (click)="selectSize(size)"
+            [class.active]="selectedSize === size">
+            {{ size }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="actions">
+
+        <!-- Cantidad -->
+        <div class="quantity-control">
+          <button (click)="decrease()">−</button>
+          <span>{{ quantity }}</span>
+          <button (click)="increase()">+</button>
+        </div>
+
+        <!-- Agregar -->
+        <button class="add-btn" (click)="addToCart()">
+          Agregar 🛒
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RELACIONADOS ================= -->
+
+  <section class="related-section">
+
+    <h2 class="related-title">TAMBIÉN PODRÍA GUSTARTE</h2>
+
+    <div class="related-products">
+
+      <div class="product-card" *ngFor="let item of relatedProducts">
+
+        <!-- Imagen blanca -->
+        <div class="card-image">
+          <img [src]="item.image" alt="producto">
+        </div>
+
+        <!-- Parte gris -->
+        <div class="card-info">
+          <h3>{{ item.name }}</h3>
+
+          <div class="card-footer">
+            <span class="price">${{ item.price }}.00</span>
+            <button>Agregar</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

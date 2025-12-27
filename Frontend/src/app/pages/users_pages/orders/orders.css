@@ -1,0 +1,152 @@
+/* ===== GENERAL ===== */
+
+.orders-page {
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  color: #000;
+}
+
+.brand-hero {
+  background: #ffd9ec;
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.brand-hero h1 {
+  font-size: 90px;
+  letter-spacing: 4px;
+}
+
+.brand-hero p {
+  font-size: 20px;
+}
+
+/* ===== FILTROS ===== */
+
+.order-filters {
+  display: flex;
+  gap: 30px;
+  margin: 30px 0;
+}
+
+.order-filters button {
+  padding: 12px 26px;
+  border-radius: 30px;
+  border: 1px solid #eee;
+  background: #f7f7f7;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.order-filters button.active {
+  background: #12111f;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ===== TABLA ===== */
+
+.orders-table {
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1.2fr 1fr 1fr;
+  align-items: center;
+  padding: 20px 20px;
+}
+
+.table-header {
+  background: #fff2f7;
+  font-weight: bold;
+  color: #ff7bb5;
+  font-size: 20px;
+}
+
+.table-row {
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 20px;
+}
+
+.order-id {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* ===== ESTADOS ===== */
+
+.status {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 16px;
+  width: fit-content;
+}
+
+.status.Entregado {
+  background: #d8f6e6;
+  color: #0c8a53;
+}
+
+.status.Enproceso {
+  background: #e1edff;
+  color: #2563eb;
+}
+
+.status.Enviado {
+  background: #efe7ff;
+  color: #7c3aed;
+}
+
+/* ===== ARTÍCULOS ===== */
+
+.items {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.items img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.items span {
+  background: #ffe3f1;
+  color: #ff4fa3;
+  padding: 6px 10px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+/* ===== ACCIONES ===== */
+
+.action-btn {
+  background: #ffe3f1;
+  color: #ff4fa3;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 900px) {
+  .table-header {
+    display: none;
+  }
+
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
