@@ -5,8 +5,8 @@
   }
 
   <div class="sidebar-and-content">
-    
-    @if (showLayout) {
+
+    @if (showUserSidebar) {
       <app-user-sidebar></app-user-sidebar>
     }
 
@@ -16,7 +16,7 @@
 
   </div>
 
-  @if (showLayout) {
+  @if (showFooter) {
     <app-footer></app-footer>
   }
 
