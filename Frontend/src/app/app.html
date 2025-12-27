@@ -1,7 +1,23 @@
-<app-navbar></app-navbar>
+<div class="app-container">
 
-<main>
-  <router-outlet></router-outlet>
-</main>
+  @if (showLayout) {
+    <app-navbar></app-navbar>
+  }
 
-<app-footer></app-footer>
+  <div class="sidebar-and-content">
+    
+    @if (showLayout) {
+      <app-user-sidebar></app-user-sidebar>
+    }
+
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+  @if (showLayout) {
+    <app-footer></app-footer>
+  }
+
+</div>

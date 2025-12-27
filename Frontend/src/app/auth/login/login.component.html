@@ -1,0 +1,48 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <img src="assets/logo.png" alt="Logo" class="logo" />
+
+    <h2>Iniciar sesión</h2>
+
+    <form>
+      <div class="input-group">
+        <label for="user">Correo o usuario</label>
+        <input
+          type="text"
+          id="user"
+          placeholder="Ingresa tu correo o usuario"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Ingresa tu contraseña"
+        />
+      </div>
+
+      <div class="options">
+        <label>
+          <input type="checkbox" />
+          Recordar contraseña
+        </label>
+
+        <a href="#" class="link">¿Olvidó su contraseña?</a>
+      </div>
+
+      <button type="submit" class="btn-login">
+        Iniciar sesión
+      </button>
+    </form>
+
+    <div class="register">
+      <span>¿Aún no es cliente?</span>
+      <!-- <a href="#" class="link">Crear cuenta</a>-->
+      <a routerLink="/register" class="link">Crear cuenta</a>
+    </div>
+
+  </div>
+</div>

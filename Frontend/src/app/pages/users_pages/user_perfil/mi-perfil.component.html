@@ -1,0 +1,34 @@
+<div class="perfil-container">
+  <div class="header"></div>
+
+  <div class="avatar">
+    <img src="https://img.freepik.com/vector-premium/icono-perfil-avatar-predeterminado-imagen-usuario-redes-sociales-icono-avatar-gris-silueta-perfil-blanco-ilustracion-vectorial_561158-3407.jpg?w=2000" alt="avatar">
+  </div>
+
+  <form [formGroup]="perfilForm">
+    <h3>Información Personal</h3>
+
+    <label>Nombre Completo</label>
+    <input type="text" formControlName="nombre">
+
+    <label>Correo Electrónico</label>
+    <input type="email" formControlName="email">
+
+    <h3>Seguridad</h3>
+
+    <label>Contraseña Actual</label>
+    <input type="password" formControlName="passwordActual">
+
+    <label>Nueva contraseña</label>
+    <input type="password" formControlName="nuevaPassword">
+
+    <div class="acciones">
+      <button type="button" class="guardar" (click)="guardarCambios()">
+        Guardar cambios
+      </button>
+      <button type="button" class="cancelar" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
