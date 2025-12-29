@@ -1,17 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-export interface Product {
-  id?: number;
-  name: string;
-  slug?: string;
-  description?: string;
-  price: number;
-  stock?: number;
-  category_id: number;
-}
+import { Product } from '../interface/product'; // ✅ solo se importa
 
 @Injectable({
   providedIn: 'root'
@@ -31,30 +22,18 @@ export class ProductService {
     return this.http.get<Product[]>(url);
   }
 
-  // 🔐 CREAR producto (ADMIN)
-  createProduct(product: Product, token: string): Observable<Product> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
-    return this.http.post<Product>(this.apiUrl, product, { headers });
+  // 🔐 CREAR producto
+  createProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, product);
   }
 
   // 🔐 ACTUALIZAR producto
-  updateProduct(id: number, product: Product, token: string): Observable<Product> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
-    return this.http.put<Product>(`${this.apiUrl}/${id}`, product, { headers });
+  updateProduct(id: number, product: Product): Observable<Product> {
+    return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
   }
 
   // 🔐 ELIMINAR producto
-  deleteProduct(id: number, token: string): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+  deleteProduct(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }
