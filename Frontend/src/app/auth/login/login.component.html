@@ -1,18 +1,21 @@
 <div class="login-container">
   <div class="login-card">
-
     <img src="assets/logo.png" alt="Logo" class="logo" />
-
     <h2>Iniciar sesión</h2>
 
-    <form>
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
       <div class="input-group">
-        <label for="user">Correo o usuario</label>
+        <label for="email">Correo o usuario</label>
         <input
-          type="text"
-          id="user"
+          type="email"
+          id="email"
+          formControlName="email"  
           placeholder="Ingresa tu correo o usuario"
         />
+        <!-- Opcional: Muestra errores -->
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
+          Email inválido.
+        </div>
       </div>
 
       <div class="input-group">
@@ -20,29 +23,29 @@
         <input
           type="password"
           id="password"
+          formControlName="password"  
           placeholder="Ingresa tu contraseña"
         />
       </div>
 
       <div class="options">
         <label>
-          <input type="checkbox" />
+          <input type="checkbox" formControlName="remember" /> 
           Recordar contraseña
         </label>
-
         <a href="#" class="link">¿Olvidó su contraseña?</a>
       </div>
 
-      <button type="submit" class="btn-login">
-        Iniciar sesión
+      <button type="submit" class="btn-login" [disabled]="loginForm.invalid || isLoading">
+        {{ isLoading ? 'Iniciando...' : 'Iniciar sesión' }}
       </button>
     </form>
 
-    <div class="register">
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+    <div class="register"> 
       <span>¿Aún no es cliente?</span>
-      <!-- <a href="#" class="link">Crear cuenta</a>-->
       <a routerLink="/register" class="link">Crear cuenta</a>
     </div>
-
   </div>
 </div>
