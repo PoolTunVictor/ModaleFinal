@@ -20,7 +20,7 @@ product_model = api.model("Product", {
 })
 
 # LIST / CREATE
-@api.route("/")
+@api.route("/",  strict_slashes=False) #lo mismo, solo le agregue esto para ver por que enviaba mal las rutas, solo se borra el strict y ya
 class ProductList(Resource):
 
     @api.marshal_list_with(product_model)
