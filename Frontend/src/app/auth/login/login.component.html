@@ -5,16 +5,15 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
       <div class="input-group">
-        <label for="email">Correo o usuario</label>
+        <label for="email">Correo electrónico</label>  <!-- Cambié a "Correo electrónico" para consistencia -->
         <input
           type="email"
           id="email"
-          formControlName="email"  
-          placeholder="Ingresa tu correo o usuario"
+          formControlName="email"
+          placeholder="Ingresa tu correo electrónico"
         />
-        <!-- Opcional: Muestra errores -->
         <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
-          Email inválido.
+          Correo electrónico inválido.
         </div>
       </div>
 
@@ -23,14 +22,17 @@
         <input
           type="password"
           id="password"
-          formControlName="password"  
+          formControlName="password"
           placeholder="Ingresa tu contraseña"
         />
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+          La contraseña es requerida.
+        </div>
       </div>
 
       <div class="options">
         <label>
-          <input type="checkbox" formControlName="remember" /> 
+          <input type="checkbox" formControlName="remember" />
           Recordar contraseña
         </label>
         <a href="#" class="link">¿Olvidó su contraseña?</a>
@@ -43,7 +45,7 @@
 
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
-    <div class="register"> 
+    <div class="register">
       <span>¿Aún no es cliente?</span>
       <a routerLink="/register" class="link">Crear cuenta</a>
     </div>

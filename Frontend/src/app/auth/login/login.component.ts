@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';  // <-- Importa ReactiveFormsModule aquí
-import { CommonModule } from '@angular/common';  // <-- Necesario para *ngIf, etc.
-import { AuthService } from '../../core/service/auth.service';// Asegúrate de que AuthService esté disponible
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../core/service/auth.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,  // <-- Marca como standalone
-  imports: [ReactiveFormsModule, CommonModule],  // <-- Importa los módulos necesarios aquí
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -22,7 +22,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],  // Si quieres permitir "usuario", cambia a Validators.required sin email
       password: ['', Validators.required],
       remember: [false]
     });
@@ -32,7 +32,7 @@ export class LoginComponent {
     if (this.loginForm.invalid) return;
 
     this.isLoading = true;
-    this.errorMessage = '';
+    this.errorMessage = '';  // Limpia cualquier error previo al intentar de nuevo
 
     const loginData = this.loginForm.value;
 
@@ -55,9 +55,10 @@ export class LoginComponent {
       error: (error) => {
         this.errorMessage = 'Credenciales incorrectas o error en el servidor.';
         console.error('Error en login:', error);
+        this.isLoading = false;  // <-- CORRECCIÓN: Resetea isLoading aquí para permitir reintentos
       },
       complete: () => {
-        this.isLoading = false;
+        this.isLoading = false;  // Redundante, pero asegura que se resetee
       }
     });
   }
