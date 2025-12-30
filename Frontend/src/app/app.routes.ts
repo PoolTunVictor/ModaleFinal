@@ -27,7 +27,7 @@ import { Users } from './pages/admin_pages/users/users';
 export const routes: Routes = [
 
   // 🔓 LANDING
-  { path: '', component: ProductDescriptionComponent },
+  { path: '', component: HomeComponent },
 
   // 🔐 AUTH
   { path: 'login', component: LoginComponent },
@@ -44,7 +44,7 @@ export const routes: Routes = [
 
   // 🛠️ ADMIN (CON LAYOUT)
   {
-    path: '',
+    path: 'admin',
     component: MainLayout,
     children: [
       { path: 'inicio', component: Inicio },

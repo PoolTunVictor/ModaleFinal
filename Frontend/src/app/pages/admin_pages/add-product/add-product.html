@@ -4,7 +4,7 @@
 </div>
 
 <div class="card">
-  <!-- 🔹 IMPORTANTE: formGroup + ngSubmit -->
+  <!-- 🔹 FORMULARIO -->
   <form
     class="add-product-form"
     [formGroup]="productForm"
@@ -23,8 +23,6 @@
     <div class="form-group">
       <label>Categoría</label>
       <select formControlName="category_id">
-        <option value="">Seleccione una categoría</option>
-        <!-- por ahora estático, luego lo haremos dinámico -->
         <option value="1">Maquillaje</option>
         <option value="2">Perfumes</option>
         <option value="3">Prendas</option>
@@ -65,14 +63,19 @@
 
     <div class="actions">
       <button type="submit" [disabled]="loading">
-        Guardar producto
+        {{ loading ? 'Guardando...' : 'Guardar producto' }}
       </button>
     </div>
 
-    <!-- 🔴 Mensaje de error -->
-    <p *ngIf="errorMessage" class="error">
-      {{ errorMessage }}
-    </p>
-
   </form>
 </div>
+
+<!-- ✅ MENSAJE DE ÉXITO -->
+<p *ngIf="successMessage" class="success">
+  {{ successMessage }}
+</p>
+
+<!-- ❌ MENSAJE DE ERROR -->
+<p *ngIf="errorMessage" class="error">
+  {{ errorMessage }}
+</p>

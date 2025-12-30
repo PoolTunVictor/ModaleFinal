@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { NavbarComponent } from '../layouts/navbar/navbar.component';
 import { Footer } from './layouts/footer/footer';
 import { UserSidebarComponent } from '../layouts/user_sidebar/user-sidebar.component';
@@ -21,29 +22,27 @@ export class App {
   protected readonly title = signal('ModAle');
 
   // Estados de layout
-  showLayout = true;        // navbar
+  showLayout = true;        // navbar cliente
   showUserSidebar = false; // sidebar usuario
-  showFooter = true;       // footer
+  showFooter = true;       // footer cliente
 
   constructor(private router: Router) {
-    this.router.events.subscribe(() => {
-      const url = this.router.url;
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
 
-      // ❌ Login: nada de layout
-      this.showLayout = !url.includes('login');
+        const url = event.urlAfterRedirects;
 
-      // ✅ Sidebar SOLO en "Mi cuenta"
-      this.showUserSidebar = url.startsWith('/perfil');
+        const isAdminRoute = url.startsWith('/admin');
+        const isLoginRoute = url.startsWith('/login');
 
-      // ❌ Footer NO en admin
-      const isAdminRoute =
-        url.startsWith('/inicio') ||
-        url.startsWith('/add_product') ||
-        url.startsWith('/inventory') ||
-        url.startsWith('/reports') ||
-        url.startsWith('/users');
+        // 🔹 Navbar y footer SOLO para cliente
+        this.showLayout = !isAdminRoute && !isLoginRoute;
+        this.showFooter = !isAdminRoute && !isLoginRoute;
 
-      this.showFooter = !isAdminRoute && this.showLayout;
-    });
+        // 🔹 Sidebar usuario SOLO en perfil
+        this.showUserSidebar = url.startsWith('/perfil') && !isAdminRoute;
+
+      });
   }
 }

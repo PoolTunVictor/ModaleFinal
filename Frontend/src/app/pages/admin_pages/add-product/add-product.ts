@@ -25,6 +25,8 @@ export class AddProduct {
   productForm: FormGroup;
   loading = false;
   errorMessage = '';
+  successMessage = '';
+  
 
   constructor(
     private fb: FormBuilder,
@@ -41,34 +43,54 @@ export class AddProduct {
   }
 
   // 🔹 Submit del formulario
-  onSubmit(): void {
+  onSubmit() {
     if (this.productForm.invalid) {
-      this.productForm.markAllAsTouched();
+      this.errorMessage = '❌ Completa todos los campos obligatorios';
+      this.successMessage = '';
       return;
     }
 
-    const product: Product = this.productForm.value;
-
     this.loading = true;
     this.errorMessage = '';
+    this.successMessage = '';
+
+    const formValue = this.productForm.value;
+
+    const product = {
+      ...formValue,
+      category_id: Number(formValue.category_id)
+    };
 
     this.productService.createProduct(product).subscribe({
-      next: (res) => {
-        console.log('Producto creado:', res);
+      next: () => {
+        this.loading = false;
 
-        // reset form
+        // ✅ mostrar mensaje
+        this.successMessage = '✅ El producto se agregó correctamente';
+
+        // limpiar formulario
         this.productForm.reset({
+          name: '',
+          category_id: null,
           stock: 0,
-          price: 0
+          price: 0,
+          description: ''
         });
 
-        this.loading = false;
+        // 🔥 ocultar mensaje automáticamente
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 600); // tiempo
       },
       error: (err) => {
-        console.error(err);
-        this.errorMessage =
-          err.error?.message || 'Error al crear el producto';
         this.loading = false;
+        this.errorMessage =
+          err?.error?.message || '❌ No se pudo agregar el producto';
+
+        // ocultar error también si quieres
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 600);
       }
     });
   }
