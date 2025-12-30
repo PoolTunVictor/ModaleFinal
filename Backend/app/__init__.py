@@ -17,7 +17,13 @@ def create_app():
     # =========================
     # EXTENSIONS
     # =========================
-    CORS(app)
+    CORS(
+    app,
+    resources={r"/*": {"origins": "*"}},
+    supports_credentials=True,
+    allow_headers=["Content-Type", "Authorization"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+)
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
