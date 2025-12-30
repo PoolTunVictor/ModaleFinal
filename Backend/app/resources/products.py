@@ -20,7 +20,7 @@ product_model = api.model("Product", {
 })
 
 # LIST / CREATE
-@api.route("/")
+@api.route("/",strict_slashes=False)# le agregue el strict para probar algo
 class ProductList(Resource):
 
     @api.marshal_list_with(product_model)
