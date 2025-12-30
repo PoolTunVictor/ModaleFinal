@@ -32,7 +32,7 @@ class ProductList(Resource):
             query = query.filter_by(category_id=category_id)
         return query.all()
 
-    @admin_required
+   
     @api.expect(product_model, validate=True)
     @api.marshal_with(product_model, code=201)
     def post(self):
@@ -75,7 +75,7 @@ class ProductDetail(Resource):
         """Obtener producto por ID"""
         return Product.query.get_or_404(id)
 
-    @admin_required
+    
     @api.expect(product_model, validate=True)
     @api.marshal_with(product_model)
     def put(self, id):
@@ -102,7 +102,6 @@ class ProductDetail(Resource):
         return product
 
 
-    @admin_required
     def delete(self, id):
         """Eliminar producto"""
         product = Product.query.get_or_404(id)
