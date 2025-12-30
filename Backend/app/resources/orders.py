@@ -219,3 +219,4 @@ class OrderStatus(Resource):
             "order_id": order.id,
             "new_status": order.status
         }, 200
+    
