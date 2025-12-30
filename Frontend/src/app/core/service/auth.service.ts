@@ -15,6 +15,12 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, loginData, { headers });  // Nota: Agregué /auth porque tu namespace es "auth"
   }
 
+  // Nuevo método para registro
+  register(registerData: { email: string; password: string; phone?: string }): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(`${this.apiUrl}/auth/register`, registerData, { headers });
+  }
+  
   // Método para verificar si es admin
   isAdmin(): boolean {
     const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
