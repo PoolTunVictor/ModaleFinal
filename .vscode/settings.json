@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": false
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "dpg-d53lgn75r7bs73dte980-a.ohio-postgres.render.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "render",
+            "database": "modale",
+            "username": "modale123"
+        }
+    ]
+}
