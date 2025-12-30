@@ -28,7 +28,7 @@ def create_app():
     migrate.init_app(app, db)
     jwt.init_app(app)
 
-    # =========================
+    # =======================
     # CLOUDINARY (FIX)
     # =========================
     init_cloudinary(app)
