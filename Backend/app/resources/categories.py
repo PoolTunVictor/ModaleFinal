@@ -25,7 +25,7 @@ class CategoryList(Resource):
 
     @api.expect(category_model, validate=True)
     @api.marshal_with(category_model, code=201)
-    @admin_required
+    
     def post(self):
         """Crear una nueva categoría"""
         data = request.json
@@ -57,7 +57,7 @@ class CategoryDetail(Resource):
 
     @api.expect(category_model, validate=True)
     @api.marshal_with(category_model)
-    @admin_required
+    
     def put(self, id):
         """Actualizar una categoría"""
         category = Category.query.get_or_404(id)
@@ -70,7 +70,7 @@ class CategoryDetail(Resource):
         db.session.commit()
         return category
     
-    @admin_required
+    
     def delete(self, id):
         """Eliminar una categoría"""
         category = Category.query.get_or_404(id)
