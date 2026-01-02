@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AdminGuard } from './core/service/admin.guard';
+import { AuthGuard } from './core/service/auth.guard';
 
 // ========== AUTH ==========
 import { LoginComponent } from './auth/login/login.component';
@@ -41,6 +42,7 @@ export const routes: Routes = [
   {
     path: 'user',
     component: UserSide,
+    canActivate: [AuthGuard],
     children: [
       { path: 'perfil', component: MiPerfilComponent },
       { path: 'resume', component: AccountSummaryComponent },
@@ -56,6 +58,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: MainLayout,
+    canActivate: [AdminGuard],
     children: [
       { path: 'inicio', component: Inicio },
       { path: 'add_product', component: AddProduct },
