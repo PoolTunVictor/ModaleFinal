@@ -33,7 +33,7 @@ export class App {
       this.showLayout = !url.includes('login');
 
       // ✅ Sidebar SOLO en "Mi cuenta"
-      this.showUserSidebar = url.startsWith('/perfil');
+      this.showUserSidebar = url.startsWith('/perfil') || url.startsWith('/resume') || url.startsWith('/orders');
 
       // ❌ Footer NO en admin
       const isAdminRoute =
