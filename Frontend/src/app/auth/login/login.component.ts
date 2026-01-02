@@ -47,9 +47,9 @@ export class LoginComponent {
         localStorage.setItem('user', JSON.stringify(response.user));
 
         if (response.user.role === 'admin') {
-          this.router.navigate(['/admin-dashboard']);
+          this.router.navigate(['/admin/inicio']);
         } else {
-          this.router.navigate(['/user-dashboard']);
+          this.router.navigate(['/user/resume']);
         }
       },
       error: (error) => {

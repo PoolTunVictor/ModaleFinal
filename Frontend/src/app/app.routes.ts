@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdminGuard } from './core/service/admin.guard';
 
 // ========== AUTH ==========
 import { LoginComponent } from './auth/login/login.component';
@@ -18,7 +19,7 @@ import { MiPerfilComponent } from './pages/users_pages/user_perfil/mi-perfil.com
 // ========== USER LAYOUT ==========
 import { UserSide } from '../layouts/user_layout/user.layouts';
 // ========== ADMIN LAYOUT ==========
-import { MainLayout } from '../layouts/main-layout/main-layout';
+import { MainLayout } from '../layouts/admin_layout/main-layout';
 
 // ========== ADMIN PAGES ==========
 import { Inicio } from './pages/admin_pages/inicio/inicio';
@@ -38,7 +39,7 @@ export const routes: Routes = [
 
   // 👤 USER
   {
-    path: '',
+    path: 'user',
     component: UserSide,
     children: [
       { path: 'perfil', component: MiPerfilComponent },
@@ -51,12 +52,9 @@ export const routes: Routes = [
   { path: 'categorias/:nombre', component: CategoryDetailComponent },
   { path: 'cart', component: CartComponent },
  
-  
- 
-
   // 🛠️ ADMIN (CON LAYOUT)
   {
-    path: '',
+    path: 'admin',
     component: MainLayout,
     children: [
       { path: 'inicio', component: Inicio },
