@@ -14,6 +14,9 @@ import { OrdersComponent } from './pages/users_pages/orders/orders';
 import { AccountSummaryComponent } from './pages/users_pages/user_resume/account-summary.component';
 import { MiPerfilComponent } from './pages/users_pages/user_perfil/mi-perfil.component';
 
+
+// ========== USER LAYOUT ==========
+import { UserSide } from '../layouts/user_layout/user.layouts';
 // ========== ADMIN LAYOUT ==========
 import { MainLayout } from '../layouts/main-layout/main-layout';
 
@@ -34,13 +37,22 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 
   // 👤 USER
+  {
+    path: '',
+    component: UserSide,
+    children: [
+      { path: 'perfil', component: MiPerfilComponent },
+      { path: 'resume', component: AccountSummaryComponent },
+      { path: 'orders', component: OrdersComponent },
+    ]
+  },
   { path: 'home', component: HomeComponent },
   { path: 'categorias', component: CategoriesComponent },
   { path: 'categorias/:nombre', component: CategoryDetailComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'orders', component: OrdersComponent },
-  { path: 'resume', component: AccountSummaryComponent },
-  { path: 'perfil', component: MiPerfilComponent },
+ 
+  
+ 
 
   // 🛠️ ADMIN (CON LAYOUT)
   {

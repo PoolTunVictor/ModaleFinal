@@ -15,7 +15,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   font-family: 'Josefin Slab', serif;
 
-   height: 87vh; /* toda la pantalla menos la altura del navbar */
+   height: 80vh; /* toda la pantalla menos la altura del navbar */
   display: flex;
   flex-direction: column;
 }
