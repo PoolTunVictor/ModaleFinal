@@ -5,8 +5,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   selector: 'app-dashboard',
   imports: [RouterLink, RouterLinkActive],
   standalone:true,
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css',
+  templateUrl: './admin_dashboard.html',
+  styleUrl: './admin_dashboard.css',
 })
 export class Dashboard {
 

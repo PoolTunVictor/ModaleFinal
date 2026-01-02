@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet} from '@angular/router';
-import { Dashboard } from '../../shared/dashboard/dashboard';
+import { Dashboard } from '../../shared/dashboard/admin_dashboard';
 import { Footer } from '../footer/footer';
 
 @Component({

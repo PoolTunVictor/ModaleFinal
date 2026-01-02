@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
   selector: 'app-user-sidebar',
   standalone: true,
   imports: [RouterModule],
-  templateUrl: './user-sidebar.component.html',
-  styleUrls: ['./user-sidebar.component.css']
+  templateUrl: './user_dashboard.html',
+  styleUrls: ['./user_dashboard.css']
 })
 export class UserSidebarComponent {
   userName = 'Jaqueline Uc';
