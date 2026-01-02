@@ -34,14 +34,14 @@ export class App {
     
       // ❌ Footer NO en admin
       const isAdminRoute =
-        url.startsWith('/inicio') ||
-        url.startsWith('/add_product') ||
-        url.startsWith('/inventory') ||
-        url.startsWith('/reports') ||
-        url.startsWith('/users') ||
-        url.startsWith('/perfil') || 
-        url.startsWith('/resume') || 
-        url.startsWith('/orders');
+        url.startsWith('/admin/inicio') ||
+        url.startsWith('/admin/add_product') ||
+        url.startsWith('/admin/inventory') ||
+        url.startsWith('/admin/reports') ||
+        url.startsWith('/admin/users') ||
+        url.startsWith('/user/perfil') || 
+        url.startsWith('/user/resume') || 
+        url.startsWith('/user/orders');
 
       this.showFooter = !isAdminRoute && this.showLayout;
     });
