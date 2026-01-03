@@ -1,16 +1,32 @@
 .layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;          /* 🔥 ocupa toda la pantalla */
+  overflow: hidden;       /* 🔥 evita scroll global */
 }
 
+/* Sidebar (dashboard) */
+app-dashboard {
+  width: 240px;           /* usa el ancho real de tu dashboard */
+  height: 100vh;
+  position: fixed;        /* 🔥 clave */
+  top: 0;
+  left: 0;
+}
+
+/* Main (todo lo que NO es dashboard) */
 .main {
+  margin-left: 240px;     /* mismo ancho del dashboard */
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  overflow: hidden;       /* 🔒 evita que todo scrollee */
 }
 
+/* Contenido dinámico (AQUÍ va el scroll) */
 .content {
   flex: 1;
   padding: 30px;
   background: #f8f9fb;
+  overflow-y: auto;       /* ✅ SOLO aquí hay scroll */
 }

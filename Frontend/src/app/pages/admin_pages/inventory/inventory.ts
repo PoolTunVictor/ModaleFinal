@@ -46,20 +46,32 @@ export class Inventory implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadProducts();
+    const navigation = history.state;
+    this.loadProducts(navigation?.updatedProduct);
   }
 
-  loadProducts(): void {
+  loadProducts(updatedProduct?: Product): void {
     this.loading = true;
 
     this.productService.getProducts().subscribe({
-      next: (data) => {
-        this.products = data;
-        this.filteredProducts = data;
+      next: (products) => {
+        this.products = products;
+
+        // 🔥 REEMPLAZAR SIN CAMBIAR EL ORDEN
+        if (updatedProduct) {
+          const index = this.products.findIndex(
+            p => p.id === updatedProduct.id
+          );
+
+          if (index !== -1) {
+            this.products[index] = updatedProduct;
+          }
+        }
+
+        this.filteredProducts = [...this.products];
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'Error al cargar productos';
         this.loading = false;
       }
     });

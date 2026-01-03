@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 
 import { ProductService } from '../../../core/service/product.service';
-import { Product } from '../../../core/interface/product';
 
 @Component({
   selector: 'app-add-product',
@@ -26,13 +25,11 @@ export class AddProduct {
   loading = false;
   errorMessage = '';
   successMessage = '';
-  
 
   constructor(
     private fb: FormBuilder,
     private productService: ProductService
   ) {
-    // 🔹 Formulario alineado con backend
     this.productForm = this.fb.group({
       name: ['', Validators.required],
       category_id: [null, Validators.required],
@@ -65,10 +62,11 @@ export class AddProduct {
       next: () => {
         this.loading = false;
 
-        // ✅ mostrar mensaje
+        // 🔥 LOG DE ACTIVIDAD
+        this.saveActivity('add', product.name);
+
         this.successMessage = '✅ El producto se agregó correctamente';
 
-        // limpiar formulario
         this.productForm.reset({
           name: '',
           category_id: null,
@@ -77,21 +75,36 @@ export class AddProduct {
           description: ''
         });
 
-        // 🔥 ocultar mensaje automáticamente
         setTimeout(() => {
           this.successMessage = '';
-        }, 600); // tiempo
+        }, 600);
       },
       error: (err) => {
         this.loading = false;
         this.errorMessage =
           err?.error?.message || '❌ No se pudo agregar el producto';
 
-        // ocultar error también si quieres
         setTimeout(() => {
           this.errorMessage = '';
         }, 600);
       }
     });
+  }
+
+  // 🔵 Guardar actividad
+  saveActivity(type: 'add' | 'edit', name: string) {
+    const data = localStorage.getItem('activity_log');
+    const activity = data ? JSON.parse(data) : [];
+
+    activity.unshift({
+      type,
+      message: `Producto agregado: "${name}"`,
+      date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem(
+      'activity_log',
+      JSON.stringify(activity.slice(0, 10))
+    );
   }
 }

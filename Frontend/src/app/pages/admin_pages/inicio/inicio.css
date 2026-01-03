@@ -27,6 +27,7 @@
   gap: 20px;
 }
 
+/* Card (ahora es <a>) */
 .card {
   background: #fff;
   border-radius: 14px;
@@ -34,6 +35,16 @@
   padding: 16px;
   gap: 16px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+
+  /* 🔥 QUITAR SUBRAYADO DEL LINK */
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Hover elegante */
+.card:hover {
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
 }
 
 .card img {
@@ -54,9 +65,11 @@
   margin: 8px 0;
 }
 
-.card-content a {
+/* 🔥 LABEL / TEXTO DE ACCIÓN MÁS GRANDE */
+.card-content span {
   color: #2f6fed;
-  font-size: 13px;
+  font-size: 15px;      /* ⬆️ más grande */
+  font-weight: 800;    /* ⬆️ más visible */
   cursor: pointer;
 }
 
@@ -85,9 +98,17 @@
   margin-top: 4px;
 }
 
-.activity-item.blue { border-left: 4px solid #2f6fed; }
-.activity-item.green { border-left: 4px solid #22c55e; }
-.activity-item.orange { border-left: 4px solid #f97316; }
+.activity-item.blue {
+  border-left: 4px solid #2f6fed;
+}
+
+.activity-item.green {
+  border-left: 4px solid #22c55e;
+}
+
+.activity-item.orange {
+  border-left: 4px solid #f97316;
+}
 
 /* Resumen inventario */
 .chart-placeholder {

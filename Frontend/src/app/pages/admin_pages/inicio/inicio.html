@@ -11,41 +11,41 @@
 
   <div class="quick-access">
 
-    <div class="card">
+    <a routerLink="/admin/add_product" class="card">
       <img src="/assets/productos.png" alt="Productos">
       <div class="card-content">
         <h3>Productos</h3>
         <p>Gestionar el catálogo completo, actualizar precios y descripciones.</p>
-        <a>Ir a Productos →</a>
+        <span>Ir a Productos →</span>
       </div>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/admin/inventory" class="card">
       <img src="/assets/inventario.png" alt="Inventario">
       <div class="card-content">
         <h3>Inventario</h3>
         <p>Revisar niveles de stock, gestionar entradas y salidas de mercancía.</p>
-        <a>Revisar Stock →</a>
+        <span>Revisar Stock →</span>
       </div>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/admin/reports" class="card">
       <img src="/assets/reportes.png" alt="Reportes">
       <div class="card-content">
         <h3>Reportes</h3>
         <p>Ver análisis detallado de ventas, rendimiento y tendencias mensuales.</p>
-        <a>Ver Análisis →</a>
+        <span>Ver Análisis →</span>
       </div>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/admin/users" class="card">
       <img src="/assets/usuarios.png" alt="Usuarios">
       <div class="card-content">
         <h3>Usuarios</h3>
         <p>Administrar roles, permisos y accesos de usuarios del sistema.</p>
-        <a>Administrar →</a>
+        <span>Administrar →</span>
       </div>
-    </div>
+    </a>
 
   </div>
 
@@ -56,27 +56,35 @@
     <div class="activity">
       <h2 class="section-title">Actividad Reciente</h2>
 
-      <div class="activity-item blue">
-        Nuevo producto agregado: “Auriculares Wireless”
-        <span>Hace 2 horas por Admin</span>
+      <div *ngIf="recentActivity.length === 0">
+        No hay actividad reciente
       </div>
 
-      <div class="activity-item green">
-        Nuevo pedido #1024 recibido
-        <span>Hace 5 horas</span>
-      </div>
-
-      <div class="activity-item orange">
-        Alerta de stock bajo: “Monitor 24”
-        <span>Hace 8 horas</span>
+      <div
+        *ngFor="let act of recentActivity"
+        class="activity-item"
+        [class.blue]="act.type === 'add'"
+        [class.orange]="act.type === 'edit'"
+      >
+        {{ act.message }}
+        <span>{{ act.date }}</span>
       </div>
     </div>
 
     <!-- Resumen inventario -->
     <div class="inventory-summary">
       <h2 class="section-title">Resumen de inventario</h2>
-      <div class="chart-placeholder">
-        <!-- aquí luego puedes meter Chart.js -->
+
+      <div *ngIf="lowStockProducts.length === 0">
+        ✔ No hay productos con stock bajo
+      </div>
+
+      <div
+        *ngFor="let product of lowStockProducts"
+        class="activity-item orange"
+      >
+        {{ product.name }}
+        <span>Stock: {{ product.stock }}</span>
       </div>
     </div>
 
