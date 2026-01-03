@@ -23,6 +23,8 @@ import { AddProduct } from './pages/admin_pages/add-product/add-product';
 import { Inventory } from './pages/admin_pages/inventory/inventory';
 import { Reports } from './pages/admin_pages/reports/reports';
 import { Users } from './pages/admin_pages/users/users';
+import { EditProduct } from './pages/admin_pages/edit-product/edit-product';
+
 
 export const routes: Routes = [
 
@@ -50,6 +52,7 @@ export const routes: Routes = [
       { path: 'inicio', component: Inicio },
       { path: 'add_product', component: AddProduct },
       { path: 'inventory', component: Inventory },
+      { path: 'edit-product/:id', component: EditProduct },
       { path: 'reports', component: Reports },
       { path: 'users', component: Users },
       { path: '', redirectTo: 'inicio', pathMatch: 'full' }

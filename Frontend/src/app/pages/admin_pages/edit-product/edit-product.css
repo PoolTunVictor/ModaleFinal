@@ -1,0 +1,108 @@
+/* Contenedor principal */
+.edit-product-page {
+  max-width: 600px;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Título */
+.edit-product-page h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* Mensajes */
+.success {
+  color: #22c55e;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Grupo */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+/* Inputs */
+.form-group input,
+.form-group textarea {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #2f6fed;
+}
+
+/* Textarea */
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* Acciones */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Botones */
+.actions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+}
+
+/* Guardar */
+.actions button[type="submit"] {
+  background: #2f6fed;
+  color: #fff;
+}
+
+.actions button[type="submit"]:hover {
+  background: #2458c4;
+}
+
+/* Cancelar */
+.actions button[type="button"] {
+  background: #f1f1f1;
+  color: #333;
+}
+
+.actions button[type="button"]:hover {
+  background: #e5e5e5;
+}

@@ -1,162 +1,134 @@
 <div class="inventory-page">
 
-  <!-- Header -->
   <h1 class="title">GESTIÓN DE INVENTARIO</h1>
-  <p class="subtitle">Administra tu inventario..</p>
+  <p class="subtitle">Administra tu inventario</p>
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat-card">
-      <span class="stat-label">STOCK TOTAL</span>
-      <span class="stat-value">20%</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-label">BAJO STOCK (ALERTAS)</span>
-      <span class="stat-value">20%</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-label">Alertas STOCK (ALERTITOS)</span>
-      <span class="stat-value pink">5%</span>
-    </div>
-  </div>
+  <div class="search-box compact">
 
-  <!-- Search -->
-  <div class="search-box">
     <span class="material-symbols-outlined">search</span>
-    <input type="text" placeholder="Buscar producto">
-    <span class="material-symbols-outlined clear">close</span>
+
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Buscar..."
+      [(ngModel)]="searchTerm"
+      (input)="filterProducts()"
+    />
+
+    <select
+      class="category-filter"
+      [(ngModel)]="selectedCategory"
+      (change)="filterProducts()"
+    >
+      <option value="all">Todas</option>
+      <option value="1">Maquillaje</option>
+      <option value="2">Perfumes</option>
+      <option value="3">Prendas</option>
+      <option value="4">Cuidado facial</option>
+      <option value="5">Cuidado corporal</option>
+      <option value="6">Accesorios</option>
+    </select>
+
+    <span
+      class="material-symbols-outlined clear"
+      (click)="clearSearch()"
+    >
+    </span>
+
   </div>
 
-  <!-- Table -->
+  <!-- Card -->
   <div class="inventory-card">
 
     <div class="inventory-header">
       <span class="header-title">PRODUCTOS</span>
-      <div class="header-tags">
-        <span class="tag-text">Usuarios</span>
-        <span class="tag-pill">Codudo</span>
-      </div>
     </div>
 
-    <table class="inventory-table">
+    <p *ngIf="loading">Cargando productos...</p>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+    <table
+      class="inventory-table"
+      *ngIf="!loading && filteredProducts.length > 0"
+    >
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Slug</th>
+          <th>Categoría</th>
+          <th>Descripción</th>
+          <th class="center">Stock</th>
+          <th class="center">Precio</th>
+          <th class="center">Acciones</th>
+        </tr>
+      </thead>
+
       <tbody>
+        <tr *ngFor="let product of filteredProducts">
 
-        <!-- Grupo -->
-        <tr class="group">
-          <td colspan="4">Exelurtos</td>
-        </tr>
-
-        <tr>
           <td class="product-cell">
-            <img src="/assets/prod1.jpg">
             <div>
-              <strong>Monitor UltraWide</strong>
-              <small>SKU-CF-7386</small>
-              <span class="category">Ropa</span>
+              <strong>{{ product.name }}</strong>
+              <small>{{ product.slug }}</small>
             </div>
           </td>
-          <td>
-            <div class="bar orange"></div>
-          </td>
-          <td><span class="dot green"></span></td>
-          <td>5</td>
-        </tr>
 
-        <tr>
-          <td class="product-cell">
-            <img src="/assets/prod2.jpg">
-            <div>
-              <strong>Monitor UltraWide</strong>
-              <small>SKU-MD-31923</small>
-              <span class="category yellow">$1</span>
-            </div>
-          </td>
-          <td>
-            <div class="bar yellow"></div>
-          </td>
-          <td><span class="dot green"></span></td>
-          <td>0</td>
-        </tr>
+          <td>{{ product.slug }}</td>
 
-        <tr>
-          <td class="product-cell">
-            <img src="/assets/prod3.jpg">
-            <div>
-              <strong>Tenor UltraWide+</strong>
-              <small>SKU-MD-15195</small>
-              <span class="category green">$9</span>
-            </div>
+          <td class="center">
+            {{ getCategoryName(product.category_id) }}
           </td>
-          <td>
-            <div class="bar green"></div>
+
+          <td>{{ product.description || '—' }}</td>
+
+          <td class="center">{{ product.stock }}</td>
+
+          <td class="center">${{ product.price }}</td>
+
+          <td class="center actions">
+            <button class="btn edit" (click)="openEditModal(product)">✏️</button>
+            <button class="btn delete" (click)="openDeleteModal(product)">🗑️</button>
           </td>
-          <td><span class="dot green"></span></td>
-          <td>0</td>
-        </tr>
 
-        <!-- Grupo -->
-        <tr class="group">
-          <td colspan="4">Crítico <span class="status-text">Bro Sritiod</span></td>
         </tr>
-
-        <tr>
-          <td class="product-cell">
-            <img src="/assets/prod4.jpg">
-            <div>
-              <strong>Televisor Fase 34"</strong>
-              <small>SKU-MD-30301</small>
-              <span class="category">Ropa</span>
-            </div>
-          </td>
-          <td><div class="bar orange"></div></td>
-          <td><span class="dot green"></span></td>
-          <td>8</td>
-        </tr>
-
-        <tr>
-          <td class="product-cell">
-            <span class="circle red"></span>
-            <strong>Críclio</strong>
-            <span class="category green">En Stock</span>
-          </td>
-          <td></td>
-          <td><span class="dot green"></span></td>
-          <td>15</td>
-        </tr>
-
-        <tr>
-          <td class="product-cell">
-            <span class="circle red"></span>
-            <strong>Epols</strong>
-            <span class="category green">Saludable</span>
-          </td>
-          <td></td>
-          <td><span class="dot green"></span></td>
-          <td>111</td>
-        </tr>
-
-        <tr>
-          <td class="product-cell">
-            <span class="circle red"></span>
-            <strong>Agotato</strong>
-            <span class="category green">Saludable</span>
-          </td>
-          <td></td>
-          <td><span class="dot green"></span></td>
-          <td>100</td>
-        </tr>
-
       </tbody>
     </table>
 
-    <!-- Pagination -->
-    <div class="pagination">
-      <button class="page active">1</button>
-      <button class="page">2</button>
-      <button class="page">3</button>
-      <span>→</span>
-    </div>
+    <p *ngIf="!loading && filteredProducts.length === 0">
+      No hay productos que coincidan con la búsqueda.
+    </p>
 
   </div>
+</div>
 
+<!-- 🗑️ Modal eliminar -->
+<div class="modal-backdrop" *ngIf="showDeleteModal">
+  <div class="modal">
+    <h3>Eliminar producto</h3>
+    <p>
+      ¿Seguro que deseas eliminar
+      <strong>{{ productToDelete?.name }}</strong>?
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn cancel" (click)="closeDeleteModal()">Cancelar</button>
+      <button class="btn delete" (click)="confirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ✏️ Modal editar -->
+<div class="modal-backdrop" *ngIf="showEditModal">
+  <div class="modal">
+    <h3>Editar producto</h3>
+    <p>
+      Vas a editar el producto
+      <strong>{{ productToEdit?.name }}</strong>
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn cancel" (click)="closeEditModal()">Cancelar</button>
+      <button class="btn edit" (click)="closeEditModal()">Continuar</button>
+    </div>
+  </div>
 </div>

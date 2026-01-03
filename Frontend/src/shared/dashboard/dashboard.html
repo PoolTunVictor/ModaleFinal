@@ -14,7 +14,7 @@
 
     <a
       class="menu-item"
-      routerLink="/inicio"
+      [routerLink]="['/admin', 'inicio']"
       routerLinkActive="active"
     >
       <span class="material-symbols-outlined">home</span>
@@ -23,7 +23,7 @@
 
     <a
       class="menu-item"
-      routerLink="/add_product"
+     [routerLink]="['/admin', 'add_product']"
       routerLinkActive="active"
     >
       <span class="material-symbols-outlined">inventory_2</span>
@@ -32,7 +32,7 @@
 
     <a
       class="menu-item"
-      routerLink="/inventory"
+       [routerLink]="['/admin', 'inventory']"
       routerLinkActive="active"
     >
       <span class="material-symbols-outlined">receipt_long</span>
@@ -41,7 +41,7 @@
 
     <a
       class="menu-item"
-      routerLink="/reports"
+      [routerLink]="['/admin', 'reports']"
       routerLinkActive="active"
     >
       <span class="material-symbols-outlined">bar_chart</span>
@@ -50,7 +50,7 @@
 
     <a
       class="menu-item"
-      routerLink="/users"
+      [routerLink]="['/admin', 'users']"
       routerLinkActive="active"
     >
       <span class="material-symbols-outlined">group</span>

@@ -9,38 +9,7 @@
 
 .subtitle {
   color: #666;
-  margin-bottom: 25px;
-}
-
-/* Stats */
-.stats {
-  display: flex;
-  gap: 15px;
   margin-bottom: 20px;
-}
-
-.stat-card {
-  background: #fff;
-  padding: 14px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
-  flex: 1;
-  text-align: center;
-}
-
-.stat-label {
-  font-size: 11px;
-  color: #777;
-}
-
-.stat-value {
-  font-size: 18px;
-  font-weight: 700;
-  color: #ec4899;
-}
-
-.pink {
-  color: #ec4899;
 }
 
 /* Search */
@@ -61,7 +30,12 @@
   margin: 0 10px;
 }
 
-/* Table */
+.search-box .clear {
+  cursor: pointer;
+  color: #999;
+}
+
+/* Card */
 .inventory-card {
   background: #fff;
   padding: 15px;
@@ -70,8 +44,6 @@
 }
 
 .inventory-header {
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 10px;
 }
 
@@ -80,46 +52,22 @@
   color: #777;
 }
 
-.tag-text {
-  font-size: 13px;
-  margin-right: 10px;
-  color: #ec4899;
-}
-
-.tag-pill {
-  background: #ec4899;
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-}
-
+/* Table */
 .inventory-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
 }
 
+.inventory-table th,
 .inventory-table td {
-  padding: 10px 0;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
 }
 
-.group td {
+.inventory-table th {
   font-weight: 600;
-  padding-top: 15px;
-}
-
-.product-cell {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.product-cell img {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  object-fit: cover;
+  color: #444;
 }
 
 .product-cell small {
@@ -128,64 +76,117 @@
   color: #999;
 }
 
-.category {
-  font-size: 11px;
-  color: #888;
-}
-
-.bar {
-  height: 4px;
-  border-radius: 4px;
-  width: 70%;
-}
-
-.orange { background: #f59e0b; }
-.yellow { background: #facc15; }
-.green { background: #22c55e; }
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.circle {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid #ef4444;
-  margin-right: 6px;
-}
-
-.pagination {
-  display: flex;
-  gap: 8px;
-  margin-top: 15px;
-}
-
-.page {
-  background: #f1f1f1;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.page.active {
-  background: #2f6fed;
-  color: #fff;
-}
-
-/* Footer */
-.footer {
+/* Center */
+.center {
   text-align: center;
-  margin: 30px 0 10px;
-  font-size: 12px;
-  color: #aaa;
 }
 
-.footer img {
-  width: 30px;
-  display: block;
-  margin: 0 auto 5px;
+/* Actions */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn {
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.edit:hover {
+  background: #e0f2fe;
+}
+
+.btn.delete:hover {
+  background: #fee2e2;
+}
+
+.btn.cancel {
+  background: #f1f1f1;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 340px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  animation: scaleIn .2s ease;
+}
+
+.modal h3 {
+  margin-top: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.category-filter {
+  border: none;
+  outline: none;
+  background: #f4f4f4;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+/* Search compacto */
+.search-box.compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  width: fit-content;
+}
+
+.search-input {
+  width: 200px; /* 👈 tamaño controlado */
+  border: none;
+  outline: none;
+  font-size: 13px;
+}
+
+.category-filter {
+  min-width: 140px;
+  border: none;
+  outline: none;
+  background: #f4f4f4;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.search-box .clear {
+  cursor: pointer;
+  color: #999;
 }
