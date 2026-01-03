@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api
 from sqlalchemy import text
@@ -40,7 +40,7 @@ def create_app():
                 "type": "apiKey",
                 "in": "header",
                 "name": "Authorization",
-                "description": 'Agrega tu token JWT con "Bearer <token>"'
+                "description": 'Bearer <token>'
             }
         },
         security="Bearer Auth"
@@ -49,7 +49,7 @@ def create_app():
     register_namespaces(api)
 
     # =========================
-    # CORS (🔴 SIEMPRE DESPUÉS DE RESTX)
+    # CORS (DESPUÉS DE RESTX)
     # =========================
     CORS(
         app,
@@ -58,6 +58,19 @@ def create_app():
         allow_headers=["Content-Type", "Authorization"],
         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     )
+
+    # =========================
+    # 🔴 FIX DEFINITIVO PARA JWT + OPTIONS
+    # =========================
+    @app.before_request
+    def handle_preflight():
+        if request.method == "OPTIONS":
+            response = app.make_response("")
+            response.headers["Access-Control-Allow-Origin"] = "http://localhost:4200"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            return response
 
     # =========================
     # INIT DB + ADMIN
