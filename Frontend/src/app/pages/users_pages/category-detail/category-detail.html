@@ -5,16 +5,22 @@
   </section>
 
   <div class="breadcrumb">
-    <a routerLink="/home">Inicio</a> / 
-    <a routerLink="/categorias">Categorias</a> / 
+    <a routerLink="/home">Inicio</a> /
+    <a routerLink="/categorias">Categorias</a> /
     <span class="current-page">{{ categoryName }}</span>
   </div>
 
+  <!-- 🔥 GRID DE PRODUCTOS DINÁMICO -->
   <div class="product-grid">
-    <app-product-card></app-product-card>
-    <app-product-card></app-product-card>
-    <app-product-card></app-product-card>
-    <app-product-card></app-product-card>
-    <app-product-card></app-product-card>
+
+    <div *ngIf="products.length === 0">
+      No hay productos en esta categoría
     </div>
+
+    <app-product-card
+      *ngFor="let product of products"
+      [product]="product"
+    ></app-product-card>
+
+  </div>
 </div>

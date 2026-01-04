@@ -6,6 +6,7 @@ import { RegisterComponent } from './auth/register/register.component';
 
 // ========== USER PAGES ==========
 import { HomeComponent } from './pages/users_pages/home/home';
+import { SearchProductComponent } from './pages/users_pages/search-product/search-product';
 import { CategoriesComponent } from './pages/users_pages/categories/categories';
 import { CategoryDetailComponent } from './pages/users_pages/category-detail/category-detail';
 import { ProductDescriptionComponent } from './pages/users_pages/product-description/product-description';
@@ -37,6 +38,7 @@ export const routes: Routes = [
 
   // 👤 USER
   { path: 'home', component: HomeComponent },
+  { path: 'buscar', component: SearchProductComponent },
   { path: 'categorias', component: CategoriesComponent },
   { path: 'categorias/:nombre', component: CategoryDetailComponent },
   { path: 'cart', component: CartComponent },

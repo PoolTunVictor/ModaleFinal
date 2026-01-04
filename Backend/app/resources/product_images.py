@@ -18,7 +18,6 @@ product_image_model = api.model("ProductImage", {
     "is_main": fields.Boolean
 })
 
-
 # ======================
 # LISTAR / CREAR
 # ======================
@@ -31,6 +30,7 @@ class ProductImageList(Resource):
         Listar imágenes por producto (?product_id=)
         """
         product_id = request.args.get("product_id", type=int)
+
         if not product_id:
             api.abort(400, "product_id es requerido")
 
@@ -44,12 +44,20 @@ class ProductImageList(Resource):
         Subir imagen a Cloudinary y asociarla a un producto
         (multipart/form-data)
         """
-        product_id = request.form.get("product_id", type=int)
+
+        # ⚠️ multipart/form-data → TODO llega como string
+        product_id = request.form.get("product_id")
         is_main = request.form.get("is_main", "false").lower() == "true"
         file = request.files.get("file")
 
+        # Validaciones
         if not product_id:
             api.abort(400, "product_id es obligatorio")
+
+        try:
+            product_id = int(product_id)
+        except ValueError:
+            api.abort(400, "product_id inválido")
 
         product = Product.query.get(product_id)
         if not product:
@@ -58,7 +66,7 @@ class ProductImageList(Resource):
         if not file:
             api.abort(400, "Archivo de imagen requerido")
 
-        # Si se marca como principal, quitar la principal anterior
+        # Si es imagen principal, quitar la anterior
         if is_main:
             ProductImage.query.filter_by(
                 product_id=product_id,
@@ -69,7 +77,8 @@ class ProductImageList(Resource):
         try:
             result = upload_image(file)
         except Exception as e:
-            api.abort(400, str(e))
+            print("🔥 CLOUDINARY ERROR:", e)
+            api.abort(500, f"Cloudinary error: {str(e)}")
 
         image = ProductImage(
             product_id=product_id,
@@ -114,7 +123,6 @@ class ProductImageDetail(Resource):
             api.abort(400, "is_main es requerido")
 
         if data["is_main"]:
-            # Quitar principal anterior
             ProductImage.query.filter_by(
                 product_id=image.product_id,
                 is_main=True
@@ -132,7 +140,6 @@ class ProductImageDetail(Resource):
         """
         image = ProductImage.query.get_or_404(id)
 
-        # Borrar de Cloudinary
         delete_image(image.public_id)
 
         db.session.delete(image)

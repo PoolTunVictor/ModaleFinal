@@ -1,0 +1,36 @@
+<div class="product-card">
+
+  <div class="product-info">
+    <p class="product-name">{{ product?.name }}</p>
+
+    <p class="product-price">
+      $ {{ product?.price }}
+    </p>
+
+    <!-- 📦 STOCK -->
+    <p
+      class="product-stock"
+      [ngClass]="{
+        'low': (product?.stock ?? 0) > 0 && (product?.stock ?? 0) <= 5,
+        'out': (product?.stock ?? 0) === 0
+      }"
+    >
+      <ng-container *ngIf="(product?.stock ?? 0) > 0; else noStock">
+        Quedan {{ product?.stock }} disponibles
+      </ng-container>
+
+      <ng-template #noStock>
+        Agotado
+      </ng-template>
+    </p>
+
+    <button
+      class="add-btn"
+      [routerLink]="['/producto', product?.id]"
+      [disabled]="(product?.stock ?? 0) === 0"
+    >
+      Agregar
+    </button>
+  </div>
+
+</div>

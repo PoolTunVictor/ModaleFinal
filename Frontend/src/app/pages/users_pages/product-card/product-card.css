@@ -1,0 +1,23 @@
+.product-stock {
+  font-size: 12px;
+  margin: 2px 0;
+  color: #555;
+}
+
+/* ⚠️ poco stock */
+.product-stock.low {
+  color: #f97316;
+  font-weight: 600;
+}
+
+/* ❌ sin stock */
+.product-stock.out {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* deshabilitar botón */
+.add-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}

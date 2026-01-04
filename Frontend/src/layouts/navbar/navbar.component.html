@@ -3,12 +3,20 @@
     <img src="assets/logo.png" alt="Logo" class="logo">
 
     <div class="search-container">
-      <span class="search-icon"><i class="fas fa-search"></i></span>
+      <!-- 🔍 Buscar al hacer click -->
+      <span class="search-icon" (click)="search()">
+        <i class="fas fa-search"></i>
+      </span>
+
+      <!-- ⌨️ Buscar al presionar Enter -->
       <input
         type="text"
         placeholder="Buscar..."
         [(ngModel)]="searchTerm"
+        (keyup.enter)="search()"
       >
+
+      <!-- ❌ Limpiar búsqueda -->
       <span
         class="clear-icon"
         *ngIf="searchTerm"
