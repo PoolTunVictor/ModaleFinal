@@ -36,7 +36,7 @@ class ProductImageList(Resource):
 
         return ProductImage.query.filter_by(product_id=product_id).all()
 
-    @admin_required
+    #@admin_required
     @api.expect(product_image_model, validate=False)
     @api.marshal_with(product_image_model, code=201)
     def post(self):
@@ -98,7 +98,7 @@ class ProductImageDetail(Resource):
         """
         return ProductImage.query.get_or_404(id)
 
-    @admin_required
+    #@admin_required
     @api.expect(api.model("UpdateProductImage", {
         "is_main": fields.Boolean(required=True)
     }))
@@ -125,7 +125,7 @@ class ProductImageDetail(Resource):
 
         return image
 
-    @admin_required
+    #@admin_required
     def delete(self, id):
         """
         Eliminar imagen (Cloudinary + DB)
