@@ -22,13 +22,15 @@ export class App {
   showLayout = true;        // navbar
   showFooter = true; 
   showUser = true;      // footer
+  showRegister = true;
 
   constructor(private router: Router) {
     this.router.events.subscribe(() => {
       const url = this.router.url;
 
       // ❌ Login: nada de layout
-      this.showLayout = !url.includes('login');
+      this.showLayout = !url.includes('login') && !url.includes ('register');
+      //this.showRegister =  !url.includes ('register');
 
       // ✅ Sidebar SOLO en "Mi cuenta" 
     
