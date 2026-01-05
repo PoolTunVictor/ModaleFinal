@@ -29,7 +29,7 @@ export class App {
       const url = this.router.url;
 
       // ❌ Login: nada de layout
-      this.showLayout = !url.includes('login') && !url.includes ('register');
+      this.showLayout = !url.includes('login') && !url.includes ('register') && !url.includes ('recovery');
       //this.showRegister =  !url.includes ('register');
 
       // ✅ Sidebar SOLO en "Mi cuenta" 

@@ -5,6 +5,7 @@ import { AuthGuard } from './core/service/auth.guard';
 // ========== AUTH ==========
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { RecoveryComponent } from './auth/recovery/recovery.component';
 
 // ========== USER PAGES ==========
 import { HomeComponent } from './pages/users_pages/home/home';
@@ -37,6 +38,7 @@ export const routes: Routes = [
   // 🔐 AUTH
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'recovery', component: RecoveryComponent},
 
   // 👤 USER
   {
