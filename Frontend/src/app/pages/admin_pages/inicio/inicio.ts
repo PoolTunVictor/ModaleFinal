@@ -37,10 +37,9 @@ export class Inicio implements OnInit {
   loadLowStockProducts(): void {
     this.productService.getProducts().subscribe({
       next: (products) => {
-        this.lowStockProducts = products.filter(
-          product => (product.stock ?? 0) <= 5
-        );
-
+        this.lowStockProducts = products
+          .filter(product => (product.stock ?? 0) <= 5)
+          .slice(0, 6); // 👈 AQUÍ, fuera del filter
       },
       error: () => {
         this.lowStockProducts = [];

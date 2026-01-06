@@ -106,3 +106,15 @@ textarea {
 .actions button[type="button"]:hover {
   background: #e5e5e5;
 }
+
+.image-preview {
+  margin-top: 10px;
+}
+
+.image-preview img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}

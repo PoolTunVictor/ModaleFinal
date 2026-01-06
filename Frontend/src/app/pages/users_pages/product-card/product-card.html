@@ -3,6 +3,22 @@
   [routerLink]="['/producto', product.id]"
 >
 
+  <!-- 🖼 IMAGEN -->
+  <div class="product-image">
+    <img
+      *ngIf="product.main_image; else noImage"
+      [src]="product.main_image"
+      alt="{{ product.name }}"
+    />
+
+    <ng-template #noImage>
+      <div class="no-image">
+        Sin imagen
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- INFO -->
   <div class="product-info">
     <p class="product-name">{{ product.name }}</p>
 

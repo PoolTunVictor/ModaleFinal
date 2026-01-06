@@ -37,6 +37,21 @@
       <textarea rows="4" formControlName="description"></textarea>
     </div>
 
+        <!-- 🖼 IMAGEN -->
+    <div class="form-group">
+      <label>Imagen del producto</label>
+
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onFileSelected($event)"
+      />
+
+      <div class="image-preview" *ngIf="imagePreview">
+        <img [src]="imagePreview" alt="Preview imagen">
+      </div>
+    </div>
+
     <div class="actions">
       <button type="submit" [disabled]="loading">
         Guardar cambios

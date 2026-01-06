@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ProductService } from '../../../core/service/product.service';
+import { ProductImageService } from '../../../core/service/product-image.service';
 import { Product } from '../../../core/interface/product';
 
 @Component({
@@ -27,6 +28,10 @@ export class EditProduct implements OnInit {
   errorMessage = '';
   successMessage = '';
 
+  // 🖼 Imagen
+  selectedFile: File | null = null;
+  imagePreview: string | null = null;
+
   categories = [
     { id: 1, name: 'Maquillaje' },
     { id: 2, name: 'Perfumes' },
@@ -40,6 +45,7 @@ export class EditProduct implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private productService: ProductService,
+    private productImageService: ProductImageService,
     private router: Router
   ) {}
 
@@ -71,6 +77,12 @@ export class EditProduct implements OnInit {
           price: product.price,
           description: product.description
         });
+
+        // 🖼 Preview imagen actual (si existe)
+        if (product.main_image) {
+          this.imagePreview = product.main_image;
+        }
+
         this.loading = false;
       },
       error: () => {
@@ -78,6 +90,22 @@ export class EditProduct implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  // 📸 Seleccionar imagen
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+
+      // Preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
   }
 
   onSubmit(): void {
@@ -93,19 +121,35 @@ export class EditProduct implements OnInit {
     this.productService.updateProduct(this.productId, payload).subscribe({
       next: (updatedProduct: Product) => {
 
-        // 🔥 LOG DE ACTIVIDAD
-        this.saveActivity('edit', updatedProduct.name);
-
-        this.router.navigate(
-          ['/admin/inventory'],
-          { state: { updatedProduct } }
-        );
+        // 👉 Si hay imagen nueva, subirla
+        if (this.selectedFile) {
+          this.productImageService
+            .uploadImage(this.productId, this.selectedFile, true)
+            .subscribe({
+              next: () => this.finish(updatedProduct),
+              error: () => {
+                this.errorMessage =
+                  'Producto actualizado, pero error al subir la imagen';
+                this.loading = false;
+              }
+            });
+        } else {
+          this.finish(updatedProduct);
+        }
       },
       error: () => {
         this.errorMessage = 'Error al actualizar el producto';
         this.loading = false;
       }
     });
+  }
+
+  finish(product: Product): void {
+    this.saveActivity('edit', product.name);
+
+    // ✅ NO pasar updatedProduct
+    // Dejar que inventory recargue desde backend
+    this.router.navigate(['/admin/inventory']);
   }
 
   goBack(): void {
