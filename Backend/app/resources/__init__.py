@@ -16,3 +16,4 @@ def register_namespaces(api):
     api.add_namespace(orders_ns, path="/orders")
     api.add_namespace(order_items_ns, path="/order-items")
     api.add_namespace(checkout_ns, path="/checkout")
+    
