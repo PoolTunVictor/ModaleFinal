@@ -19,6 +19,6 @@ export class UserSidebarComponent {
 
   logout(): void {
     this.authService.logout();   // 🔥 limpia token + user
-    this.router.navigate(['/login']); // 🔁 redirige
+    this.router.navigate(['/home']); // 🔁 redirige
   }
 }
