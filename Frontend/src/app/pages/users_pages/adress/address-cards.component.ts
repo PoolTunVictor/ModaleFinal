@@ -72,10 +72,19 @@ export class AddressCardsComponent implements OnInit {
     }).subscribe(() => this.loadAddresses());
   }
 
-  deleteAddress(id: number): void {
-    if (!confirm('¿Eliminar dirección?')) return;
-
-    this.addressService.deleteAddress(id)
-      .subscribe(() => this.loadAddresses());
+ deleteAddress(id: number): void {
+  if (!confirm('¿Seguro que deseas eliminar esta dirección?')) {
+    return;
   }
+
+  this.addressService.deleteAddress(id).subscribe({
+    next: () => {
+      console.log('Dirección eliminada');
+      this.loadAddresses(); // 🔄 refresca la lista
+    },
+    error: (err) => {
+      console.error('Error eliminando dirección', err);
+    }
+  });
+}
 }

@@ -44,7 +44,7 @@ export class AddressService {
 
   // 📌 DELETE /addresses/:id
   deleteAddress(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, {
+    return this.http.delete(`${this.apiUrl}${id}`, {
       headers: this.getHeaders()
     });
   }
