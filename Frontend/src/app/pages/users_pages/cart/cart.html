@@ -4,29 +4,39 @@
 
     <!-- INFO DEL PRODUCTO -->
     <div class="cart-info">
-      <strong class="product-name">
-        {{ item.product.name }}
-      </strong>
 
-      <p class="product-price">
-        ${{ item.product.price }}
-      </p>
+      <!-- 🖼 IMAGEN -->
+      <img
+        [src]="item.product.main_image"
+        alt="{{ item.product.name }}"
+        class="cart-product-img"
+      />
 
-      <!-- STOCK -->
-      <p
-        class="product-stock"
-        *ngIf="item.product.stock !== undefined && item.product.stock > 0"
-      >
-        Stock disponible: {{ item.product.stock }}
-      </p>
+      <div>
+        <strong class="product-name">
+          {{ item.product.name }}
+        </strong>
 
-      <p
-        class="product-stock out"
-        *ngIf="item.product.stock === 0"
-      >
-        Agotado
-      </p>
-    </div>
+        <p class="product-price">
+          ${{ item.product.price }}
+        </p>
+
+        <!-- STOCK -->
+        <p
+          class="product-stock"
+          *ngIf="item.product.stock !== undefined && item.product.stock > 0"
+        >
+          Stock disponible: {{ item.product.stock }}
+        </p>
+
+        <p
+          class="product-stock out"
+          *ngIf="item.product.stock === 0"
+        >
+          Agotado
+        </p>
+      </div>
+    </div> <!-- ✅ cierre cart-info -->
 
     <!-- CANTIDAD -->
     <div class="cart-quantity">
@@ -45,7 +55,7 @@
       ✕
     </button>
 
-  </div>
+  </div> <!-- ✅ cierre cart-item -->
 
   <!-- TOTAL -->
   <div class="cart-total">

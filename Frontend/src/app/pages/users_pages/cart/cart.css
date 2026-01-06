@@ -93,14 +93,23 @@ body {
   align-items: center;
 }
 
-.product-info img {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  border-radius: 14px;
+.cart-product-img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover; /* o contain si no quieres recortes */
+  border-radius: 6px;
   background: #f6f6f6;
-  padding: 6px;
 }
+
+.product-info img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #f6f6f6;
+  padding: 2px;
+}
+
 
 .product-info strong {
   font-size: 20px;
