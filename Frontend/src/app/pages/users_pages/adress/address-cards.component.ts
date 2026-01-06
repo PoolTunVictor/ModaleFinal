@@ -14,7 +14,8 @@ export class AddressCardsComponent implements OnInit {
 
   addresses: any[] = [];
   showForm = false;
-  loading = false;
+  editMode = false;
+  editingId: number | null = null;
 
   addressForm!: FormGroup;
 
@@ -44,8 +45,30 @@ export class AddressCardsComponent implements OnInit {
     });
   }
 
+  /* ========= CREAR ========= */
   openAddAddress(): void {
+    this.editMode = false;
+    this.editingId = null;
     this.addressForm.reset({ is_default: false });
+    this.showForm = true;
+  }
+
+  /* ========= EDITAR ========= */
+  openEditAddress(address: any): void {
+    this.editMode = true;
+    this.editingId = address.id;
+
+    this.addressForm.patchValue({
+      receiver_name: address.receiver_name,
+      phone: address.phone,
+      street: address.street,
+      city: address.city,
+      state: address.state,
+      postal_code: address.postal_code,
+      references: address.references,
+      is_default: address.is_default
+    });
+
     this.showForm = true;
   }
 
@@ -53,16 +76,27 @@ export class AddressCardsComponent implements OnInit {
     this.showForm = false;
   }
 
+  /* ========= SUBMIT ========= */
   submitAddress(): void {
     if (this.addressForm.invalid) return;
 
-    this.addressService.createAddress(this.addressForm.value)
-      .subscribe({
-        next: () => {
+    const data = this.addressForm.value;
+
+    if (this.editMode && this.editingId !== null) {
+      // 🟡 UPDATE
+      this.addressService.updateAddress(this.editingId, data)
+        .subscribe(() => {
           this.closeForm();
           this.loadAddresses();
-        }
-      });
+        });
+    } else {
+      // 🟢 CREATE
+      this.addressService.createAddress(data)
+        .subscribe(() => {
+          this.closeForm();
+          this.loadAddresses();
+        });
+    }
   }
 
   setDefault(address: any): void {
@@ -72,19 +106,10 @@ export class AddressCardsComponent implements OnInit {
     }).subscribe(() => this.loadAddresses());
   }
 
- deleteAddress(id: number): void {
-  if (!confirm('¿Seguro que deseas eliminar esta dirección?')) {
-    return;
-  }
+  deleteAddress(id: number): void {
+    if (!confirm('¿Seguro que deseas eliminar esta dirección?')) return;
 
-  this.addressService.deleteAddress(id).subscribe({
-    next: () => {
-      console.log('Dirección eliminada');
-      this.loadAddresses(); // 🔄 refresca la lista
-    },
-    error: (err) => {
-      console.error('Error eliminando dirección', err);
-    }
-  });
-}
+    this.addressService.deleteAddress(id)
+      .subscribe(() => this.loadAddresses());
+  }
 }

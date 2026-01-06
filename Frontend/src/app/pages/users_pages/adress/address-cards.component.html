@@ -10,8 +10,23 @@
       <span class="tag" *ngIf="a.is_default">Predeterminada</span>
 
       <div class="actions">
-        <i class="fas fa-star" (click)="setDefault(a)"></i>
-        <i class="fas fa-trash" (click)="deleteAddress(a.id)"></i>
+        <i
+          class="fas fa-star"
+          title="Predeterminada"
+          (click)="setDefault(a)">
+        </i>
+
+        <i
+          class="fas fa-pen"
+          title="Editar"
+          (click)="openEditAddress(a)">
+        </i>
+
+        <i
+          class="fas fa-trash"
+          title="Eliminar"
+          (click)="deleteAddress(a.id)">
+        </i>
       </div>
     </div>
 
@@ -41,17 +56,39 @@
 <div class="modal-backdrop" *ngIf="showForm">
   <div class="modal">
 
-    <h2>Nueva dirección</h2>
+    <!-- 🔥 TÍTULO DINÁMICO -->
+    <h2>{{ editMode ? 'Editar dirección' : 'Nueva dirección' }}</h2>
 
     <form [formGroup]="addressForm" (ngSubmit)="submitAddress()">
 
-      <input formControlName="receiver_name" placeholder="Nombre del receptor">
-      <input formControlName="phone" placeholder="Teléfono">
-      <input formControlName="street" placeholder="Calle y número">
-      <input formControlName="city" placeholder="Ciudad">
-      <input formControlName="state" placeholder="Estado">
-      <input formControlName="postal_code" placeholder="Código postal">
-      <textarea formControlName="references" placeholder="Referencias"></textarea>
+      <input
+        formControlName="receiver_name"
+        placeholder="Nombre del receptor">
+
+      <input
+        formControlName="phone"
+        placeholder="Teléfono">
+
+      <input
+        formControlName="street"
+        placeholder="Calle y número">
+
+      <input
+        formControlName="city"
+        placeholder="Ciudad">
+
+      <input
+        formControlName="state"
+        placeholder="Estado">
+
+      <input
+        formControlName="postal_code"
+        placeholder="Código postal">
+
+      <textarea
+        formControlName="references"
+        placeholder="Referencias">
+      </textarea>
 
       <label class="checkbox">
         <input type="checkbox" formControlName="is_default">
@@ -59,9 +96,13 @@
       </label>
 
       <div class="actions">
-        <button type="button" (click)="closeForm()">Cancelar</button>
+        <button type="button" (click)="closeForm()">
+          Cancelar
+        </button>
+
+        <!-- 🔥 TEXTO DINÁMICO -->
         <button type="submit" [disabled]="addressForm.invalid">
-          Guardar
+          {{ editMode ? 'Actualizar' : 'Guardar' }}
         </button>
       </div>
 
@@ -69,3 +110,4 @@
 
   </div>
 </div>
+

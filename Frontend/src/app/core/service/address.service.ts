@@ -37,7 +37,7 @@ export class AddressService {
 
   // 📌 PUT /addresses/:id
   updateAddress(id: number, data: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, data, {
+    return this.http.put(`${this.apiUrl}${id}`, data, {
       headers: this.getHeaders()
     });
   }
