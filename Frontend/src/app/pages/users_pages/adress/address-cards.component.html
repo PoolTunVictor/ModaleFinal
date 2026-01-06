@@ -1,0 +1,41 @@
+<div class="grid">
+
+  <div
+    class="card"
+    *ngFor="let a of addresses"
+    [class.primary]="a.primary"
+  >
+
+    <div class="card-header">
+      <span class="tag">{{ a.label }}</span>
+
+      <div class="actions">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-pen"></i>
+        <i class="fas fa-trash"></i>
+      </div>
+    </div>
+
+    <h3>{{ a.title }}</h3>
+    <p class="name">{{ a.name }}</p>
+    <p>{{ a.address }}</p>
+    <p>{{ a.city }}</p>
+    <p class="phone">
+      <i class="fas fa-phone"></i> {{ a.phone }}
+    </p>
+
+    <!-- Fake map -->
+    <div class="map-placeholder">
+      <span>{{ a.city.split(',')[0] }}</span>
+    </div>
+  </div>
+
+  <!-- Add new -->
+  <div class="card add">
+    <div class="add-content">
+      <i class="fas fa-location-dot"></i>
+      <p>Añadir otra dirección</p>
+    </div>
+  </div>
+
+</div>

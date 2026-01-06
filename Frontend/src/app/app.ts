@@ -43,7 +43,9 @@ export class App {
         url.startsWith('/admin/users') ||
         url.startsWith('/user/perfil') || 
         url.startsWith('/user/resume') || 
-        url.startsWith('/user/orders');
+        url.startsWith('/user/orders') ||
+         url.startsWith('/user/adress');
+;
 
       this.showFooter = !isAdminRoute && this.showLayout;
     });

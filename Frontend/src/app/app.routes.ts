@@ -15,7 +15,8 @@ import { ProductDescriptionComponent } from './pages/users_pages/product-descrip
 import { CartComponent } from './pages/users_pages/cart/cart';
 import { OrdersComponent } from './pages/users_pages/orders/orders';
 import { AccountSummaryComponent } from './pages/users_pages/user_resume/account-summary.component';
-import { MiPerfilComponent } from './pages/users_pages/user_perfil/mi-perfil.component';
+import { MiPerfilComponent } from './pages/users_pages/user_perfil/mi-perfil.component'
+import { AddressCardsComponent } from './pages/users_pages/adress/address-cards.component';
 
 
 // ========== USER LAYOUT ==========
@@ -49,6 +50,7 @@ export const routes: Routes = [
       { path: 'perfil', component: MiPerfilComponent },
       { path: 'resume', component: AccountSummaryComponent },
       { path: 'orders', component: OrdersComponent },
+      {path: 'adress', component: AddressCardsComponent}
     ]
   },
   { path: 'home', component: HomeComponent },
