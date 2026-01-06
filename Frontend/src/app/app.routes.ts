@@ -41,6 +41,7 @@ export const routes: Routes = [
   { path: 'buscar', component: SearchProductComponent },
   { path: 'categorias', component: CategoriesComponent },
   { path: 'categorias/:nombre', component: CategoryDetailComponent },
+  {path: 'producto/:id', component: ProductDescriptionComponent},
   { path: 'cart', component: CartComponent },
   { path: 'orders', component: OrdersComponent },
   { path: 'resume', component: AccountSummaryComponent },

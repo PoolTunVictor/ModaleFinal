@@ -1,92 +1,61 @@
-<!-- HERO ROSADO -->
-<section class="brand-hero">
-  <h1>MODALE & CO</h1>
-  <p>Encuentra lo último en tendencia, solo aquí</p>
-</section>
+<section *ngIf="product as p" class="product-detail">
 
-<div class="product-page">
+  <div class="detail-content">
 
-  <!-- Breadcrumb -->
-  <p class="breadcrumb">Home / Perfume / Perfume Miss Dior</p>
-
-  <!-- PRODUCTO -->
-  <div class="product-container">
-
-    <!-- Imagen -->
-    <div class="product-image">
-      <img [src]="product.image" alt="Perfume Miss Dior">
-    </div>
+    <!-- Imagen (placeholder vacío) -->
+    <div class="image-placeholder"></div>
 
     <!-- Info -->
-    <div class="product-info">
-      <h1>{{ product.name }}</h1>
-      <p class="price">${{ product.price }}.00</p>
+    <div class="info">
+      <h1>{{ p.name }}</h1>
+
+      <p class="price">$ {{ p.price }}</p>
 
       <p class="description">
-        {{ product.description }}
+        {{ p.description }}
       </p>
 
-      <!-- Tamaños -->
-      <div class="sizes">
-        <p class="label">Tamaño</p>
-        <div class="size-options">
-          <button
-            *ngFor="let size of sizes"
-            (click)="selectSize(size)"
-            [class.active]="selectedSize === size">
-            {{ size }}
-          </button>
-        </div>
+      <!-- STOCK -->
+      <p class="stock" *ngIf="p.stock !== undefined && p.stock > 0">
+        Stock disponible: {{ p.stock }}
+      </p>
+
+      <p class="stock out" *ngIf="p.stock === 0">
+        Agotado
+      </p>
+
+      <!-- Cantidad -->
+      <div class="quantity">
+        <button (click)="decrease()">-</button>
+        <span>{{ quantity }}</span>
+        <button (click)="increase()">+</button>
       </div>
 
-      <!-- Acciones -->
-      <div class="actions">
-
-        <!-- Cantidad -->
-        <div class="quantity-control">
-          <button (click)="decrease()">−</button>
-          <span>{{ quantity }}</span>
-          <button (click)="increase()">+</button>
-        </div>
-
-        <!-- Agregar -->
-        <button class="add-btn" (click)="addToCart()">
-          Agregar 🛒
-        </button>
-
-      </div>
+      <!-- Botón agregar -->
+      <button
+        class="add-btn"
+        [disabled]="p.stock === 0"
+        (click)="addToCart()"
+      >
+        Agregar al carrito
+      </button>
     </div>
+
   </div>
 
-  <!-- ================= RELACIONADOS ================= -->
+  <!-- ================= RECOMENDADOS ================= -->
+  <section
+    class="recommended"
+    *ngIf="recommendedProducts.length > 0"
+  >
+    <h2>Productos recomendados</h2>
 
-  <section class="related-section">
-
-    <h2 class="related-title">TAMBIÉN PODRÍA GUSTARTE</h2>
-
-    <div class="related-products">
-
-      <div class="product-card" *ngFor="let item of relatedProducts">
-
-        <!-- Imagen blanca -->
-        <div class="card-image">
-          <img [src]="item.image" alt="producto">
-        </div>
-
-        <!-- Parte gris -->
-        <div class="card-info">
-          <h3>{{ item.name }}</h3>
-
-          <div class="card-footer">
-            <span class="price">${{ item.price }}.00</span>
-            <button>Agregar</button>
-          </div>
-        </div>
-
-      </div>
-
+    <div class="recommended-grid">
+      <app-product-card
+        *ngFor="let rp of recommendedProducts"
+        [product]="rp"
+      ></app-product-card>
     </div>
-
   </section>
 
-</div>
+</section>

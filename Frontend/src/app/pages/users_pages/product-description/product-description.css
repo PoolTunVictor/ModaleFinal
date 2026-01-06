@@ -223,3 +223,17 @@
     grid-template-columns: 1fr;
   }
 }
+
+.recommended {
+  margin-top: 3rem;
+}
+
+.recommended h2 {
+  margin-bottom: 1rem;
+}
+
+.recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}

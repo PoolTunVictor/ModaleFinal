@@ -17,7 +17,7 @@ export class ProductImageService {
     productId: number,
     file: File,
     isMain: boolean,
-    token: string
+    token?: string
   ): Observable<any> {
 
     const formData = new FormData();
@@ -25,9 +25,12 @@ export class ProductImageService {
     formData.append('is_main', String(isMain));
     formData.append('file', file);
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+    let headers = new HttpHeaders();
+
+    // ✅ SOLO agregar Authorization si existe token
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
 
     return this.http.post(this.apiUrl, formData, { headers });
   }
@@ -38,10 +41,14 @@ export class ProductImageService {
   }
 
   // 🗑️ Eliminar imagen
-  deleteImage(id: number, token: string): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+  deleteImage(id: number, token?: string): Observable<any> {
+
+    let headers = new HttpHeaders();
+
+    // ✅ SOLO si hay token
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
 
     return this.http.delete(`${this.apiUrl}/${id}`, { headers });
   }

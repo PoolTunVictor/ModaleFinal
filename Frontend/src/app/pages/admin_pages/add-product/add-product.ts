@@ -48,10 +48,10 @@ export class AddProduct {
     }
   }
 
-  // 📤 Enviar formulario
+  // 🚀 Submit
   onSubmit() {
     if (this.productForm.invalid) {
-      this.errorMessage = '❌ Completa todos los campos obligatorios';
+      this.errorMessage = 'Completa los campos obligatorios';
       return;
     }
 
@@ -59,95 +59,45 @@ export class AddProduct {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const formValue = this.productForm.value;
-
     const product = {
-      ...formValue,
-      category_id: Number(formValue.category_id)
+      ...this.productForm.value,
+      category_id: Number(this.productForm.value.category_id)
     };
 
     this.productService.createProduct(product).subscribe({
       next: (createdProduct: any) => {
 
-        if (this.selectedFile) {
-          this.uploadProductImage(createdProduct.id, product.name);
+        const productId = createdProduct.id || createdProduct?.data?.id;
+
+        // 👉 Si hay imagen, la subimos
+        if (this.selectedFile && productId) {
+          this.productImageService
+            .uploadImage(productId, this.selectedFile, true, '') // 👈 token vacío (temporal)
+            .subscribe({
+              next: () => {
+                this.finishSuccess(product.name);
+              },
+              error: () => {
+                this.loading = false;
+                this.errorMessage =
+                  'Producto creado, pero error al subir la imagen';
+              }
+            });
         } else {
           this.finishSuccess(product.name);
         }
-
       },
-      error: (err) => {
+      error: () => {
         this.loading = false;
-        this.errorMessage =
-          err?.error?.message || '❌ No se pudo agregar el producto';
+        this.errorMessage = 'No se pudo agregar el producto';
       }
     });
   }
 
-  // ☁️ Subir imagen usando ProductImageService
-  uploadProductImage(productId: number, productName: string) {
-    const token = localStorage.getItem('token');
-
-    console.log('🔐 TOKEN PARA SUBIR IMAGEN:', token);
-
-    if (!token) {
-      console.error('❌ NO hay token JWT');
-      this.errorMessage = 'Sesión expirada. Vuelve a iniciar sesión.';
-      this.loading = false;
-      return;
-    }
-
-    this.productImageService
-      .uploadImage(productId, this.selectedFile!, true, token)
-      .subscribe({
-        next: () => {
-          this.selectedFile = null;
-          this.finishSuccess(productName);
-        },
-        error: (err) => {
-          console.error('❌ Error al subir imagen:', err);
-          this.loading = false;
-          this.errorMessage =
-            'Producto creado, pero error al subir la imagen';
-        }
-      });
-  }
-
-  // ✅ Finalizar correctamente
-  finishSuccess(productName: string) {
+  finishSuccess(name: string) {
     this.loading = false;
-
-    this.saveActivity('add', productName);
-
-    this.successMessage = '✅ El producto se agregó correctamente';
-
-    this.productForm.reset({
-      name: '',
-      category_id: null,
-      stock: 0,
-      price: 0,
-      description: ''
-    });
-
-    setTimeout(() => {
-      this.successMessage = '';
-    }, 600);
-  }
-
-  // 🟦 Log de actividad
-  saveActivity(type: 'add' | 'edit', name: string) {
-    const data = localStorage.getItem('activity_log');
-    const activity = data ? JSON.parse(data) : [];
-
-    activity.unshift({
-      type,
-      message: `Producto agregado: "${name}"`,
-      date: new Date().toLocaleString()
-    });
-
-    localStorage.setItem(
-      'activity_log',
-      JSON.stringify(activity.slice(0, 10))
-    );
+    this.successMessage = `Producto "${name}" agregado correctamente`;
+    this.productForm.reset();
+    this.selectedFile = null;
   }
 }

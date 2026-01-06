@@ -39,6 +39,17 @@ export class ProductService {
   getProductById(id: number) {
   return this.http.get<Product>(`${this.apiUrl}/${id}`);
 }
+
+getRecommendedProducts(categoryId: number, excludeId: number) {
+  return this.http.get<Product[]>(
+    `${this.apiUrl}?category_id=${categoryId}`
+  );
+}
+getProductsByCategory(categoryId: number) {
+  return this.http.get<Product[]>(
+    `${this.apiUrl}?category_id=${categoryId}`
+  );
+}
   
 }
 

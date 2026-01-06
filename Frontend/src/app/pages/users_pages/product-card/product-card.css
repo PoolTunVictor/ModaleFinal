@@ -1,23 +1,30 @@
-.product-stock {
-  font-size: 12px;
-  margin: 2px 0;
-  color: #555;
+.product-card {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* ⚠️ poco stock */
-.product-stock.low {
-  color: #f97316;
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.product-name {
   font-weight: 600;
+  font-size: 15px;
 }
 
-/* ❌ sin stock */
-.product-stock.out {
-  color: #dc2626;
+.product-price {
   font-weight: 700;
+  color: #e91e63;
 }
 
-/* deshabilitar botón */
-.add-btn:disabled {
-  background: #aaa;
-  cursor: not-allowed;
+.add-btn {
+  margin-top: 8px;
+  cursor: pointer;
 }

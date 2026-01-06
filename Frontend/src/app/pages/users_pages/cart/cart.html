@@ -1,88 +1,63 @@
-<section class="brand-hero">
-  <h1>CARRITO</h1>
-  <p>Todo lo que compraste, organizado para ti</p>
+<section class="cart-container" *ngIf="cartItems.length > 0; else emptyCart">
+
+  <div class="cart-item" *ngFor="let item of cartItems">
+
+    <!-- INFO DEL PRODUCTO -->
+    <div class="cart-info">
+      <strong class="product-name">
+        {{ item.product.name }}
+      </strong>
+
+      <p class="product-price">
+        ${{ item.product.price }}
+      </p>
+
+      <!-- STOCK -->
+      <p
+        class="product-stock"
+        *ngIf="item.product.stock !== undefined && item.product.stock > 0"
+      >
+        Stock disponible: {{ item.product.stock }}
+      </p>
+
+      <p
+        class="product-stock out"
+        *ngIf="item.product.stock === 0"
+      >
+        Agotado
+      </p>
+    </div>
+
+    <!-- CANTIDAD -->
+    <div class="cart-quantity">
+      <button (click)="decrease(item)">−</button>
+      <span>{{ item.quantity }}</span>
+      <button (click)="increase(item)">+</button>
+    </div>
+
+    <!-- SUBTOTAL -->
+    <div class="cart-subtotal">
+      ${{ item.product.price * item.quantity }}
+    </div>
+
+    <!-- ELIMINAR -->
+    <button class="remove-btn" (click)="remove(item)">
+      ✕
+    </button>
+
+  </div>
+
+  <!-- TOTAL -->
+  <div class="cart-total">
+    <strong>Total:</strong>
+    ${{ getTotal() }}
+  </div>
+
 </section>
 
-<div class="cart-page">
-
-  <div class="cart-wrapper">
-
-    <!-- Breadcrumb -->
-
-    <h2 class="cart-title">¡Felicidades! Tu pedido está casi listo</h2>
-
-    <div class="cart-layout">
-
-      <!-- LISTA PRODUCTOS -->
-      <div class="cart-list">
-
-        <div class="cart-header">
-          <span>PRODUCTO</span>
-          <span>CANTIDAD</span>
-          <span>PRECIO</span>
-          <span>TOTAL</span>
-        </div>
-
-        <div class="cart-item" *ngFor="let item of cartItems">
-
-          <!-- Producto -->
-          <div class="product-info">
-            <img [src]="item.image" alt="producto">
-            <div>
-              <strong>{{ item.name }}</strong>
-              <p>Tamaño: {{ item.size }}</p>
-              <button class="remove" (click)="remove(item)">Eliminar</button>
-            </div>
-          </div>
-
-          <!-- Cantidad -->
-          <div class="quantity-control">
-            <button (click)="decrease(item)">−</button>
-            <span>{{ item.quantity }}</span>
-            <button (click)="increase(item)">+</button>
-          </div>
-
-          <!-- Precio -->
-          <div class="price">
-            ${{ item.price }}.00
-          </div>
-
-          <!-- Total -->
-          <div class="total">
-            ${{ item.price * item.quantity }}.00
-          </div>
-
-        </div>
-      </div>
-
-      <!-- RESUMEN -->
-      <div class="summary">
-
-        <h3>DETALLE DEL PEDIDO</h3>
-
-        <label>ID Pedido</label>
-        <input type="text">
-
-        <label>Domicilio</label>
-        <input type="text">
-
-        <label>Calle</label>
-        <input type="text">
-
-        <label>Ciudad</label>
-        <input type="text">
-
-        <div class="summary-total">
-          <span>Total</span>
-          <strong>${{ getTotal() }}.00</strong>
-        </div>
-
-        <button class="checkout-btn">GENERAR PEDIDO</button>
-
-        <a class="continue">← Continuar comprando</a>
-
-      </div>
-
-    </div>
-  </div>
-</div>
+<!-- CARRITO VACÍO -->
+<ng-template #emptyCart>
+  <p class="empty-cart">
+    Tu carrito está vacío 🛒
+  </p>
+</ng-template>
