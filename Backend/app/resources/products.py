@@ -3,12 +3,14 @@ from flask import request
 from app.extensions import db
 from app.models.product import Product
 from app.models.category import Category
-from app.utils.decorators import admin_required
+from app.models.product_image import ProductImage
 from slugify import slugify
 
 api = Namespace("products", description="Gestión de productos")
 
-# MODEL
+# ======================
+# MODELO (solo para POST / PUT)
+# ======================
 product_model = api.model("Product", {
     "id": fields.Integer(readOnly=True),
     "name": fields.String(required=True),
@@ -19,31 +21,61 @@ product_model = api.model("Product", {
     "category_id": fields.Integer(required=True)
 })
 
-# LIST / CREATE
-@api.route("/",  strict_slashes=False) #lo mismo, solo le agregue esto para ver por que enviaba mal las rutas, solo se borra el strict y ya
+# ======================
+# LISTAR / CREAR
+# ======================
+@api.route("/", strict_slashes=False)
 class ProductList(Resource):
 
-    @api.marshal_list_with(product_model)
     def get(self):
-        """Listar productos, opcionalmente por categoría"""
+        """
+        Listar productos (incluye imagen principal si existe)
+        """
         category_id = request.args.get("category_id", type=int)
+
         query = Product.query
         if category_id:
             query = query.filter_by(category_id=category_id)
-        return query.all()
 
-   
+        products = query.all()
+        result = []
+
+        for product in products:
+            # 🔍 Buscar imagen principal
+            main_image = ProductImage.query.filter_by(
+                product_id=product.id,
+                is_main=True
+            ).first()
+
+            result.append({
+                "id": product.id,
+                "name": product.name,
+                "slug": product.slug,
+                "description": product.description,
+                "price": product.price,
+                "stock": product.stock,
+                "category_id": product.category_id,
+                "main_image": main_image.url if main_image else None
+            })
+
+        return result, 200
+
+
     @api.expect(product_model, validate=True)
     @api.marshal_with(product_model, code=201)
     def post(self):
-        """Crear producto"""
+        """
+        Crear producto
+        """
         data = request.json
 
         # Validaciones
         if not Category.query.get(data["category_id"]):
             api.abort(400, "La categoría no existe")
+
         if data["price"] < 0:
             api.abort(400, "El precio no puede ser negativo")
+
         if data.get("stock", 0) < 0:
             api.abort(400, "El stock no puede ser negativo")
 
@@ -65,34 +97,56 @@ class ProductList(Resource):
 
         return product, 201
 
-# GET /<id>, PUT /<id>, DELETE /<id>
+
+# ======================
+# GET / PUT / DELETE POR ID
+# ======================
 @api.route("/<int:id>")
 @api.param("id", "ID del producto")
 class ProductDetail(Resource):
 
-    @api.marshal_with(product_model)
     def get(self, id):
-        """Obtener producto por ID"""
-        return Product.query.get_or_404(id)
+        """
+        Obtener producto por ID (incluye imagen principal)
+        """
+        product = Product.query.get_or_404(id)
 
-    
+        main_image = ProductImage.query.filter_by(
+            product_id=product.id,
+            is_main=True
+        ).first()
+
+        return {
+            "id": product.id,
+            "name": product.name,
+            "slug": product.slug,
+            "description": product.description,
+            "price": product.price,
+            "stock": product.stock,
+            "category_id": product.category_id,
+            "main_image": main_image.url if main_image else None
+        }, 200
+
+
     @api.expect(product_model, validate=True)
     @api.marshal_with(product_model)
     def put(self, id):
-        """Actualizar producto"""
+        """
+        Actualizar producto
+        """
         product = Product.query.get_or_404(id)
         data = request.json
 
-        # Validar nombre y slug duplicado
+        # Validar nombre duplicado
         if "name" in data and data["name"] != product.name:
             new_slug = slugify(data["name"])
-            existing_product = Product.query.filter_by(slug=new_slug).first()
-            if existing_product and existing_product.id != product.id:
+            existing = Product.query.filter_by(slug=new_slug).first()
+            if existing and existing.id != product.id:
                 api.abort(400, "Otro producto ya tiene este nombre")
+
             product.name = data["name"]
             product.slug = new_slug
 
-        # Actualizar otros campos
         product.description = data.get("description", product.description)
         product.price = data.get("price", product.price)
         product.stock = data.get("stock", product.stock)
@@ -103,7 +157,9 @@ class ProductDetail(Resource):
 
 
     def delete(self, id):
-        """Eliminar producto"""
+        """
+        Eliminar producto
+        """
         product = Product.query.get_or_404(id)
         db.session.delete(product)
         db.session.commit()
