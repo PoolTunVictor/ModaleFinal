@@ -22,7 +22,7 @@ product_image_model = api.model("ProductImage", {
 # ======================
 # LISTAR / CREAR
 # ======================
-@api.route("/")
+@api.route("/", strict_slashes=False)
 class ProductImageList(Resource):
 
     @api.marshal_list_with(product_image_model)
