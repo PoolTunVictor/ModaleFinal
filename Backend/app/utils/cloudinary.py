@@ -1,6 +1,5 @@
 import cloudinary
 import cloudinary.uploader
-import cloudinary.api
 from flask import current_app
 
 
@@ -13,35 +12,33 @@ def init_cloudinary(app):
     )
 
 
-def upload_image(
-    file,
-    folder="products",
-    allowed_formats=("jpg", "jpeg", "png", "webp")
-):
+def upload_image(file, folder="products"):
     """
     Sube una imagen a Cloudinary
     Retorna: {url, public_id}
     """
+
     if not file:
         raise ValueError("No se envió ningún archivo")
+
+    # ✅ Validación local de extensión
+    filename = file.filename.lower()
+    if not filename.endswith((".jpg", ".jpeg", ".png", ".webp")):
+        raise ValueError("Formato de imagen no permitido")
 
     result = cloudinary.uploader.upload(
         file,
         folder=folder,
-        resource_type="image",
-        allowed_formats=list(allowed_formats)
+        resource_type="image"
     )
 
     return {
-        "url": result.get("secure_url"),
-        "public_id": result.get("public_id")
+        "url": result["secure_url"],
+        "public_id": result["public_id"]
     }
 
 
 def delete_image(public_id):
-    """
-    Elimina una imagen de Cloudinary usando public_id
-    """
     if not public_id:
         return
 

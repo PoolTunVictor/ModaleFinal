@@ -45,10 +45,6 @@ class ProductImageList(Resource):
         (multipart/form-data)
         """
 
-        # 🔍 DEBUG TEMPORAL (puedes quitar luego)
-        print("FORM:", request.form)
-        print("FILES:", request.files)
-
         product_id_raw = request.form.get("product_id")
         is_main = request.form.get("is_main", "false").lower() == "true"
         file = request.files.get("file")
@@ -74,10 +70,13 @@ class ProductImageList(Resource):
                 is_main=True
             ).update({"is_main": False})
 
+        # ---- SUBIR A CLOUDINARY (DEBUG) ----
         try:
             result = upload_image(file)
         except Exception as e:
-            api.abort(400, str(e))
+            print("CLOUDINARY ERROR >>>", repr(e))
+            raise   # ❗ fuerza error 500 para ver el mensaje real
+
 
         image = ProductImage(
             product_id=product_id,
