@@ -70,13 +70,10 @@ class ProductImageList(Resource):
                 is_main=True
             ).update({"is_main": False})
 
-        # ---- SUBIR A CLOUDINARY (DEBUG) ----
         try:
             result = upload_image(file)
         except Exception as e:
-            print("CLOUDINARY ERROR >>>", repr(e))
-            raise   # ❗ fuerza error 500 para ver el mensaje real
-
+            api.abort(400, str(e))
 
         image = ProductImage(
             product_id=product_id,
