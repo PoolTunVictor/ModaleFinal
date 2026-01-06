@@ -6,47 +6,63 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000'; // Cambia por tu URL del back-end (ej. http://localhost:5000/auth/login)
+
+  private apiUrl = 'http://localhost:5000';
 
   constructor(private http: HttpClient) {}
 
+  // ===============================
+  // LOGIN
+  // ===============================
   login(loginData: { email: string; password: string; remember: boolean }): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.apiUrl}/auth/login`, loginData, { headers });  // Nota: Agregué /auth porque tu namespace es "auth"
+    return this.http.post(`${this.apiUrl}/auth/login`, loginData, { headers });
   }
 
-  // Nuevo método para registro
+  // ===============================
+  // REGISTER
+  // ===============================
   register(registerData: { email: string; password: string; phone?: string }): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.apiUrl}/auth/register`, registerData, { headers });
   }
-  
-  // Método para verificar si es admin
-  isAdmin(): boolean {
-    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-    if (!token) return false;
-    const payload = this.decodeToken(token);
-    return payload?.role === 'admin';
-  }
 
-  // Método para obtener el token actual
+  // ===============================
+  // TOKEN
+  // ===============================
   getToken(): string | null {
-    return localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+    return (
+      localStorage.getItem('access_token') ||
+      sessionStorage.getItem('access_token')
+    );
   }
 
-  // Método para logout
+  // ===============================
+  // USER (FUENTE DE VERDAD)
+  // ===============================
+  getUser(): any | null {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+
+  // ===============================
+  // AUTH STATE
+  // ===============================
+  isLoggedIn(): boolean {
+    return !!this.getToken() && !!this.getUser();
+  }
+
+  isAdmin(): boolean {
+    const user = this.getUser();
+    return user?.role === 'admin';
+  }
+
+  // ===============================
+  // LOGOUT (LIMPIEZA TOTAL)
+  // ===============================
   logout(): void {
     localStorage.removeItem('access_token');
     sessionStorage.removeItem('access_token');
     localStorage.removeItem('user');
-  }
-
-  private decodeToken(token: string): any {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload;
-    } catch {
-      return null;
-    }
   }
 }

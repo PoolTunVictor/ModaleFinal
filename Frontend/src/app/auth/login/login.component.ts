@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,8 @@ import { AuthService } from '../../core/service/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+
   loginForm: FormGroup;
   isLoading = false;
   errorMessage = '';
@@ -22,30 +23,40 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],  // Si quieres permitir "usuario", cambia a Validators.required sin email
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       remember: [false]
     });
   }
 
-  onLogin() {
-    if (this.loginForm.invalid) return;
+  // 🔥 CLAVE: limpia cualquier sesión previa
+  ngOnInit(): void {
+    this.authService.logout();
+  }
+
+  onLogin(): void {
+    if (this.loginForm.invalid || this.isLoading) return;
 
     this.isLoading = true;
-    this.errorMessage = '';  // Limpia cualquier error previo al intentar de nuevo
+    this.errorMessage = '';
 
     const loginData = this.loginForm.value;
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
         const token = response.access_token;
+
+        // Guarda token según "remember"
         if (loginData.remember) {
           localStorage.setItem('access_token', token);
         } else {
           sessionStorage.setItem('access_token', token);
         }
+
+        // 🔑 Guarda usuario (fuente de verdad)
         localStorage.setItem('user', JSON.stringify(response.user));
 
+        // 🚀 Redirección por rol
         if (response.user.role === 'admin') {
           this.router.navigate(['/admin/users']);
         } else {
@@ -55,10 +66,10 @@ export class LoginComponent {
       error: (error) => {
         this.errorMessage = 'Credenciales incorrectas o error en el servidor.';
         console.error('Error en login:', error);
-        this.isLoading = false;  // <-- CORRECCIÓN: Resetea isLoading aquí para permitir reintentos
+        this.isLoading = false;
       },
       complete: () => {
-        this.isLoading = false;  // Redundante, pero asegura que se resetee
+        this.isLoading = false;
       }
     });
   }

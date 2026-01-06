@@ -1,13 +1,24 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../app/core/service/auth.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, RouterLinkActive],
-  standalone:true,
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './admin_dashboard.html',
-  styleUrl: './admin_dashboard.css',
+  styleUrls: ['./admin_dashboard.css']
 })
 export class Dashboard {
+   constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
+  logout(): void {
+    this.authService.logout();   // 🔥 limpia token + user
+    this.router.navigate(['/home']); // 🔁 redirige
+  }
 }
