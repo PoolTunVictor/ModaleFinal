@@ -27,9 +27,6 @@ class ProductImageList(Resource):
 
     @api.marshal_list_with(product_image_model)
     def get(self):
-        """
-        Listar imágenes por producto (?product_id=)
-        """
         try:
             product_id = int(request.args.get("product_id", 0))
         except ValueError:
@@ -48,7 +45,10 @@ class ProductImageList(Resource):
         (multipart/form-data)
         """
 
-        # ---- LECTURA SEGURA DEL FORM ----
+        # 🔍 DEBUG TEMPORAL (puedes quitar luego)
+        print("FORM:", request.form)
+        print("FILES:", request.files)
+
         product_id_raw = request.form.get("product_id")
         is_main = request.form.get("is_main", "false").lower() == "true"
         file = request.files.get("file")
@@ -58,7 +58,6 @@ class ProductImageList(Resource):
         except (TypeError, ValueError):
             product_id = 0
 
-        # ---- VALIDACIONES ----
         if not product_id:
             api.abort(400, "product_id es obligatorio")
 
@@ -69,14 +68,12 @@ class ProductImageList(Resource):
         if not file:
             api.abort(400, "Archivo de imagen requerido")
 
-        # ---- PRINCIPAL ----
         if is_main:
             ProductImage.query.filter_by(
                 product_id=product_id,
                 is_main=True
             ).update({"is_main": False})
 
-        # ---- SUBIR A CLOUDINARY ----
         try:
             result = upload_image(file)
         except Exception as e:
@@ -93,6 +90,7 @@ class ProductImageList(Resource):
         db.session.commit()
 
         return image, 201
+
 
 
 # ======================
