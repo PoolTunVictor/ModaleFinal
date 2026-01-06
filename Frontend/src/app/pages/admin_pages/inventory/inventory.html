@@ -47,12 +47,13 @@
     <p *ngIf="loading">Cargando productos...</p>
     <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
-    <table
+        <table
       class="inventory-table"
       *ngIf="!loading && filteredProducts.length > 0"
     >
       <thead>
         <tr>
+          <th>Imagen</th>
           <th>Producto</th>
           <th>Slug</th>
           <th>Categoría</th>
@@ -66,11 +67,24 @@
       <tbody>
         <tr *ngFor="let product of filteredProducts">
 
+          <!-- 🖼 IMAGEN -->
+          <td class="center">
+            <img
+              *ngIf="product.main_image; else noImage"
+              [src]="product.main_image"
+              alt="Imagen del producto"
+              class="product-thumb"
+            />
+
+            <ng-template #noImage>
+              <span class="no-image">Sin imagen</span>
+            </ng-template>
+          </td>
+
+          <!-- PRODUCTO -->
           <td class="product-cell">
-            <div>
-              <strong>{{ product.name }}</strong>
-              <small>{{ product.slug }}</small>
-            </div>
+            <strong>{{ product.name }}</strong><br />
+            <small>{{ product.slug }}</small>
           </td>
 
           <td>{{ product.slug }}</td>

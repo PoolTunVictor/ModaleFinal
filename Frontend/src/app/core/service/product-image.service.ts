@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductImageService {
 
-  private apiUrl = `${environment.apiUrl}/product-images`;
+  private apiUrl = `${environment.apiUrl}/product-images/`;
 
   constructor(private http: HttpClient) {}
 
@@ -46,7 +46,7 @@ export class ProductImageService {
     let headers = new HttpHeaders();
 
     // ✅ SOLO si hay token
-    if (token) {
+    if (token) {  
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
 

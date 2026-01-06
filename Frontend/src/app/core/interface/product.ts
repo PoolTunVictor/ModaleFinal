@@ -6,4 +6,5 @@ export interface Product {
   price: number;
   stock?: number;
   category_id: number;
+  main_image?: string; // ✅ SOLO para mostrar
 }

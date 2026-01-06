@@ -25,6 +25,7 @@ export class AddProduct {
   successMessage = '';
 
   selectedFile: File | null = null;
+  imagePreview: string | null = null; // 👈 NUEVO
 
   constructor(
     private fb: FormBuilder,
@@ -40,15 +41,23 @@ export class AddProduct {
     });
   }
 
-  // 📸 Capturar imagen
+  // 📸 Capturar imagen + preview
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
+
+      // 👉 Crear preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
     }
   }
 
-  // 🚀 Submit
+  // 🚀 Submit (igual que lo tienes)
   onSubmit() {
     if (this.productForm.invalid) {
       this.errorMessage = 'Completa los campos obligatorios';
@@ -69,14 +78,11 @@ export class AddProduct {
 
         const productId = createdProduct.id || createdProduct?.data?.id;
 
-        // 👉 Si hay imagen, la subimos
         if (this.selectedFile && productId) {
           this.productImageService
-            .uploadImage(productId, this.selectedFile, true, '') // 👈 token vacío (temporal)
+            .uploadImage(productId, this.selectedFile, true)
             .subscribe({
-              next: () => {
-                this.finishSuccess(product.name);
-              },
+              next: () => this.finishSuccess(product.name),
               error: () => {
                 this.loading = false;
                 this.errorMessage =
@@ -99,5 +105,7 @@ export class AddProduct {
     this.successMessage = `Producto "${name}" agregado correctamente`;
     this.productForm.reset();
     this.selectedFile = null;
+    this.imagePreview = null; // 👈 limpiar preview
   }
 }
+

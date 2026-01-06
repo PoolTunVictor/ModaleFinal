@@ -48,14 +48,20 @@
       <textarea rows="4" formControlName="description"></textarea>
     </div>
 
-    <!-- 🖼 IMAGEN -->
-      <div class="form-group">
+  <!-- 🖼 IMAGEN -->
+  <div class="form-group">
     <label>Imagen del producto</label>
     <input
       type="file"
       accept="image/*"
       (change)="onFileSelected($event)"
     />
+  </div>
+
+  <!-- 👁️ PREVIEW -->
+  <div class="image-preview" *ngIf="imagePreview">
+    <p>Vista previa:</p>
+    <img [src]="imagePreview" alt="Preview del producto">
   </div>
 
     <div class="actions">
