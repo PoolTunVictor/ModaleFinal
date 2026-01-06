@@ -54,7 +54,7 @@ def generate_order_number():
 @api.route("/")
 class OrderList(Resource):
 
-    @jwt_required()
+    #@jwt_required()
     @api.marshal_list_with(order_response_model)
     def get(self):
         """
@@ -73,7 +73,7 @@ class OrderList(Resource):
             Order.created_at.desc()
         ).all()
 
-    @jwt_required()
+    #@jwt_required()
     @api.expect(order_create_model, validate=True)
     @api.marshal_with(order_response_model, code=201)
     def post(self):
@@ -155,7 +155,7 @@ class OrderList(Resource):
 @api.param("id", "ID del pedido")
 class OrderDetail(Resource):
 
-    @jwt_required()
+    #@jwt_required()
     @api.marshal_with(order_response_model)
     def get(self, id):
         """Obtener pedido por ID"""
@@ -175,7 +175,7 @@ class OrderDetail(Resource):
 @api.param("id", "ID del pedido")
 class OrderStatus(Resource):
 
-    @jwt_required()
+    #@jwt_required()
     def put(self, id):
         """Actualizar estado del pedido (ADMIN)"""
 

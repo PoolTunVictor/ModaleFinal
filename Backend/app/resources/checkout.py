@@ -33,7 +33,7 @@ checkout_model = api.model("Checkout", {
 @api.route("/")
 class Checkout(Resource):
 
-    @jwt_required()
+    #@jwt_required()
     @api.expect(checkout_model, validate=True)
     def post(self):
         """Crear pedido y descontar stock"""

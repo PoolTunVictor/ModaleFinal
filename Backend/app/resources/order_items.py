@@ -31,7 +31,7 @@ order_item_model = api.model("OrderItem", {
 @api.param("order_id", "ID del pedido")
 class OrderItemList(Resource):
 
-    @jwt_required()
+    #@jwt_required()
     @api.marshal_list_with(order_item_model)
     def get(self, order_id):
         """Listar items de un pedido"""
