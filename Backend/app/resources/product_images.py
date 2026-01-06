@@ -30,7 +30,13 @@ class ProductImageList(Resource):
         """
         Listar imágenes por producto (?product_id=)
         """
-        product_id = request.args.get("product_id", type=int)
+        print("FORM:", request.form)
+        print("FILES:", request.files)
+
+        try:
+            product_id = int(request.form.get("product_id", 0))
+        except ValueError:
+            product_id = 0
         if not product_id:
             api.abort(400, "product_id es requerido")
 
