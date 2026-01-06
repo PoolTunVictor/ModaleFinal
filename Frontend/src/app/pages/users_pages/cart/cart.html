@@ -1,71 +1,96 @@
-<section class="cart-container" *ngIf="cartItems.length > 0; else emptyCart">
+<section class="cart-page">
 
-  <div class="cart-item" *ngFor="let item of cartItems">
+  <h1 class="cart-title">CARRITO</h1>
+  <p class="cart-subtitle">
+    Todo lo que compraste, organizado para ti
+  </p>
 
-    <!-- INFO DEL PRODUCTO -->
-    <div class="cart-info">
+  <div class="cart-layout">
 
-      <!-- 🖼 IMAGEN -->
-      <img
-        [src]="item.product.main_image"
-        alt="{{ item.product.name }}"
-        class="cart-product-img"
-      />
+    <!-- ================= LISTA ================= -->
+    <div class="cart-list" *ngIf="cartItems.length > 0; else emptyCart">
 
-      <div>
-        <strong class="product-name">
-          {{ item.product.name }}
-        </strong>
-
-        <p class="product-price">
-          ${{ item.product.price }}
-        </p>
-
-        <!-- STOCK -->
-        <p
-          class="product-stock"
-          *ngIf="item.product.stock !== undefined && item.product.stock > 0"
-        >
-          Stock disponible: {{ item.product.stock }}
-        </p>
-
-        <p
-          class="product-stock out"
-          *ngIf="item.product.stock === 0"
-        >
-          Agotado
-        </p>
+      <div class="cart-header">
+        <span>PRODUCTO</span>
+        <span>CANTIDAD</span>
+        <span>PRECIO</span>
+        <span>TOTAL</span>
       </div>
-    </div> <!-- ✅ cierre cart-info -->
 
-    <!-- CANTIDAD -->
-    <div class="cart-quantity">
-      <button (click)="decrease(item)">−</button>
-      <span>{{ item.quantity }}</span>
-      <button (click)="increase(item)">+</button>
+      <div class="cart-item" *ngFor="let item of cartItems">
+
+        <!-- PRODUCTO -->
+        <div class="product-info">
+          <img
+            [src]="item.product.main_image || 'assets/no-image.png'"
+            class="cart-product-img"
+            alt="{{ item.product.name }}"
+          />
+
+          <div>
+            <strong>{{ item.product.name }}</strong>
+            <p class="product-price">${{ item.product.price }}</p>
+            <button class="remove" (click)="remove(item)">
+              Eliminar
+            </button>
+          </div>
+        </div>
+
+        <!-- CANTIDAD -->
+        <div class="quantity-control">
+          <button (click)="decrease(item)">−</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="increase(item)">+</button>
+        </div>
+
+        <!-- PRECIO -->
+        <div class="price">
+          ${{ item.product.price }}
+        </div>
+
+        <!-- TOTAL -->
+        <div class="total">
+          ${{ item.product.price * item.quantity }}
+        </div>
+
+      </div>
     </div>
 
-    <!-- SUBTOTAL -->
-    <div class="cart-subtotal">
-      ${{ item.product.price * item.quantity }}
+    <!-- ================= RESUMEN ================= -->
+    <div class="summary">
+
+      <h3>DETALLE DEL PEDIDO</h3>
+
+      <label>ID pedido</label>
+      <input type="text" disabled>
+
+      <label>Domicilio</label>
+      <input type="text">
+
+      <label>Calle</label>
+      <input type="text">
+
+      <label>Ciudad</label>
+      <input type="text">
+
+      <div class="summary-total">
+        <span>Total</span>
+        <strong>${{ getTotal() }}</strong>
+      </div>
+
+      <button class="checkout-btn">
+        GENERAR PEDIDO
+      </button>
+
+      <a class="continue" routerLink="/">
+        Continúa comprando →
+      </a>
+
     </div>
-
-    <!-- ELIMINAR -->
-    <button class="remove-btn" (click)="remove(item)">
-      ✕
-    </button>
-
-  </div> <!-- ✅ cierre cart-item -->
-
-  <!-- TOTAL -->
-  <div class="cart-total">
-    <strong>Total:</strong>
-    ${{ getTotal() }}
   </div>
 
 </section>
 
-<!-- CARRITO VACÍO -->
 <ng-template #emptyCart>
   <p class="empty-cart">
     Tu carrito está vacío 🛒
