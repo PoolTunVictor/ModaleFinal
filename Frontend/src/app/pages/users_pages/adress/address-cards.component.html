@@ -1,41 +1,71 @@
 <div class="grid">
 
+  <!-- DIRECCIONES -->
   <div
     class="card"
     *ngFor="let a of addresses"
-    [class.primary]="a.primary"
+    [class.primary]="a.is_default"
   >
-
     <div class="card-header">
-      <span class="tag">{{ a.label }}</span>
+      <span class="tag" *ngIf="a.is_default">Predeterminada</span>
 
       <div class="actions">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-pen"></i>
-        <i class="fas fa-trash"></i>
+        <i class="fas fa-star" (click)="setDefault(a)"></i>
+        <i class="fas fa-trash" (click)="deleteAddress(a.id)"></i>
       </div>
     </div>
 
-    <h3>{{ a.title }}</h3>
-    <p class="name">{{ a.name }}</p>
-    <p>{{ a.address }}</p>
-    <p>{{ a.city }}</p>
+    <h3>{{ a.street }}</h3>
+    <p class="name">{{ a.receiver_name }}</p>
+    <p>{{ a.city }}, {{ a.state }}</p>
+    <p>{{ a.postal_code }}</p>
+
     <p class="phone">
       <i class="fas fa-phone"></i> {{ a.phone }}
     </p>
 
-    <!-- Fake map -->
-    <div class="map-placeholder">
-      <span>{{ a.city.split(',')[0] }}</span>
-    </div>
+    <div class="map-placeholder">{{ a.city }}</div>
   </div>
 
-  <!-- Add new -->
-  <div class="card add">
+  <!-- ADD -->
+  <div class="card add" (click)="openAddAddress()">
     <div class="add-content">
       <i class="fas fa-location-dot"></i>
       <p>Añadir otra dirección</p>
     </div>
   </div>
 
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" *ngIf="showForm">
+  <div class="modal">
+
+    <h2>Nueva dirección</h2>
+
+    <form [formGroup]="addressForm" (ngSubmit)="submitAddress()">
+
+      <input formControlName="receiver_name" placeholder="Nombre del receptor">
+      <input formControlName="phone" placeholder="Teléfono">
+      <input formControlName="street" placeholder="Calle y número">
+      <input formControlName="city" placeholder="Ciudad">
+      <input formControlName="state" placeholder="Estado">
+      <input formControlName="postal_code" placeholder="Código postal">
+      <textarea formControlName="references" placeholder="Referencias"></textarea>
+
+      <label class="checkbox">
+        <input type="checkbox" formControlName="is_default">
+        Usar como dirección predeterminada
+      </label>
+
+      <div class="actions">
+        <button type="button" (click)="closeForm()">Cancelar</button>
+        <button type="submit" [disabled]="addressForm.invalid">
+          Guardar
+        </button>
+      </div>
+
+    </form>
+
+  </div>
 </div>
