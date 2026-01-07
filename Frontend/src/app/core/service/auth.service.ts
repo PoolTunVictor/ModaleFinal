@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000'; // Cambia por tu URL del back-end (ej. http://localhost:5000/auth/login)
+  private apiUrl = 'https://modalefinal.onrender.com'
 
   constructor(private http: HttpClient) {}
 
@@ -15,13 +15,25 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, loginData, { headers });  // Nota: Agregué /auth porque tu namespace es "auth"
   }
 
-  // Método para verificar si es admin
-  isAdmin(): boolean {
-    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-    if (!token) return false;
-    const payload = this.decodeToken(token);
-    return payload?.role === 'admin';
-  }
+  // ===============================
+// AUTH STATE
+// ===============================
+isLoggedIn(): boolean {
+  const token =
+    localStorage.getItem('access_token') ||
+    sessionStorage.getItem('access_token');
+
+  const user = localStorage.getItem('user');
+
+  return !!token && !!user;
+}
+
+isAdmin(): boolean {
+  const user = localStorage.getItem('user');
+  if (!user) return false;
+
+  return JSON.parse(user).role === 'admin';
+}
 
   // Método para obtener el token actual
   getToken(): string | null {
@@ -43,4 +55,12 @@ export class AuthService {
       return null;
     }
   }
+
+  register(registerData: { email: string; password: string; phone?: string }) {
+    return this.http.post(
+      `${this.apiUrl}/auth/register`,
+      registerData
+    );
+  }
+
 }

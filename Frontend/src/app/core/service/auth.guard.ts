@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { AuthService } from '../service/auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdminGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
 
   constructor(
     private authService: AuthService,
@@ -13,11 +13,12 @@ export class AdminGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    if (this.authService.isAdmin()) {
+    // ✅ Usuario logueado (token + user)
+    if (this.authService.isLoggedIn()) {
       return true;
     }
 
-    // No es admin → login o home
+    // ❌ No logueado → login
     this.router.navigate(['/login']);
     return false;
   }
