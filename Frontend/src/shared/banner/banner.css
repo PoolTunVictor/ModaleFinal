@@ -1,0 +1,18 @@
+.brand-hero {
+  background:#fce4ec;
+  text-align: center;
+  padding: 36px 20px;
+}
+
+.brand-hero h1 {
+  font-family: 'Josefin Slab', serif;
+  font-size: 48px;
+  letter-spacing: 4px;
+  margin: 0;
+}
+
+.brand-hero p {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
+}

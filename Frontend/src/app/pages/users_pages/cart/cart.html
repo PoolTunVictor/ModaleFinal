@@ -1,9 +1,11 @@
-<section class="cart-page">
+<!-- 🔴 BANNER GLOBAL -->
+<app-banner
+  title="CARRITO"
+  subtitle="Todo lo que compraste, organizado para ti">
+</app-banner>
 
-  <h1 class="cart-title">CARRITO</h1>
-  <p class="cart-subtitle">
-    Todo lo que compraste, organizado para ti
-  </p>
+<!-- CONTENIDO DEL CARRITO -->
+<section class="cart-page">
 
   <div class="cart-layout">
 
@@ -30,6 +32,7 @@
           <div>
             <strong>{{ item.product.name }}</strong>
             <p class="product-price">${{ item.product.price }}</p>
+
             <button class="remove" (click)="remove(item)">
               Eliminar
             </button>
@@ -61,9 +64,6 @@
 
       <h3>DETALLE DEL PEDIDO</h3>
 
-      <label>ID pedido</label>
-      <input type="text" disabled>
-
       <label>Domicilio</label>
       <input type="text">
 
@@ -87,10 +87,11 @@
       </a>
 
     </div>
-  </div>
 
+  </div>
 </section>
 
+<!-- CARRITO VACÍO -->
 <ng-template #emptyCart>
   <p class="empty-cart">
     Tu carrito está vacío 🛒

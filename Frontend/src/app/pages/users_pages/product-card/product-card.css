@@ -1,54 +1,74 @@
 .product-card {
+  width: 100%;
+  max-width: 260px;              /* ⬅️ un poco más angosta */
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+  overflow: hidden;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Josefin Slab', serif;
 }
 
 .product-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
 }
 
+/* ================= IMAGEN ================= */
+
+.product-image {
+  width: 100%;
+  height: 150px;       
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;     
+}
+
+.product-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ================= INFO ================= */
+
 .product-info {
+  padding: 10px 12px 14px; 
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: 4px;              
 }
 
 .product-name {
+  font-size: 14px;
   font-weight: 600;
-  font-size: 15px;
+  text-align: center;
 }
 
 .product-price {
+  font-size: 14px;
   font-weight: 700;
   color: #e91e63;
 }
 
+/* ================= BOTÓN ================= */
+
 .add-btn {
-  margin-top: 8px;
+  margin-top: 4px;        
+  background: #12111f;
+  color: #fff;
+  border: none;
+  padding: 6px 18px;      
+  border-radius: 18px;
+  font-size: 13px;
   cursor: pointer;
 }
 
-.product-image {
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
-  border-radius: 10px 10px 0 0;
-  background: #f3f3f3;
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.no-image {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-  font-size: 14px;
+.add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

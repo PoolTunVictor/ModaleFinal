@@ -1,6 +1,7 @@
 .categories-page {
   font-family: 'Josefin Slab', serif;
   text-align: center;
+  font-size: 25px;
 }
 
 .hero-banner {
@@ -13,7 +14,7 @@
 .breadcrumb {
   text-align: left;
   padding: 10px 5%;
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: #666;
 }
 

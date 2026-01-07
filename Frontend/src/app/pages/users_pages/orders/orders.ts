@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BannerComponent } from '../../../../shared/banner/banner';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BannerComponent],
   templateUrl: './orders.html',
   styleUrls: ['./orders.css']
 })

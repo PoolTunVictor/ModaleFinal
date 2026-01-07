@@ -1,55 +1,53 @@
-<section *ngIf="product as p" class="product-detail">
+<!-- BANNER -->
+<div class="brand-hero">
+  <h1>MODALE & CO</h1>
+  <p>Encuentra lo último en tendencia, solo aquí</p>
+</div>
 
-  <div class="detail-content">
+<section *ngIf="product as p" class="product-page">
 
-    <!-- Imagen (placeholder vacío) -->
-    <div class="image-placeholder"></div>
+  <div class="product-container">
 
-    <!-- Info -->
-    <div class="info">
+    <!-- IMAGEN -->
+    <div class="product-image">
+      <img
+        [src]="p.main_image || 'assets/no-image.png'"
+        alt="{{ p.name }}"
+      />
+    </div>
+
+    <!-- INFO -->
+    <div class="product-info">
       <h1>{{ p.name }}</h1>
-
       <p class="price">$ {{ p.price }}</p>
+      <p class="description">{{ p.description }}</p>
 
-      <p class="description">
-        {{ p.description }}
-      </p>
-
-      <!-- STOCK -->
       <p class="stock" *ngIf="p.stock !== undefined && p.stock > 0">
         Stock disponible: {{ p.stock }}
       </p>
+      <p class="stock out" *ngIf="p.stock === 0">Agotado</p>
 
-      <p class="stock out" *ngIf="p.stock === 0">
-        Agotado
-      </p>
+      <div class="actions">
+        <div class="quantity-control">
+          <button (click)="decrease()">−</button>
+          <span>{{ quantity }}</span>
+          <button (click)="increase()">+</button>
+        </div>
 
-      <!-- Cantidad -->
-      <div class="quantity">
-        <button (click)="decrease()">-</button>
-        <span>{{ quantity }}</span>
-        <button (click)="increase()">+</button>
+        <button
+          class="add-btn"
+          [disabled]="p.stock === 0"
+          (click)="addToCart()"
+        >
+          Agregar
+        </button>
       </div>
-
-      <!-- Botón agregar -->
-      <button
-        class="add-btn"
-        [disabled]="p.stock === 0"
-        (click)="addToCart()"
-      >
-        Agregar al carrito
-      </button>
     </div>
-
   </div>
 
-  <!-- ================= RECOMENDADOS ================= -->
-  <section
-    class="recommended"
-    *ngIf="recommendedProducts.length > 0"
-  >
-    <h2>Productos recomendados</h2>
-
+  <!-- RECOMENDADOS -->
+  <section class="recommended" *ngIf="recommendedProducts.length > 0">
+    <h2>También podría gustarte</h2>
     <div class="recommended-grid">
       <app-product-card
         *ngFor="let rp of recommendedProducts"
