@@ -25,8 +25,3 @@ class ProductImage(db.Model):
         db.Boolean,
         default=False
     )
-
-    product = db.relationship(
-        "Product",
-        backref="images"
-    )

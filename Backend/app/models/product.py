@@ -42,3 +42,11 @@ class Product(db.Model):
         "Category",
         backref="products"
     )
+
+    # 🔥 RELACIÓN CORRECTA CON IMÁGENES
+    images = db.relationship(
+        "ProductImage",
+        backref="product",
+        cascade="all, delete-orphan",
+        lazy=True
+    )
