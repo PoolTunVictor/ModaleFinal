@@ -1,9 +1,6 @@
-<div
-  class="product-card"
-  [routerLink]="['/producto', product.id]"
->
+<div class="product-card">
 
-  <!-- 🖼 IMAGEN -->
+  <!-- IMAGEN -->
   <div class="product-image">
     <img
       *ngIf="product.main_image; else noImage"
@@ -12,9 +9,7 @@
     />
 
     <ng-template #noImage>
-      <div class="no-image">
-        Sin imagen
-      </div>
+      <div class="no-image">Sin imagen</div>
     </ng-template>
   </div>
 
@@ -23,22 +18,6 @@
     <p class="product-name">{{ product.name }}</p>
 
     <p class="product-price">$ {{ product.price }}</p>
-
-    <p
-      class="product-stock"
-      [ngClass]="{
-        low: product.stock !== undefined && product.stock > 0 && product.stock <= 5,
-        out: product.stock === 0
-      }"
-    >
-      <ng-container *ngIf="product.stock !== 0; else noStock">
-        Quedan {{ product.stock }} disponibles
-      </ng-container>
-
-      <ng-template #noStock>
-        Agotado
-      </ng-template>
-    </p>
 
     <button
       class="add-btn"

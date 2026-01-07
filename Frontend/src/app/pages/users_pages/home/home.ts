@@ -4,18 +4,19 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../core/service/product.service';
 import { Product } from '../../../core/interface/product';
 import { ProductCard } from '../product-card/product-card';
+import { BannerComponent } from '../../../../shared/banner/banner';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ProductCard],
+  imports: [CommonModule, ProductCard, BannerComponent],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  latestProducts: Product[] = [];   // últimos 9
-  visibleProducts: Product[] = []; // los que se muestran ahora
+  latestProducts: Product[] = [];
+  visibleProducts: Product[] = [];
 
   private intervalId: any;
   private showFirstGroup = true;
@@ -35,28 +36,32 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadLatestProducts(): void {
     this.productService.getProducts().subscribe(products => {
 
-      // 🔥 ordenar por más reciente (id alto = más nuevo)
-    this.latestProducts = products
-      .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
-      .slice(0, 9);
+      // 🔥 últimos 12
+      this.latestProducts = products
+        .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
+        .slice(0, 12);
 
+      // 🔥 primeros 6
+      this.visibleProducts = this.latestProducts.slice(0, 6);
 
-      // mostrar primeros 5
-      this.visibleProducts = this.latestProducts.slice(0, 5);
-
-      // iniciar transición
       this.startRotation();
     });
   }
 
   startRotation(): void {
     this.intervalId = setInterval(() => {
+
       if (this.showFirstGroup) {
-        this.visibleProducts = this.latestProducts.slice(5, 9); // 4
+        // 👉 productos 7 al 12
+        this.visibleProducts = this.latestProducts.slice(6, 12);
       } else {
-        this.visibleProducts = this.latestProducts.slice(0, 5); // 5
+        // 👉 productos 1 al 6
+        this.visibleProducts = this.latestProducts.slice(0, 6);
       }
+
       this.showFirstGroup = !this.showFirstGroup;
-    }, 4000); // ⏱ cada 4 segundos
+
+    }, 4000); // cada 4 segundos
   }
+
 }

@@ -1,19 +1,36 @@
-<!-- HERO ROSADO -->
-<section class="brand-hero">
-  <h1>MIS PEDIDOS</h1>
-  <p>Todo lo que compraste, organizado para ti</p>
-</section>
+<!-- 🔴 BANNER GLOBAL -->
+<app-banner
+  title="MIS PEDIDOS"
+  subtitle="Todo lo que compraste, organizado para ti">
+</app-banner>
 
 <div class="orders-page">
 
-  
-
   <!-- FILTROS -->
   <div class="order-filters">
-    <button (click)="setFilter('Todos')" [class.active]="selectedFilter === 'Todos'">Todos</button>
-    <button (click)="setFilter('En proceso')" [class.active]="selectedFilter === 'En proceso'">En proceso</button>
-    <button (click)="setFilter('Enviado')" [class.active]="selectedFilter === 'Enviado'">Enviado</button>
-    <button (click)="setFilter('Entregado')" [class.active]="selectedFilter === 'Entregado'">Entregado</button>
+    <button
+      (click)="setFilter('Todos')"
+      [class.active]="selectedFilter === 'Todos'">
+      Todos
+    </button>
+
+    <button
+      (click)="setFilter('En proceso')"
+      [class.active]="selectedFilter === 'En proceso'">
+      En proceso
+    </button>
+
+    <button
+      (click)="setFilter('Enviado')"
+      [class.active]="selectedFilter === 'Enviado'">
+      Enviado
+    </button>
+
+    <button
+      (click)="setFilter('Entregado')"
+      [class.active]="selectedFilter === 'Entregado'">
+      Entregado
+    </button>
   </div>
 
   <!-- TABLA -->
@@ -38,7 +55,10 @@
       </span>
 
       <div class="items">
-        <img *ngFor="let img of order.items" [src]="img" alt="producto">
+        <img
+          *ngFor="let img of order.items"
+          [src]="img"
+          alt="producto">
         <span *ngIf="order.extra">+{{ order.extra }}</span>
       </div>
 

@@ -1,16 +1,20 @@
 <div class="categories-page">
-  <section class="hero-banner">
-    <h1>MODALE & CO</h1>
-    <p>Encuentra lo último en tendencia, solo aquí</p>
-  </section>
 
+  <!-- 🔴 BANNER GLOBAL -->
+  <app-banner
+    title="CATÁLOGO"
+    subtitle="Encuentra lo último en tendencia, solo aquí">
+  </app-banner>
+
+  <!-- BREADCRUMB -->
   <div class="breadcrumb">
-    <a routerLink="/home">Inicio</a> / <span>Categorias</span>
+    <a routerLink="/home">Inicio</a> / <span>Categorías</span>
   </div>
 
   <h2 class="section-title">EXPLORA POR CATEGORÍA</h2>
 
   <div class="categories-grid">
+
     <a class="category-card" [routerLink]="['/categorias', 'accesorios']">
       <div class="image-box">
         <img src="assets/accesorios.jpg" alt="Accesorios">
@@ -70,5 +74,6 @@
         <i class="fas fa-caret-right"></i>
       </div>
     </a>
+
   </div>
 </div>

@@ -1,20 +1,29 @@
 .home-container {
-  font-family: 'Serif', sans-serif; /* O la fuente que prefieras */
+  font-family: 'Josefin Slab', serif; /* O la fuente que prefieras */
 }
 
 /* El banner rosa del centro */
+/* ================= BANNER ROSA HOME ================= */
+
 .hero-banner {
-  background-color: #fce4ec; /* Rosa claro del diseño */
-  padding: 60px 20px;
+  background: #ffd9ec;
   text-align: center;
+  padding: 36px 20px;
   margin-bottom: 40px;
 }
 
 .hero-banner h1 {
-  font-size: 3rem;
-  letter-spacing: 5px;
-  margin-bottom: 10px;
+  font-family: 'Josefin Slab', serif;
+  font-size: 48px;
+  letter-spacing: 4px;
+  margin: 0;
   color: #000;
+}
+
+.hero-banner p {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
 }
 
 /* Encabezados de secciones (Recién llegados / Populares) */

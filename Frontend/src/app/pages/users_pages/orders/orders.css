@@ -2,18 +2,19 @@
 
 .orders-page {
   padding: 40px;
-  font-family: Arial, sans-serif;
+  font-family:'Josefin Slab', serif;
   color: #000;
 }
 
 .brand-hero {
-  background: #ffd9ec;
+  background: #fce4ec;
   text-align: center;
+  font-family: 'Josefin Slab', serif;
   padding: 30px 20px;
 }
 
 .brand-hero h1 {
-  font-size: 90px;
+  font-size: 50px;
   letter-spacing: 4px;
 }
 

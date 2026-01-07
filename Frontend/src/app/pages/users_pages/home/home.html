@@ -1,10 +1,12 @@
 <div class="home-container">
 
-  <section class="hero-banner">
-    <h1>MODALE & CO</h1>
-    <p>Encuentra lo último en tendencia, solo aquí</p>
-  </section>
+  <!-- 🔴 BANNER GLOBAL -->
+  <app-banner
+    title="HOME"
+    subtitle="Encuentra lo último en tendencia, solo aquí">
+  </app-banner>
 
+  <!-- ================= PRODUCTOS ================= -->
   <section class="product-section">
     <div class="section-header">
       <h2>RECIÉN LLEGADOS</h2>
@@ -14,8 +16,8 @@
     <div class="product-grid">
       <app-product-card
         *ngFor="let product of visibleProducts"
-        [product]="product"
-      ></app-product-card>
+        [product]="product">
+      </app-product-card>
     </div>
   </section>
 

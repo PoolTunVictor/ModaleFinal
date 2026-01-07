@@ -1,33 +1,31 @@
-/* ================= GENERAL ================= */
-
-.product-page {
-  padding: 40px;
-  font-family: Arial, sans-serif;
-  color: #000;
-}
-
-/* ================= HERO ================= */
+/* ================= BANNER ROSA ================= */
 
 .brand-hero {
-  background: #ffd9ec;
+  background:#fce4ec;
   text-align: center;
-  padding: 30px 20px;
+  padding: 36px 20px;
 }
 
 .brand-hero h1 {
-  font-size: 90px;
+  font-family: 'Josefin Slab', serif;
+  font-size: 48px;
   letter-spacing: 4px;
+  margin: 0;
 }
 
 .brand-hero p {
-  font-size: 20px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
 }
 
-/* ================= BREADCRUMB ================= */
+/* ================= GENERAL ================= */
 
-.breadcrumb {
-  font-size: 14px;
-  margin: 40px 0;
+.product-page {
+  padding: 40px 80px;
+  font-family:  'Josefin Slab', serif;
+  color: #000;
+  background: #fff;
 }
 
 /* ================= PRODUCTO ================= */
@@ -37,9 +35,11 @@
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   margin-bottom: 100px;
+  align-items: center;
 }
 
-/* Imagen */
+/* ================= IMAGEN ================= */
+
 .product-image {
   display: flex;
   justify-content: center;
@@ -47,13 +47,20 @@
 }
 
 .product-image img {
-  max-width: 380px;
   width: 100%;
+  max-width: 800px;       /* 👈 tamaño grande */
+  max-height: 800px;
   object-fit: contain;
 }
 
-/* Info */
+/* ================= INFO ================= */
+
+.product-info {
+  max-width: 420px;
+}
+
 .product-info h1 {
+ font-family: 'Josefin Slab', serif;
   font-size: 38px;
   margin-bottom: 10px;
 }
@@ -67,30 +74,19 @@
 .description {
   line-height: 1.6;
   margin-bottom: 30px;
+  font-size: 14px;
+  color: #555;
 }
 
-/* Tamaños */
-.label {
-  font-weight: bold;
+/* ================= STOCK ================= */
+
+.stock {
+  font-size: 14px;
   margin-bottom: 10px;
 }
 
-.size-options {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 30px;
-}
-
-.size-options button {
-  padding: 10px 18px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.size-options button.active {
-  border: 2px solid #000;
+.stock.out {
+  color: #ff3c3c;
 }
 
 /* ================= ACCIONES ================= */
@@ -99,16 +95,22 @@
   display: flex;
   align-items: center;
   gap: 25px;
+  margin-top: 20px;
 }
 
-/* Cantidad */
+/* ================= CANTIDAD ================= */
+
 .quantity-control {
   display: inline-flex;
   align-items: center;
+  justify-content: space-between;
+
+  width: 120px;
+  height: 44px;
+
   border: 1px solid #ddd;
   border-radius: 30px;
-  overflow: hidden;
-  height: 44px;
+  background: #fff;
 }
 
 .quantity-control button {
@@ -121,12 +123,13 @@
 }
 
 .quantity-control span {
-  min-width: 40px;
+  min-width: 32px;
   text-align: center;
   font-weight: bold;
 }
 
-/* Botón agregar */
+/* ================= BOTÓN ================= */
+
 .add-btn {
   background: #12111f;
   color: #fff;
@@ -137,103 +140,48 @@
   cursor: pointer;
 }
 
-/* ================= RELACIONADOS ================= */
-
-.related-section {
-  padding-bottom: 80px; /* 👈 ESPACIO QUE FALTABA */
+.add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.related-title {
-  margin: 60px 0 30px;
-  font-size: 20px;
-}
-
-/* GRID */
-.related-products {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 30px;
-}
-
-/* CARD */
-.product-card {
-  background: #fff;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-  transition: transform 0.3s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-6px);
-}
-
-/* IMAGEN */
-.card-image {
-  background: #fff;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-image img {
-  max-width: 85%;
-  max-height: 85%;
-  object-fit: contain;
-}
-
-/* INFO GRIS */
-.card-info {
-  background: #f2f2f2;
-  padding: 16px 18px 20px;
-}
-
-.card-info h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-
-/* FOOTER */
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-footer .price {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-/* BOTÓN */
-.card-footer button {
-  background: #12111f;
-  color: #fff;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .product-container {
-    grid-template-columns: 1fr;
-  }
-}
+/* ================= RECOMENDADOS ================= */
 
 .recommended {
-  margin-top: 3rem;
+  margin-top: 80px;
 }
 
 .recommended h2 {
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
+  font-size: 16px;
+  letter-spacing: 1px;
 }
 
 .recommended-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: 20px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+  .product-page {
+    padding: 30px 20px;
+  }
+
+  .product-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .product-info {
+    max-width: 100%;
+  }
+
+  .product-image img {
+    max-width: 100%;
+    max-height: 500px;
+  }
 }
