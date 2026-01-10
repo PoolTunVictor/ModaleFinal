@@ -13,7 +13,9 @@ api = Namespace("orders", description="Gestión de pedidos")
 # MODELS (Swagger)
 # =========================
 
-order_item_model = api.model("OrderItem", {
+# ⚠️ IMPORTANTE:
+# Nombre ÚNICO para evitar choque con order-items
+order_create_item_model = api.model("OrderCreateItem", {
     "product_id": fields.Integer(required=True),
     "quantity": fields.Integer(required=True)
 })
@@ -26,7 +28,7 @@ order_create_model = api.model("OrderCreate", {
     "state": fields.String(required=True),
     "postal_code": fields.String(required=True),
     "references": fields.String,
-    "items": fields.List(fields.Nested(order_item_model), required=True)
+    "items": fields.List(fields.Nested(order_create_item_model), required=True)
 })
 
 order_response_model = api.model("OrderResponse", {
@@ -78,7 +80,7 @@ class OrderList(Resource):
         user_id = int(get_jwt_identity())
         data = request.json
 
-        if not data["items"]:
+        if not data.get("items"):
             api.abort(400, "El pedido debe contener productos")
 
         subtotal = 0
@@ -110,7 +112,7 @@ class OrderList(Resource):
                 "quantity": item["quantity"]
             })
 
-        total = subtotal
+        total = subtotal  # aquí luego puedes agregar envío/impuestos
 
         # =========================
         # Crear Order
@@ -150,7 +152,7 @@ class OrderList(Resource):
 
         db.session.commit()
 
-        # 🔥 RESPUESTA MANUAL (evita bug de marshal_with)
+        # 🔥 RESPUESTA MANUAL (evita bugs de marshal_with)
         return {
             "id": order.id,
             "order_number": order.order_number,
