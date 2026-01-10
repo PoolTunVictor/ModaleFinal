@@ -44,28 +44,27 @@ export class LoginComponent implements OnInit {
     const loginData = this.loginForm.value;
 
     this.authService.login(loginData).subscribe({
-      next: (res) => {
-        const token = res.access_token;
+      next: (response) => {
+        const token = response.access_token;
+        const user = response.user;
 
-        // ✅ Guardar token
+        // 🔐 MISMO STORAGE PARA TODO
         if (loginData.remember) {
           localStorage.setItem('access_token', token);
+          localStorage.setItem('user', JSON.stringify(user));
         } else {
           sessionStorage.setItem('access_token', token);
+          sessionStorage.setItem('user', JSON.stringify(user));
         }
 
-        // ✅ Guardar usuario (clave)
-        localStorage.setItem('user', JSON.stringify(res.user));
-
-        // ✅ Redirección por rol
-        if (res.user.role === 'admin') {
-          this.router.navigate(['/admin']);
+        if (user.role === 'admin') {
+          this.router.navigate(['/admin/inicio']);
         } else {
-          this.router.navigate(['/']);
+          this.router.navigate(['/home']);
         }
       },
       error: () => {
-        this.errorMessage = 'Email o contraseña incorrectos';
+        this.errorMessage = 'Credenciales incorrectas';
         this.isLoading = false;
       },
       complete: () => {

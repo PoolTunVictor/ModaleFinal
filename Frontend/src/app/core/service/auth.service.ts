@@ -62,5 +62,14 @@ isAdmin(): boolean {
       registerData
     );
   }
+  // ===============================
+  // USER (fuente de verdad)
+  // ===============================
+  getUser(): any | null {
+    const user =
+      localStorage.getItem('user') ||
+      sessionStorage.getItem('user');
 
+    return user ? JSON.parse(user) : null;
+  }
 }
