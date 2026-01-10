@@ -3,7 +3,7 @@ import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NavbarComponent } from '../layouts/navbar/navbar.component';
 import { Footer } from './layouts/footer/footer';
-import { UserSidebarComponent } from '../layouts/user_sidebar/user-sidebar.component';
+import { UserSidebarComponent } from '../layouts/user_sidebar/user-sidebar.component'
 
 @Component({
   selector: 'app-root',

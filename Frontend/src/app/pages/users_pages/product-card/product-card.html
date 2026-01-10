@@ -1,11 +1,15 @@
-<div class="product-card">
+<div
+  class="product-card"
+  *ngIf="product as p"
+  (click)="goToDetail()"
+>
 
   <!-- IMAGEN -->
   <div class="product-image">
     <img
-      *ngIf="product.main_image; else noImage"
-      [src]="product.main_image"
-      alt="{{ product.name }}"
+      *ngIf="p.main_image; else noImage"
+      [src]="p.main_image"
+      alt="{{ p.name }}"
     />
 
     <ng-template #noImage>
@@ -15,17 +19,28 @@
 
   <!-- INFO -->
   <div class="product-info">
-    <p class="product-name">{{ product.name }}</p>
+    <p class="product-name">{{ p.name }}</p>
 
-    <p class="product-price">$ {{ product.price }}</p>
+    <p class="product-price">$ {{ p.price }}</p>
 
+    <!-- STOCK -->
+    <p class="product-stock" [class.out]="p.stock === 0">
+      Stock: {{ p.stock }}
+    </p>
+
+    <!-- BOTÓN -->
     <button
       class="add-btn"
       (click)="addToCart($event)"
-      [disabled]="product.stock === 0"
+      [disabled]="p.stock === 0"
     >
       Agregar
     </button>
   </div>
 
+</div>
+
+<!-- 🔔 MENSAJE FLOTANTE -->
+<div class="floating-message" *ngIf="showFloatingMessage">
+  {{ floatingMessage }}
 </div>

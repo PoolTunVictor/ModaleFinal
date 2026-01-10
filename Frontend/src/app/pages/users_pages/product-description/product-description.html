@@ -22,10 +22,12 @@
       <p class="price">$ {{ p.price }}</p>
       <p class="description">{{ p.description }}</p>
 
-      <p class="stock" *ngIf="p.stock !== undefined && p.stock > 0">
+      <p class="stock" *ngIf="p.stock > 0">
         Stock disponible: {{ p.stock }}
       </p>
-      <p class="stock out" *ngIf="p.stock === 0">Agotado</p>
+      <p class="stock out" *ngIf="p.stock === 0">
+        Agotado
+      </p>
 
       <div class="actions">
         <div class="quantity-control">
@@ -42,6 +44,13 @@
           Agregar
         </button>
       </div>
+
+      <!-- 🔴 MENSAJE CUANDO YA NO HAY STOCK -->
+      <p class="stock-error" *ngIf="showStockModal">
+        {{ stockMessage }}
+      </p>
+      <!-- 🔴 FIN MENSAJE -->
+
     </div>
   </div>
 

@@ -4,7 +4,7 @@ export interface Product {
   slug:string;
   description?: string;
   price: number;
-  stock?: number;
+  stock: number;
   category_id: number;
   main_image?: string; // ✅ SOLO para mostrar
 }

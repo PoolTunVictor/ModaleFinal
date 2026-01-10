@@ -72,3 +72,33 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.stock {
+  font-size: 0.9rem;
+  margin: 4px 0;
+  font-weight: 600;
+}
+
+.in-stock {
+  color: #2e7d32; /* verde */
+}
+
+.low-stock {
+  color: #f57c00; /* naranja */
+}
+
+.out-stock {
+  color: #c62828; /* rojo */
+}
+.floating-message {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #2e7d32;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  z-index: 9999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
