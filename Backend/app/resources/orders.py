@@ -13,8 +13,7 @@ api = Namespace("orders", description="Gestión de pedidos")
 # MODELS (Swagger)
 # =========================
 
-# ⚠️ IMPORTANTE:
-# Nombre ÚNICO para evitar choque con order-items
+# ⚠️ Nombre único para evitar choque con order-items
 order_create_item_model = api.model("OrderCreateItem", {
     "product_id": fields.Integer(required=True),
     "quantity": fields.Integer(required=True)
@@ -78,7 +77,23 @@ class OrderList(Resource):
     def post(self):
         """Crear pedido"""
         user_id = int(get_jwt_identity())
-        data = request.json
+        data = request.json or {}
+
+        # =========================
+        # 🔒 VALIDACIÓN OBLIGATORIA (FIX CLAVE)
+        # =========================
+        required_fields = [
+            "receiver_name",
+            "phone",
+            "street",
+            "city",
+            "state",
+            "postal_code"
+        ]
+
+        for field in required_fields:
+            if not data.get(field):
+                api.abort(400, f"El campo '{field}' es obligatorio")
 
         if not data.get("items"):
             api.abort(400, "El pedido debe contener productos")
@@ -112,7 +127,7 @@ class OrderList(Resource):
                 "quantity": item["quantity"]
             })
 
-        total = subtotal  # aquí luego puedes agregar envío/impuestos
+        total = subtotal  # aquí luego puedes agregar envío / impuestos
 
         # =========================
         # Crear Order
@@ -152,7 +167,9 @@ class OrderList(Resource):
 
         db.session.commit()
 
-        # 🔥 RESPUESTA MANUAL (evita bugs de marshal_with)
+        # =========================
+        # RESPUESTA
+        # =========================
         return {
             "id": order.id,
             "order_number": order.order_number,
