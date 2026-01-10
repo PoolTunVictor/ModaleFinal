@@ -38,14 +38,12 @@ order_response_model = api.model("OrderResponse", {
     "created_at": fields.DateTime
 })
 
-
 # =========================
 # HELPERS
 # =========================
 
 def generate_order_number():
     return f"ORD-{uuid.uuid4().hex[:10].upper()}"
-
 
 # =========================
 # LIST / CREATE
@@ -54,7 +52,7 @@ def generate_order_number():
 @api.route("/")
 class OrderList(Resource):
 
-    #@jwt_required()
+    @jwt_required()
     @api.marshal_list_with(order_response_model)
     def get(self):
         """
@@ -73,7 +71,7 @@ class OrderList(Resource):
             Order.created_at.desc()
         ).all()
 
-    #@jwt_required()
+    @jwt_required()
     @api.expect(order_create_model, validate=True)
     @api.marshal_with(order_response_model, code=201)
     def post(self):
@@ -87,7 +85,9 @@ class OrderList(Resource):
         subtotal = 0
         order_items = []
 
+        # =========================
         # Validar productos y stock
+        # =========================
         for item in data["items"]:
             product = Product.query.get(item["product_id"])
 
@@ -108,12 +108,14 @@ class OrderList(Resource):
 
             order_items.append({
                 "product": product,
-                "quantity": item["quantity"],
-                "price": product.price
+                "quantity": item["quantity"]
             })
 
-        total = subtotal  # aquí luego puedes agregar envío, impuestos, etc.
+        total = subtotal  # aquí puedes agregar envío/impuestos después
 
+        # =========================
+        # Crear Order
+        # =========================
         order = Order(
             order_number=generate_order_number(),
             user_id=user_id,
@@ -129,15 +131,19 @@ class OrderList(Resource):
         )
 
         db.session.add(order)
-        db.session.flush()  # para obtener order.id
+        db.session.flush()  # obtener order.id
 
-        # Crear OrderItems y descontar stock
+        # =========================
+        # Crear OrderItems + descontar stock
+        # =========================
         for item in order_items:
             order_item = OrderItem(
                 order_id=order.id,
                 product_id=item["product"].id,
+                product_name=item["product"].name,
+                product_price=item["product"].price,
                 quantity=item["quantity"],
-                price=item["price"]
+                subtotal=item["product"].price * item["quantity"]
             )
 
             item["product"].stock -= item["quantity"]
@@ -145,7 +151,6 @@ class OrderList(Resource):
 
         db.session.commit()
         return order, 201
-
 
 # =========================
 # DETAIL / STATUS
@@ -155,7 +160,7 @@ class OrderList(Resource):
 @api.param("id", "ID del pedido")
 class OrderDetail(Resource):
 
-    #@jwt_required()
+    @jwt_required()
     @api.marshal_with(order_response_model)
     def get(self, id):
         """Obtener pedido por ID"""
@@ -170,12 +175,11 @@ class OrderDetail(Resource):
 
         return order
 
-
 @api.route("/<int:id>/status")
 @api.param("id", "ID del pedido")
 class OrderStatus(Resource):
 
-    #@jwt_required()
+    @jwt_required()
     def put(self, id):
         """Actualizar estado del pedido (ADMIN)"""
 
@@ -200,13 +204,12 @@ class OrderStatus(Resource):
 
         order = Order.query.get_or_404(id)
 
-        # Evitar cambios innecesarios
         if order.status == new_status:
             return {
                 "message": f"El pedido ya está en estado '{new_status}'"
             }, 200
 
-        # Restaurar stock si se cancela el pedido
+        # Restaurar stock si se cancela
         if new_status == "cancelado" and order.status != "cancelado":
             for item in order.items:
                 item.product.stock += item.quantity
@@ -219,4 +222,3 @@ class OrderStatus(Resource):
             "order_id": order.id,
             "new_status": order.status
         }, 200
-    
