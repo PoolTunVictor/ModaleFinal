@@ -4,9 +4,7 @@
   subtitle="Todo lo que compraste, organizado para ti">
 </app-banner>
 
-<!-- CONTENIDO DEL CARRITO -->
 <section class="cart-page">
-
   <div class="cart-layout">
 
     <!-- ================= LISTA ================= -->
@@ -33,7 +31,10 @@
             <strong>{{ item.product.name }}</strong>
             <p class="product-price">${{ item.product.price }}</p>
 
-            <button class="remove" (click)="remove(item)">
+            <!-- ✅ llamar directo al servicio -->
+            <button
+              class="remove"
+              (click)="cartService.remove(item)">
               Eliminar
             </button>
           </div>
@@ -41,9 +42,9 @@
 
         <!-- CANTIDAD -->
         <div class="quantity-control">
-          <button (click)="decrease(item)">−</button>
+          <button (click)="cartService.decrease(item)">−</button>
           <span>{{ item.quantity }}</span>
-          <button (click)="increase(item)">+</button>
+          <button (click)="cartService.increase(item)">+</button>
         </div>
 
         <!-- PRECIO -->
@@ -59,26 +60,41 @@
       </div>
     </div>
 
-    <!-- ================= RESUMEN ================= -->
+    <!-- ================= RESUMEN / CHECKOUT ================= -->
     <div class="summary">
 
       <h3>DETALLE DEL PEDIDO</h3>
 
-      <label>Domicilio</label>
-      <input type="text">
+      <label>Nombre del receptor</label>
+      <input type="text" [(ngModel)]="address.receiver_name">
+
+      <label>Teléfono</label>
+      <input type="text" [(ngModel)]="address.phone">
 
       <label>Calle</label>
-      <input type="text">
+      <input type="text" [(ngModel)]="address.street">
 
       <label>Ciudad</label>
-      <input type="text">
+      <input type="text" [(ngModel)]="address.city">
+
+      <label>Estado</label>
+      <input type="text" [(ngModel)]="address.state">
+
+      <label>Código Postal</label>
+      <input type="text" [(ngModel)]="address.postal_code">
+
+      <label>Referencia a domicilio</label>
+      <input type="text" [(ngModel)]="address.references">
 
       <div class="summary-total">
         <span>Total</span>
         <strong>${{ getTotal() }}</strong>
       </div>
 
-      <button class="checkout-btn">
+      <!-- ✅ generar pedido -->
+      <button
+        class="checkout-btn"
+        (click)="generateOrder()">
         GENERAR PEDIDO
       </button>
 
@@ -91,7 +107,7 @@
   </div>
 </section>
 
-<!-- CARRITO VACÍO -->
+<!-- ================= CARRITO VACÍO ================= -->
 <ng-template #emptyCart>
   <p class="empty-cart">
     Tu carrito está vacío 🛒
