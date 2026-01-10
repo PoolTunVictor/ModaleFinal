@@ -73,7 +73,6 @@ class OrderList(Resource):
 
     @jwt_required()
     @api.expect(order_create_model, validate=True)
-    @api.marshal_with(order_response_model, code=201)
     def post(self):
         """Crear pedido"""
         user_id = int(get_jwt_identity())
@@ -111,7 +110,7 @@ class OrderList(Resource):
                 "quantity": item["quantity"]
             })
 
-        total = subtotal  # aquí puedes agregar envío/impuestos después
+        total = subtotal
 
         # =========================
         # Crear Order
@@ -150,7 +149,16 @@ class OrderList(Resource):
             db.session.add(order_item)
 
         db.session.commit()
-        return order, 201
+
+        # 🔥 RESPUESTA MANUAL (evita bug de marshal_with)
+        return {
+            "id": order.id,
+            "order_number": order.order_number,
+            "status": order.status,
+            "subtotal": order.subtotal,
+            "total": order.total,
+            "created_at": order.created_at.isoformat() if order.created_at else None
+        }, 201
 
 # =========================
 # DETAIL / STATUS
