@@ -15,14 +15,12 @@ api = Namespace("orders", description="Gestión de pedidos")
 # MODELS (Swagger)
 # =========================
 
-order_create_item_model = api.model("OrderCreateItem", {
-    "product_id": fields.Integer(required=True),
-    "quantity": fields.Integer(required=True)
-})
-
-order_create_model = api.model("OrderCreate", {
-    "address_id": fields.Integer(required=True),
-    "items": fields.List(fields.Nested(order_create_item_model), required=True)
+order_item_response_model = api.model("OrderItemResponse", {
+    "product_id": fields.Integer,
+    "product_name": fields.String,
+    "product_image": fields.String,
+    "quantity": fields.Integer,
+    "subtotal": fields.Float
 })
 
 order_response_model = api.model("OrderResponse", {
@@ -31,7 +29,18 @@ order_response_model = api.model("OrderResponse", {
     "status": fields.String,
     "subtotal": fields.Float,
     "total": fields.Float,
-    "created_at": fields.DateTime
+    "created_at": fields.DateTime,
+    "items": fields.List(fields.Nested(order_item_response_model))
+})
+
+order_create_item_model = api.model("OrderCreateItem", {
+    "product_id": fields.Integer(required=True),
+    "quantity": fields.Integer(required=True)
+})
+
+order_create_model = api.model("OrderCreate", {
+    "address_id": fields.Integer(required=True),
+    "items": fields.List(fields.Nested(order_create_item_model), required=True)
 })
 
 # =========================
@@ -48,20 +57,53 @@ def generate_order_number():
 @api.route("/")
 class OrderList(Resource):
 
+    # =========================
+    # GET MIS PEDIDOS
+    # =========================
     @jwt_required()
-    @api.marshal_list_with(order_response_model)
     def get(self):
         claims = get_jwt()
         role = claims.get("role")
         user_id = int(get_jwt_identity())
 
         if role == "admin":
-            return Order.query.order_by(Order.created_at.desc()).all()
+            orders = Order.query.order_by(Order.created_at.desc()).all()
+        else:
+            orders = Order.query.filter_by(user_id=user_id).order_by(
+                Order.created_at.desc()
+            ).all()
 
-        return Order.query.filter_by(user_id=user_id).order_by(
-            Order.created_at.desc()
-        ).all()
+        response = []
 
+        for order in orders:
+            items = []
+
+            for item in OrderItem.query.filter_by(order_id=order.id).all():
+                product = Product.query.get(item.product_id)
+
+                items.append({
+                    "product_id": item.product_id,
+                    "product_name": item.product_name,
+                    "product_image": product.main_image if product else None,
+                    "quantity": item.quantity,
+                    "subtotal": item.subtotal
+                })
+
+            response.append({
+                "id": order.id,
+                "order_number": order.order_number,
+                "status": order.status,
+                "subtotal": order.subtotal,
+                "total": order.total,
+                "created_at": order.created_at,
+                "items": items
+            })
+
+        return response, 200
+
+    # =========================
+    # CREATE ORDER
+    # =========================
     @jwt_required()
     @api.expect(order_create_model, validate=True)
     def post(self):
@@ -69,11 +111,6 @@ class OrderList(Resource):
             user_id = int(get_jwt_identity())
             data = request.json or {}
 
-            print("📦 DATA RECIBIDA:", data)
-
-            # =========================
-            # VALIDACIONES
-            # =========================
             address = Address.query.filter_by(
                 id=data.get("address_id"),
                 user_id=user_id
@@ -88,32 +125,22 @@ class OrderList(Resource):
             subtotal = 0
             order_items = []
 
-            # =========================
-            # VALIDAR PRODUCTOS
-            # =========================
             for item in data["items"]:
                 product = Product.query.get(item["product_id"])
 
                 if not product:
                     api.abort(400, "Producto no existe")
 
-                if item["quantity"] <= 0:
-                    api.abort(400, "Cantidad inválida")
-
                 if product.stock < item["quantity"]:
                     api.abort(400, f"Stock insuficiente para {product.name}")
 
-                line_total = product.price * item["quantity"]
-                subtotal += line_total
+                subtotal += product.price * item["quantity"]
 
                 order_items.append({
                     "product": product,
                     "quantity": item["quantity"]
                 })
 
-            # =========================
-            # CREAR ORDER
-            # =========================
             order = Order(
                 order_number=generate_order_number(),
                 user_id=user_id,
@@ -122,14 +149,9 @@ class OrderList(Resource):
                 total=subtotal
             )
 
-            print("🧾 ORDER A GUARDAR:", order.__dict__)
-
             db.session.add(order)
             db.session.flush()
 
-            # =========================
-            # CREAR ITEMS
-            # =========================
             for item in order_items:
                 db.session.add(OrderItem(
                     order_id=order.id,
@@ -146,18 +168,12 @@ class OrderList(Resource):
 
             return {
                 "id": order.id,
-                "order_number": order.order_number,
-                "status": order.status,
-                "subtotal": order.subtotal,
-                "total": order.total,
-                "created_at": order.created_at.isoformat()
+                "order_number": order.order_number
             }, 201
 
         except Exception as e:
             db.session.rollback()
-            print("🔥 ERROR AL CREAR PEDIDO")
             traceback.print_exc()
-
             return {
                 "message": "Error interno al generar el pedido",
                 "error": str(e)
