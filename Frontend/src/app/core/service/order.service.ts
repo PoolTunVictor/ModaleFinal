@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CartService } from './cart.service';
 import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,9 @@ export class OrderService {
     private authService: AuthService
   ) {}
 
+  // =========================
+  // CREAR PEDIDO
+  // =========================
   createOrder(addressId: number) {
 
     const token = this.authService.getToken();
@@ -31,11 +35,28 @@ export class OrderService {
     }));
 
     return this.http.post(
-      this.apiUrl,
+      this.apiUrl + '/',
       {
         address_id: addressId,
         items
       },
+      { headers }
+    );
+  }
+
+  // =========================
+  // MIS PEDIDOS (GET)
+  // =========================
+  getMyOrders(): Observable<any[]> {
+
+    const token = this.authService.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<any[]>(
+      this.apiUrl + '/',
       { headers }
     );
   }

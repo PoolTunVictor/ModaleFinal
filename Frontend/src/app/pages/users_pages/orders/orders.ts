@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BannerComponent } from '../../../../shared/banner/banner';
+import { OrderService } from '../../../core/service/order.service';
+import { AuthService } from '../../../core/service/auth.service';
 
 @Component({
   selector: 'app-orders',
@@ -9,46 +11,63 @@ import { BannerComponent } from '../../../../shared/banner/banner';
   templateUrl: './orders.html',
   styleUrls: ['./orders.css']
 })
-export class OrdersComponent {
+export class OrdersComponent implements OnInit {
 
   selectedFilter: string = 'Todos';
+  isLoading = true;
 
-  orders = [
-    {
-      id: 'ORD-7829',
-      date: '24 Oct, 2023',
-      status: 'Entregado',
-      items: [
-        'assets/product_description/moños.png',
-        'assets/product_description/gio.png'
-      ],
-      extra: 2,
-      total: 124.50,
-      action: 'Ver detalles'
-    },
-    {
-      id: 'ORD-7830',
-      date: '02 Nov, 2023',
-      status: 'En proceso',
-      items: [
-        'assets/product_description/garnier.png'
-      ],
-      total: 45.00,
-      action: 'Rastrear pedido'
-    },
-    {
-      id: 'ORD-7812',
-      date: '15 Oct, 2023',
-      status: 'Enviado',
-      items: [
-        'assets/product_description/miss-dior.png',
-        'assets/product_description/gio.png'
-      ],
-      total: 280.00,
-      action: 'Rastrear paquete'
+  orders: any[] = [];
+
+  constructor(
+    private orderService: OrderService,
+    private authService: AuthService
+  ) {}
+
+  // =========================
+  // INIT
+  // =========================
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.loadOrders();
+    } else {
+      this.isLoading = false;
     }
-  ];
+  }
 
+  // =========================
+  // CARGAR PEDIDOS
+  // =========================
+  loadOrders() {
+    this.isLoading = true;
+
+    this.orderService.getMyOrders().subscribe({
+      next: (res) => {
+        this.orders = res.map(order => ({
+          id: order.order_number,
+          date: new Date(order.created_at).toLocaleDateString('es-MX', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+          }),
+          status: this.mapStatus(order.status),
+          items: [], // 👈 luego si quieres imágenes reales
+          extra: 0,
+          total: order.total,
+          action: this.mapAction(order.status)
+        }));
+
+        this.isLoading = false;
+      },
+      error: () => {
+        alert('Error al cargar pedidos');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // =========================
+  // FILTRO
+  // =========================
   get filteredOrders() {
     if (this.selectedFilter === 'Todos') {
       return this.orders;
@@ -60,5 +79,33 @@ export class OrdersComponent {
 
   setFilter(filter: string) {
     this.selectedFilter = filter;
+  }
+
+  // =========================
+  // HELPERS
+  // =========================
+  mapStatus(status: string): string {
+    switch (status) {
+      case 'pendiente':
+        return 'En proceso';
+      case 'confirmado':
+        return 'Enviado';
+      case 'entregado':
+        return 'Entregado';
+      default:
+        return status;
+    }
+  }
+
+  mapAction(status: string): string {
+    switch (status) {
+      case 'entregado':
+        return 'Ver detalles';
+      case 'confirmado':
+      case 'pendiente':
+        return 'Rastrear pedido';
+      default:
+        return 'Ver pedido';
+    }
   }
 }
