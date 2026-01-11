@@ -5,6 +5,7 @@ from app.extensions import db
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.product import Product
+from app.models.product_image import ProductImage
 from app.models.address import Address
 import uuid
 import traceback
@@ -78,20 +79,18 @@ class OrderList(Resource):
         for order in orders:
             items = []
 
+            # 🔥 AQUÍ VA TU LÓGICA EXACTA CON ProductImage
             for item in OrderItem.query.filter_by(order_id=order.id).all():
-                product = Product.query.get(item.product_id)
-
-                main_image = None
-                if product:
-                    main_image = next(
-                        (img.url for img in product.images if img.is_main),
-                        None
-                    )
+                main_image = (
+                    ProductImage.query
+                    .filter_by(product_id=item.product_id, is_main=True)
+                    .first()
+                )
 
                 items.append({
                     "product_id": item.product_id,
                     "product_name": item.product_name,
-                    "product_image": main_image,
+                    "product_image": main_image.url if main_image else None,
                     "quantity": item.quantity,
                     "subtotal": item.subtotal
                 })
@@ -102,7 +101,7 @@ class OrderList(Resource):
                 "status": order.status,
                 "subtotal": order.subtotal,
                 "total": order.total,
-                "created_at": order.created_at.isoformat(),  # 🔥 CLAVE
+                "created_at": order.created_at.isoformat(),  # ✅ serializable
                 "items": items
             })
 
