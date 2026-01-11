@@ -23,7 +23,9 @@ isLoggedIn(): boolean {
     localStorage.getItem('access_token') ||
     sessionStorage.getItem('access_token');
 
-  const user = localStorage.getItem('user');
+  const user =
+    localStorage.getItem('user') ||
+    sessionStorage.getItem('user');
 
   return !!token && !!user;
 }

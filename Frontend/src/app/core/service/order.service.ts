@@ -1,34 +1,42 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CartService } from './cart.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
-  private apiUrl = 'https://modalefinal.onrender.com/orders/'; // ajusta si es necesario
+  private apiUrl = 'https://modalefinal.onrender.com/orders';
 
   constructor(
     private http: HttpClient,
-    private cartService: CartService
+    private cartService: CartService,
+    private authService: AuthService
   ) {}
 
-  createOrder(address: any) {
+  createOrder(addressId: number) {
+
+    const token = this.authService.getToken();
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
     const items = this.cartService.getCart().map(item => ({
       product_id: item.product.id,
       quantity: item.quantity
     }));
 
-    return this.http.post(this.apiUrl, {
-      receiver_name: address.receiver_name,
-      phone: address.phone,
-      street: address.street,
-      city: address.city,
-      state: address.state,
-      postal_code: address.postal_code,
-      references: address.references,
-      items
-    });
+    return this.http.post(
+      this.apiUrl,
+      {
+        address_id: addressId,
+        items
+      },
+      { headers }
+    );
   }
 }
