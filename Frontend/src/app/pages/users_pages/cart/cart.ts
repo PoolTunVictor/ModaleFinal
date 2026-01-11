@@ -6,7 +6,7 @@ import { CartService } from '../../../core/service/cart.service';
 import { OrderService } from '../../../core/service/order.service';
 import { AuthService } from '../../../core/service/auth.service';
 import { AddressService } from '../../../core/service/address.service';
-
+import { Address } from '../../../core/interface/address';
 import { BannerComponent } from '../../../../shared/banner/banner';
 import { FormsModule } from '@angular/forms';
 
@@ -22,7 +22,7 @@ export class CartComponent implements OnInit {
   // =========================
   // DIRECCIONES
   // =========================
-  addresses: any[] = [];
+  addresses: Address[] = [];
   selectedAddressId: number | null = null;
   isLoadingAddresses = true;
 
@@ -37,8 +37,9 @@ export class CartComponent implements OnInit {
     state: '',
     postal_code: '',
     references: '',
-    is_default: true
+    is_default: false
   };
+
 
   constructor(
     public cartService: CartService,
@@ -111,11 +112,11 @@ export class CartComponent implements OnInit {
     }
 
     this.addressService.createAddress(this.newAddress).subscribe({
-      next: () => {
+      next: (createdAddress) => {
         alert('Dirección guardada correctamente');
 
-        // reset
         this.showAddressForm = false;
+
         this.newAddress = {
           receiver_name: '',
           phone: '',
@@ -124,15 +125,15 @@ export class CartComponent implements OnInit {
           state: '',
           postal_code: '',
           references: '',
-          is_default: true
+          is_default: false
         };
 
-        // 🔥 recargar direcciones
         this.loadAddresses();
-      },
-      error: () => {
-        alert('Error al guardar dirección');
+
+        // 🔥 seleccionar la nueva
+        this.selectedAddressId = createdAddress.id;
       }
+
     });
   }
 
