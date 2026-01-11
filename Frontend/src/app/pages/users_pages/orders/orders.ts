@@ -18,6 +18,9 @@ export class OrdersComponent implements OnInit {
 
   orders: any[] = [];
 
+  // 🔥 NUEVO → pedido seleccionado para el modal
+  selectedOrder: any = null;
+
   constructor(
     private orderService: OrderService,
     private authService: AuthService
@@ -45,24 +48,23 @@ export class OrdersComponent implements OnInit {
 
         this.orders = res.map(order => {
 
-          // 🔥 SOLO MOSTRAMOS HASTA 3 IMÁGENES
           const images = order.items
             ?.map((item: any) => item.product_image)
             .filter((img: string | null) => !!img)
             .slice(0, 3);
 
           return {
+            ...order, // 🔥 conservamos todo el pedido
             id: order.order_number,
             date: new Date(order.created_at).toLocaleDateString('es-MX', {
               day: '2-digit',
               month: 'short',
               year: 'numeric'
             }),
-            status: this.mapStatus(order.status),
-            items: images,                 // ✅ IMÁGENES REALES
-            extra: order.items.length - images.length, // ✅ +X
-            total: order.total,
-            action: this.mapAction(order.status)
+            statusLabel: this.mapStatus(order.status),
+            itemsPreview: images,
+            extra: order.items.length - images.length,
+            action: 'Ver detalles'
           };
         });
 
@@ -77,6 +79,17 @@ export class OrdersComponent implements OnInit {
   }
 
   // =========================
+  // MODAL
+  // =========================
+  openOrder(order: any) {
+    this.selectedOrder = order;
+  }
+
+  closeModal() {
+    this.selectedOrder = null;
+  }
+
+  // =========================
   // FILTRO
   // =========================
   get filteredOrders() {
@@ -84,7 +97,7 @@ export class OrdersComponent implements OnInit {
       return this.orders;
     }
     return this.orders.filter(
-      order => order.status === this.selectedFilter
+      order => order.statusLabel === this.selectedFilter
     );
   }
 
@@ -105,18 +118,6 @@ export class OrdersComponent implements OnInit {
         return 'Entregado';
       default:
         return status;
-    }
-  }
-
-  mapAction(status: string): string {
-    switch (status) {
-      case 'entregado':
-        return 'Ver detalles';
-      case 'confirmado':
-      case 'pendiente':
-        return 'Rastrear pedido';
-      default:
-        return 'Ver pedido';
     }
   }
 }

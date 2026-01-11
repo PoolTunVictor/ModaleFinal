@@ -8,27 +8,16 @@
 
   <!-- FILTROS -->
   <div class="order-filters">
-    <button
-      (click)="setFilter('Todos')"
-      [class.active]="selectedFilter === 'Todos'">
+    <button (click)="setFilter('Todos')" [class.active]="selectedFilter === 'Todos'">
       Todos
     </button>
-
-    <button
-      (click)="setFilter('En proceso')"
-      [class.active]="selectedFilter === 'En proceso'">
+    <button (click)="setFilter('En proceso')" [class.active]="selectedFilter === 'En proceso'">
       En proceso
     </button>
-
-    <button
-      (click)="setFilter('Enviado')"
-      [class.active]="selectedFilter === 'Enviado'">
+    <button (click)="setFilter('Enviado')" [class.active]="selectedFilter === 'Enviado'">
       Enviado
     </button>
-
-    <button
-      (click)="setFilter('Entregado')"
-      [class.active]="selectedFilter === 'Entregado'">
+    <button (click)="setFilter('Entregado')" [class.active]="selectedFilter === 'Entregado'">
       Entregado
     </button>
   </div>
@@ -55,21 +44,56 @@
       </span>
 
       <div class="items">
-        <img
-          *ngFor="let img of order.items"
-          [src]="img"
-          alt="producto">
-        <span *ngIf="order.extra">+{{ order.extra }}</span>
+        <img *ngFor="let img of order.items" [src]="img" alt="producto">
+        <span *ngIf="order.extra > 0">+{{ order.extra }}</span>
       </div>
 
       <span class="total">${{ order.total }}</span>
 
-      <button class="action-btn">
-        {{ order.action }}
+      <button class="action-btn" (click)="openOrder(order)">
+        Ver detalles
       </button>
 
     </div>
+  </div>
+</div>
 
+<!-- ========================= -->
+<!-- MODAL DETALLE PEDIDO -->
+<!-- ========================= -->
+<div class="modal-backdrop" *ngIf="selectedOrder" (click)="closeModal()"></div>
+
+<div class="order-modal" *ngIf="selectedOrder">
+  <div class="modal-header">
+    <h3>Pedido #{{ selectedOrder.id }}</h3>
+    <button class="close-btn" (click)="closeModal()">✕</button>
   </div>
 
+  <div class="modal-body">
+
+    <div class="order-info">
+      <p><strong>Fecha:</strong> {{ selectedOrder.date }}</p>
+      <p><strong>Estado:</strong> {{ selectedOrder.status }}</p>
+    </div>
+
+    <div class="order-items">
+
+      <div class="order-item" *ngFor="let item of selectedOrder.fullItems">
+        <img [src]="item.product_image" alt="producto">
+
+        <div class="item-info">
+          <p class="name">{{ item.product_name }}</p>
+          <p>Cantidad: {{ item.quantity }}</p>
+          <p class="price">${{ item.subtotal }}</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="order-total">
+      <span>Total</span>
+      <strong>${{ selectedOrder.total }}</strong>
+    </div>
+
+  </div>
 </div>
