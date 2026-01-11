@@ -6,6 +6,7 @@ from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.product import Product
 import uuid
+import traceback
 
 api = Namespace("orders", description="Gestión de pedidos")
 
@@ -13,7 +14,6 @@ api = Namespace("orders", description="Gestión de pedidos")
 # MODELS (Swagger)
 # =========================
 
-# ⚠️ Nombre único para evitar choque con order-items
 order_create_item_model = api.model("OrderCreateItem", {
     "product_id": fields.Integer(required=True),
     "quantity": fields.Integer(required=True)
@@ -56,11 +56,6 @@ class OrderList(Resource):
     @jwt_required()
     @api.marshal_list_with(order_response_model)
     def get(self):
-        """
-        Listar pedidos
-        - Admin: todos
-        - Usuario: solo los suyos
-        """
         claims = get_jwt()
         role = claims.get("role")
         user_id = int(get_jwt_identity())
@@ -75,122 +70,128 @@ class OrderList(Resource):
     @jwt_required()
     @api.expect(order_create_model, validate=True)
     def post(self):
-        """Crear pedido"""
-        user_id = int(get_jwt_identity())
-        data = request.json or {}
+        try:
+            user_id = int(get_jwt_identity())
+            data = request.json or {}
 
-        # =========================
-        # 🔒 VALIDACIÓN OBLIGATORIA (FIX CLAVE)
-        # =========================
-        required_fields = [
-            "receiver_name",
-            "phone",
-            "street",
-            "city",
-            "state",
-            "postal_code"
-        ]
+            print("📦 DATA RECIBIDA:", data)
 
-        for field in required_fields:
-            if not data.get(field):
-                api.abort(400, f"El campo '{field}' es obligatorio")
+            # =========================
+            # VALIDACIONES
+            # =========================
+            required_fields = [
+                "receiver_name",
+                "phone",
+                "street",
+                "city",
+                "state",
+                "postal_code"
+            ]
 
-        if not data.get("items"):
-            api.abort(400, "El pedido debe contener productos")
+            for field in required_fields:
+                if not data.get(field):
+                    api.abort(400, f"El campo '{field}' es obligatorio")
 
-        subtotal = 0
-        order_items = []
+            if not data.get("items"):
+                api.abort(400, "El pedido debe contener productos")
 
-        # =========================
-        # Validar productos y stock
-        # =========================
-        for item in data["items"]:
-            product = Product.query.get(item["product_id"])
+            subtotal = 0
+            order_items = []
 
-            if not product:
-                api.abort(400, f"Producto {item['product_id']} no existe")
+            # =========================
+            # VALIDAR PRODUCTOS
+            # =========================
+            for item in data["items"]:
+                product = Product.query.get(item["product_id"])
 
-            if item["quantity"] <= 0:
-                api.abort(400, "La cantidad debe ser mayor a 0")
+                if not product:
+                    api.abort(400, f"Producto {item['product_id']} no existe")
 
-            if product.stock < item["quantity"]:
-                api.abort(
-                    400,
-                    f"Stock insuficiente para {product.name}"
-                )
+                if item["quantity"] <= 0:
+                    api.abort(400, "Cantidad inválida")
 
-            line_total = product.price * item["quantity"]
-            subtotal += line_total
+                if product.stock < item["quantity"]:
+                    api.abort(400, f"Stock insuficiente para {product.name}")
 
-            order_items.append({
-                "product": product,
-                "quantity": item["quantity"]
-            })
+                line_total = product.price * item["quantity"]
+                subtotal += line_total
 
-        total = subtotal  # aquí luego puedes agregar envío / impuestos
+                order_items.append({
+                    "product": product,
+                    "quantity": item["quantity"]
+                })
 
-        # =========================
-        # Crear Order
-        # =========================
-        order = Order(
-            order_number=generate_order_number(),
-            user_id=user_id,
-            receiver_name=data["receiver_name"],
-            phone=data["phone"],
-            street=data["street"],
-            city=data["city"],
-            state=data["state"],
-            postal_code=data["postal_code"],
-            references=data.get("references"),
-            subtotal=subtotal,
-            total=total
-        )
-
-        db.session.add(order)
-        db.session.flush()  # obtener order.id
-
-        # =========================
-        # Crear OrderItems + descontar stock
-        # =========================
-        for item in order_items:
-            order_item = OrderItem(
-                order_id=order.id,
-                product_id=item["product"].id,
-                product_name=item["product"].name,
-                product_price=item["product"].price,
-                quantity=item["quantity"],
-                subtotal=item["product"].price * item["quantity"]
+            # =========================
+            # CREAR ORDER
+            # =========================
+            order = Order(
+                order_number=generate_order_number(),
+                user_id=user_id,
+                receiver_name=data["receiver_name"],
+                phone=data["phone"],
+                street=data["street"],
+                city=data["city"],
+                state=data["state"],
+                postal_code=data["postal_code"],
+                references=data.get("references"),
+                subtotal=subtotal,
+                total=subtotal
             )
 
-            item["product"].stock -= item["quantity"]
-            db.session.add(order_item)
+            print("🧾 ORDER A GUARDAR:", order.__dict__)
 
-        db.session.commit()
+            db.session.add(order)
+            db.session.flush()  # obtener order.id
 
-        # =========================
-        # RESPUESTA
-        # =========================
-        return {
-            "id": order.id,
-            "order_number": order.order_number,
-            "status": order.status,
-            "subtotal": order.subtotal,
-            "total": order.total,
-            "created_at": order.created_at.isoformat() if order.created_at else None
-        }, 201
+            # =========================
+            # CREAR ITEMS
+            # =========================
+            for item in order_items:
+                order_item = OrderItem(
+                    order_id=order.id,
+                    product_id=item["product"].id,
+                    product_name=item["product"].name,
+                    product_price=item["product"].price,
+                    quantity=item["quantity"],
+                    subtotal=item["product"].price * item["quantity"]
+                )
+
+                item["product"].stock -= item["quantity"]
+                db.session.add(order_item)
+
+            db.session.commit()
+
+            return {
+                "id": order.id,
+                "order_number": order.order_number,
+                "status": order.status,
+                "subtotal": order.subtotal,
+                "total": order.total,
+                "created_at": order.created_at.isoformat() if order.created_at else None
+            }, 201
+
+        except Exception as e:
+            db.session.rollback()
+
+            print("🔥 ERROR AL CREAR PEDIDO")
+            print(str(e))
+            traceback.print_exc()
+
+            return {
+                "message": "Error interno al generar el pedido",
+                "error": str(e)
+            }, 500
 
 # =========================
 # DETAIL / STATUS
 # =========================
 
 @api.route("/<int:id>")
-@api.param("id", "ID del pedido")
 class OrderDetail(Resource):
 
     @jwt_required()
     @api.marshal_with(order_response_model)
     def get(self, id):
-        """Obtener pedido por ID"""
         user_id = int(get_jwt_identity())
         claims = get_jwt()
         role = claims.get("role")
@@ -202,15 +203,14 @@ class OrderDetail(Resource):
 
         return order
 
+
 @api.route("/<int:id>/status")
-@api.param("id", "ID del pedido")
 class OrderStatus(Resource):
 
     @jwt_required()
     def put(self, id):
-        """Actualizar estado del pedido (ADMIN)"""
-
         claims = get_jwt()
+
         if claims.get("role") != "admin":
             api.abort(403, "Solo administradores")
 
@@ -219,33 +219,22 @@ class OrderStatus(Resource):
         if "status" not in data:
             api.abort(400, "El estado es requerido")
 
-        new_status = data["status"]
-
         VALID_STATUSES = ["pendiente", "confirmado", "entregado", "cancelado"]
 
-        if new_status not in VALID_STATUSES:
-            api.abort(
-                400,
-                f"Estado inválido. Estados permitidos: {', '.join(VALID_STATUSES)}"
-            )
+        if data["status"] not in VALID_STATUSES:
+            api.abort(400, "Estado inválido")
 
         order = Order.query.get_or_404(id)
 
-        if order.status == new_status:
-            return {
-                "message": f"El pedido ya está en estado '{new_status}'"
-            }, 200
-
-        # Restaurar stock si se cancela
-        if new_status == "cancelado" and order.status != "cancelado":
+        if data["status"] == "cancelado" and order.status != "cancelado":
             for item in order.items:
                 item.product.stock += item.quantity
 
-        order.status = new_status
+        order.status = data["status"]
         db.session.commit()
 
         return {
-            "message": "Estado del pedido actualizado",
+            "message": "Estado actualizado",
             "order_id": order.id,
-            "new_status": order.status
+            "status": order.status
         }, 200
