@@ -29,16 +29,16 @@ address_model = api.model("Address", {
 @api.route("/")
 class AddressList(Resource):
 
-    #@jwt_required()
     @api.marshal_list_with(address_model)
+    @jwt_required()  # 👈 JWT DEBE IR MÁS CERCA DEL DEF
     def get(self):
         """Listar direcciones del usuario"""
         user_id = int(get_jwt_identity())
         return Address.query.filter_by(user_id=user_id).all()
 
-    #@jwt_required()
     @api.expect(address_model, validate=True)
     @api.marshal_with(address_model, code=201)
+    @jwt_required()  # 👈 JWT SIEMPRE EL ÚLTIMO DECORADOR
     def post(self):
         """Crear dirección"""
         user_id = int(get_jwt_identity())
@@ -68,7 +68,6 @@ class AddressList(Resource):
 
         return address, 201
 
-
 # =========================
 # DETAIL / UPDATE / DELETE
 # =========================
@@ -77,20 +76,19 @@ class AddressList(Resource):
 @api.param("id", "ID de la dirección")
 class AddressDetail(Resource):
 
-    #@jwt_required()
     @api.marshal_with(address_model)
+    @jwt_required()
     def get(self, id):
         """Obtener dirección"""
         user_id = int(get_jwt_identity())
-        address = Address.query.filter_by(
+        return Address.query.filter_by(
             id=id,
             user_id=user_id
         ).first_or_404()
-        return address
 
-    #@jwt_required()
     @api.expect(address_model, validate=True)
     @api.marshal_with(address_model)
+    @jwt_required()
     def put(self, id):
         """Actualizar dirección"""
         user_id = int(get_jwt_identity())
@@ -119,7 +117,7 @@ class AddressDetail(Resource):
         db.session.commit()
         return address
 
-    #@jwt_required()
+    @jwt_required()
     def delete(self, id):
         """Eliminar dirección"""
         user_id = int(get_jwt_identity())
