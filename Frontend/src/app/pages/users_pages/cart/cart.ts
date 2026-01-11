@@ -37,11 +37,13 @@ export class CartComponent {
     return this.cartService.getCart();
   }
 
+  
   getTotal() {
     return this.cartService.getTotal();
   }
 
   generateOrder() {
+    console.log(this.address);
 
     if (!this.authService.isLoggedIn()) {
       localStorage.setItem('redirectAfterLogin', '/carrito');
