@@ -12,45 +12,25 @@ class Order(db.Model):
         index=True
     )
 
+    # =========================
+    # RELACIONES CLAVE
+    # =========================
+
     user_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
         nullable=False
     )
 
-    receiver_name = db.Column(
-        db.String(120),
+    address_id = db.Column(
+        db.Integer,
+        db.ForeignKey("addresses.id"),
         nullable=False
     )
 
-    phone = db.Column(
-        db.String(20),
-        nullable=False
-    )
-
-    street = db.Column(
-        db.String(120),
-        nullable=False
-    )
-
-    city = db.Column(
-        db.String(80),
-        nullable=False
-    )
-
-    state = db.Column(
-        db.String(80),
-        nullable=False
-    )
-
-    postal_code = db.Column(
-        db.String(10),
-        nullable=False
-    )
-
-    references = db.Column(
-        db.String(255)
-    )
+    # =========================
+    # ESTADO Y TOTALES
+    # =========================
 
     status = db.Column(
         db.String(30),
@@ -73,7 +53,15 @@ class Order(db.Model):
         server_default=db.func.now()
     )
 
+    # =========================
+    # RELATIONSHIPS
+    # =========================
+
     user = db.relationship(
         "User",
         backref="orders"
+    )
+
+    address = db.relationship(
+        "Address"
     )

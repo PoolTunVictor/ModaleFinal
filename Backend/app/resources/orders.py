@@ -5,6 +5,7 @@ from app.extensions import db
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.product import Product
+from app.models.address import Address
 import uuid
 import traceback
 
@@ -20,13 +21,7 @@ order_create_item_model = api.model("OrderCreateItem", {
 })
 
 order_create_model = api.model("OrderCreate", {
-    "receiver_name": fields.String(required=True),
-    "phone": fields.String(required=True),
-    "street": fields.String(required=True),
-    "city": fields.String(required=True),
-    "state": fields.String(required=True),
-    "postal_code": fields.String(required=True),
-    "references": fields.String,
+    "address_id": fields.Integer(required=True),
     "items": fields.List(fields.Nested(order_create_item_model), required=True)
 })
 
@@ -79,18 +74,13 @@ class OrderList(Resource):
             # =========================
             # VALIDACIONES
             # =========================
-            required_fields = [
-                "receiver_name",
-                "phone",
-                "street",
-                "city",
-                "state",
-                "postal_code"
-            ]
+            address = Address.query.filter_by(
+                id=data.get("address_id"),
+                user_id=user_id
+            ).first()
 
-            for field in required_fields:
-                if not data.get(field):
-                    api.abort(400, f"El campo '{field}' es obligatorio")
+            if not address:
+                api.abort(400, "Dirección inválida o no pertenece al usuario")
 
             if not data.get("items"):
                 api.abort(400, "El pedido debe contener productos")
@@ -105,7 +95,7 @@ class OrderList(Resource):
                 product = Product.query.get(item["product_id"])
 
                 if not product:
-                    api.abort(400, f"Producto {item['product_id']} no existe")
+                    api.abort(400, "Producto no existe")
 
                 if item["quantity"] <= 0:
                     api.abort(400, "Cantidad inválida")
@@ -127,13 +117,7 @@ class OrderList(Resource):
             order = Order(
                 order_number=generate_order_number(),
                 user_id=user_id,
-                receiver_name=data["receiver_name"],
-                phone=data["phone"],
-                street=data["street"],
-                city=data["city"],
-                state=data["state"],
-                postal_code=data["postal_code"],
-                references=data.get("references"),
+                address_id=address.id,
                 subtotal=subtotal,
                 total=subtotal
             )
@@ -141,23 +125,22 @@ class OrderList(Resource):
             print("🧾 ORDER A GUARDAR:", order.__dict__)
 
             db.session.add(order)
-            db.session.flush()  # obtener order.id
+            db.session.flush()
 
             # =========================
             # CREAR ITEMS
             # =========================
             for item in order_items:
-                order_item = OrderItem(
+                db.session.add(OrderItem(
                     order_id=order.id,
                     product_id=item["product"].id,
                     product_name=item["product"].name,
                     product_price=item["product"].price,
                     quantity=item["quantity"],
                     subtotal=item["product"].price * item["quantity"]
-                )
+                ))
 
                 item["product"].stock -= item["quantity"]
-                db.session.add(order_item)
 
             db.session.commit()
 
@@ -167,74 +150,15 @@ class OrderList(Resource):
                 "status": order.status,
                 "subtotal": order.subtotal,
                 "total": order.total,
-                "created_at": order.created_at.isoformat() if order.created_at else None
+                "created_at": order.created_at.isoformat()
             }, 201
 
         except Exception as e:
             db.session.rollback()
-
             print("🔥 ERROR AL CREAR PEDIDO")
-            print(str(e))
             traceback.print_exc()
 
             return {
                 "message": "Error interno al generar el pedido",
                 "error": str(e)
             }, 500
-
-# =========================
-# DETAIL / STATUS
-# =========================
-
-@api.route("/<int:id>")
-class OrderDetail(Resource):
-
-    @jwt_required()
-    @api.marshal_with(order_response_model)
-    def get(self, id):
-        user_id = int(get_jwt_identity())
-        claims = get_jwt()
-        role = claims.get("role")
-
-        order = Order.query.get_or_404(id)
-
-        if role != "admin" and order.user_id != user_id:
-            api.abort(403, "No autorizado")
-
-        return order
-
-
-@api.route("/<int:id>/status")
-class OrderStatus(Resource):
-
-    @jwt_required()
-    def put(self, id):
-        claims = get_jwt()
-
-        if claims.get("role") != "admin":
-            api.abort(403, "Solo administradores")
-
-        data = request.json or {}
-
-        if "status" not in data:
-            api.abort(400, "El estado es requerido")
-
-        VALID_STATUSES = ["pendiente", "confirmado", "entregado", "cancelado"]
-
-        if data["status"] not in VALID_STATUSES:
-            api.abort(400, "Estado inválido")
-
-        order = Order.query.get_or_404(id)
-
-        if data["status"] == "cancelado" and order.status != "cancelado":
-            for item in order.items:
-                item.product.stock += item.quantity
-
-        order.status = data["status"]
-        db.session.commit()
-
-        return {
-            "message": "Estado actualizado",
-            "order_id": order.id,
-            "status": order.status
-        }, 200
