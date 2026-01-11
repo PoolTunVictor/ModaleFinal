@@ -42,23 +42,34 @@ export class OrdersComponent implements OnInit {
 
     this.orderService.getMyOrders().subscribe({
       next: (res) => {
-        this.orders = res.map(order => ({
-          id: order.order_number,
-          date: new Date(order.created_at).toLocaleDateString('es-MX', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric'
-          }),
-          status: this.mapStatus(order.status),
-          items: [], // 👈 luego si quieres imágenes reales
-          extra: 0,
-          total: order.total,
-          action: this.mapAction(order.status)
-        }));
+
+        this.orders = res.map(order => {
+
+          // 🔥 SOLO MOSTRAMOS HASTA 3 IMÁGENES
+          const images = order.items
+            ?.map((item: any) => item.product_image)
+            .filter((img: string | null) => !!img)
+            .slice(0, 3);
+
+          return {
+            id: order.order_number,
+            date: new Date(order.created_at).toLocaleDateString('es-MX', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric'
+            }),
+            status: this.mapStatus(order.status),
+            items: images,                 // ✅ IMÁGENES REALES
+            extra: order.items.length - images.length, // ✅ +X
+            total: order.total,
+            action: this.mapAction(order.status)
+          };
+        });
 
         this.isLoading = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('❌ Error al cargar pedidos:', err);
         alert('Error al cargar pedidos');
         this.isLoading = false;
       }
