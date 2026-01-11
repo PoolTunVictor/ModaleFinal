@@ -130,3 +130,4 @@ class AddressDetail(Resource):
         db.session.commit()
 
         return {"message": "Dirección eliminada"}, 200
+    
