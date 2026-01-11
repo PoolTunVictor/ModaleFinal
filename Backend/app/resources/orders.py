@@ -13,6 +13,7 @@ api = Namespace("orders", description="Gestión de pedidos")
 # MODELS (Swagger)
 # =========================
 
+# ⚠️ Nombre único para evitar choque con order-items
 order_create_item_model = api.model("OrderCreateItem", {
     "product_id": fields.Integer(required=True),
     "quantity": fields.Integer(required=True)
@@ -29,6 +30,15 @@ order_create_model = api.model("OrderCreate", {
     "items": fields.List(fields.Nested(order_create_item_model), required=True)
 })
 
+order_response_model = api.model("OrderResponse", {
+    "id": fields.Integer,
+    "order_number": fields.String,
+    "status": fields.String,
+    "subtotal": fields.Float,
+    "total": fields.Float,
+    "created_at": fields.DateTime
+})
+
 # =========================
 # HELPERS
 # =========================
@@ -37,26 +47,48 @@ def generate_order_number():
     return f"ORD-{uuid.uuid4().hex[:10].upper()}"
 
 # =========================
-# CREATE ORDER
+# LIST / CREATE
 # =========================
 
 @api.route("/")
 class OrderList(Resource):
 
     @jwt_required()
+    @api.marshal_list_with(order_response_model)
+    def get(self):
+        """
+        Listar pedidos
+        - Admin: todos
+        - Usuario: solo los suyos
+        """
+        claims = get_jwt()
+        role = claims.get("role")
+        user_id = int(get_jwt_identity())
+
+        if role == "admin":
+            return Order.query.order_by(Order.created_at.desc()).all()
+
+        return Order.query.filter_by(user_id=user_id).order_by(
+            Order.created_at.desc()
+        ).all()
+
+    @jwt_required()
     @api.expect(order_create_model, validate=True)
     def post(self):
+        """Crear pedido"""
         user_id = int(get_jwt_identity())
         data = request.json or {}
 
-        # 🔍 DEBUG 1: payload recibido
-        print("===================================")
-        print("DATA RECIBIDA:", data)
-        print("===================================")
-
+        # =========================
+        # 🔒 VALIDACIÓN OBLIGATORIA (FIX CLAVE)
+        # =========================
         required_fields = [
-            "receiver_name", "phone", "street",
-            "city", "state", "postal_code"
+            "receiver_name",
+            "phone",
+            "street",
+            "city",
+            "state",
+            "postal_code"
         ]
 
         for field in required_fields:
@@ -69,22 +101,37 @@ class OrderList(Resource):
         subtotal = 0
         order_items = []
 
+        # =========================
+        # Validar productos y stock
+        # =========================
         for item in data["items"]:
             product = Product.query.get(item["product_id"])
 
             if not product:
-                api.abort(400, "Producto no existe")
+                api.abort(400, f"Producto {item['product_id']} no existe")
+
+            if item["quantity"] <= 0:
+                api.abort(400, "La cantidad debe ser mayor a 0")
 
             if product.stock < item["quantity"]:
-                api.abort(400, "Stock insuficiente")
+                api.abort(
+                    400,
+                    f"Stock insuficiente para {product.name}"
+                )
 
-            subtotal += product.price * item["quantity"]
+            line_total = product.price * item["quantity"]
+            subtotal += line_total
 
             order_items.append({
                 "product": product,
                 "quantity": item["quantity"]
             })
 
+        total = subtotal  # aquí luego puedes agregar envío / impuestos
+
+        # =========================
+        # Crear Order
+        # =========================
         order = Order(
             order_number=generate_order_number(),
             user_id=user_id,
@@ -96,16 +143,15 @@ class OrderList(Resource):
             postal_code=data["postal_code"],
             references=data.get("references"),
             subtotal=subtotal,
-            total=subtotal
+            total=total
         )
 
-        # 🔍 DEBUG 2: objeto Order antes de guardar
-        print("ORDER A GUARDAR:", order.__dict__)
-        print("===================================")
-
         db.session.add(order)
-        db.session.flush()
+        db.session.flush()  # obtener order.id
 
+        # =========================
+        # Crear OrderItems + descontar stock
+        # =========================
         for item in order_items:
             order_item = OrderItem(
                 order_id=order.id,
@@ -121,7 +167,85 @@ class OrderList(Resource):
 
         db.session.commit()
 
+        # =========================
+        # RESPUESTA
+        # =========================
         return {
             "id": order.id,
-            "order_number": order.order_number
+            "order_number": order.order_number,
+            "status": order.status,
+            "subtotal": order.subtotal,
+            "total": order.total,
+            "created_at": order.created_at.isoformat() if order.created_at else None
         }, 201
+
+# =========================
+# DETAIL / STATUS
+# =========================
+
+@api.route("/<int:id>")
+@api.param("id", "ID del pedido")
+class OrderDetail(Resource):
+
+    @jwt_required()
+    @api.marshal_with(order_response_model)
+    def get(self, id):
+        """Obtener pedido por ID"""
+        user_id = int(get_jwt_identity())
+        claims = get_jwt()
+        role = claims.get("role")
+
+        order = Order.query.get_or_404(id)
+
+        if role != "admin" and order.user_id != user_id:
+            api.abort(403, "No autorizado")
+
+        return order
+
+@api.route("/<int:id>/status")
+@api.param("id", "ID del pedido")
+class OrderStatus(Resource):
+
+    @jwt_required()
+    def put(self, id):
+        """Actualizar estado del pedido (ADMIN)"""
+
+        claims = get_jwt()
+        if claims.get("role") != "admin":
+            api.abort(403, "Solo administradores")
+
+        data = request.json or {}
+
+        if "status" not in data:
+            api.abort(400, "El estado es requerido")
+
+        new_status = data["status"]
+
+        VALID_STATUSES = ["pendiente", "confirmado", "entregado", "cancelado"]
+
+        if new_status not in VALID_STATUSES:
+            api.abort(
+                400,
+                f"Estado inválido. Estados permitidos: {', '.join(VALID_STATUSES)}"
+            )
+
+        order = Order.query.get_or_404(id)
+
+        if order.status == new_status:
+            return {
+                "message": f"El pedido ya está en estado '{new_status}'"
+            }, 200
+
+        # Restaurar stock si se cancela
+        if new_status == "cancelado" and order.status != "cancelado":
+            for item in order.items:
+                item.product.stock += item.quantity
+
+        order.status = new_status
+        db.session.commit()
+
+        return {
+            "message": "Estado del pedido actualizado",
+            "order_id": order.id,
+            "new_status": order.status
+        }, 200
