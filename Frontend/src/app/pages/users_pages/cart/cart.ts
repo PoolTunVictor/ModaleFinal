@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { CartService } from '../../../core/service/cart.service';
 import { OrderService } from '../../../core/service/order.service';
@@ -52,20 +53,29 @@ export class CartComponent implements OnInit {
     private orderService: OrderService,
     private addressService: AddressService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   // =========================
   // INIT
   // =========================
-  ngOnInit() {
+ngOnInit() {
 
-    // 🔁 PASO 2 — Restaurar dirección guardada
-    const draftAddress = localStorage.getItem('draftAddress');
-    if (draftAddress) {
-      this.newAddress = JSON.parse(draftAddress);
-      this.showAddressForm = true;
-    }
+    this.route.queryParams.subscribe(params => {
+
+      // ➕ Nueva dirección
+      if (params['newAddress']) {
+        this.showAddressForm = true;
+      }
+
+      // ✏️ Editar dirección
+      if (params['editAddress']) {
+        const id = Number(params['editAddress']);
+        this.loadAddressForEdit(id);
+      }
+
+    });
 
     if (this.authService.isLoggedIn()) {
       this.loadAddresses();
@@ -241,5 +251,24 @@ export class CartComponent implements OnInit {
     }
     this.closeModal();
   }
+
+  loadAddressForEdit(id: number) {
+  const address = this.addresses.find(a => a.id === id);
+  if (!address) return;
+
+  this.newAddress = {
+    receiver_name: address.receiver_name,
+    phone: address.phone,
+    street: address.street,
+    city: address.city,
+    state: address.state,
+    postal_code: address.postal_code,
+    references: address.references || '',
+    is_default: address.is_default
+  };
+
+  this.selectedAddressId = address.id;
+  this.showAddressForm = true;
+}
 
 }

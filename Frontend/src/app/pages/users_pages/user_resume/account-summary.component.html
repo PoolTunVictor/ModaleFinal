@@ -1,7 +1,16 @@
+<!-- ===================== -->
+<!-- PEDIDOS -->
+<!-- ===================== -->
 <section class="orders">
   <h2>Pedidos</h2>
 
-  <table>
+  <p *ngIf="isLoadingOrders">Cargando pedidos...</p>
+
+  <p *ngIf="!isLoadingOrders && orders.length === 0">
+    No tienes pedidos registrados.
+  </p>
+
+  <table *ngIf="!isLoadingOrders && orders.length > 0">
     <thead>
       <tr>
         <th>N° Pedido</th>
@@ -15,7 +24,7 @@
     <tbody>
       <tr *ngFor="let order of orders">
         <td>{{ order.id }}</td>
-        <td>{{ order.date }}</td>
+        <td>{{ order.created_at | date:'dd/MM/yyyy' }}</td>
         <td>
           <span class="badge" [ngClass]="order.status.toLowerCase()">
             {{ order.status }}
@@ -23,35 +32,175 @@
         </td>
         <td>${{ order.total }}</td>
         <td>
-          <button class="action-btn">{{ order.action }}</button>
+          <button class="action-btn">Ver detalles</button>
         </td>
       </tr>
     </tbody>
   </table>
 </section>
 
+<!-- ===================== -->
+<!-- GRID -->
+<!-- ===================== -->
 <div class="grid">
-  <!-- Información personal -->
+
+  <!-- INFO PERSONAL -->
   <div class="card">
     <h3>Información personal</h3>
 
-    <p><strong>Nombre</strong><br>{{ user.name }}</p>
-    <p><strong>Correo electrónico</strong><br>{{ user.email }}</p>
-    <p><strong>Número de teléfono</strong><br>{{ user.phone }}</p>
+    <p><strong>Nombre</strong><br>{{ user?.email?.split('@')[0] }}</p>
+    <p><strong>Correo electrónico</strong><br>{{ user?.email }}</p>
+    <p><strong>Teléfono</strong><br>{{ user?.phone || '—' }}</p>
 
-    <a href="#" class="link">Cambiar contraseña</a>
+    <a class="link">Cambiar contraseña</a>
   </div>
 
-  <!-- Dirección -->
+  <!-- DIRECCIONES -->
   <div class="card">
-    <h3>Dirección predeterminada</h3>
+    <h3>Direcciones</h3>
 
-    <p class="address-title">🏠 {{ address.title }}</p>
-    <p>{{ address.text }}</p>
+    <p *ngIf="isLoadingAddress">Cargando direcciones...</p>
 
-    <div class="buttons">
-      <button class="outline">Editar</button>
-      <button class="primary">Añadir nueva</button>
+    <p *ngIf="!isLoadingAddress && addresses.length === 0">
+      No tienes direcciones registradas.
+    </p>
+
+    <div
+      class="address-box"
+      *ngFor="let address of addresses"
+    >
+      <p class="address-title">🏠 {{ address.receiver_name }}</p>
+
+      <p>
+        {{ address.street }},
+        {{ address.city }},
+        {{ address.state }},
+        {{ address.postal_code }}
+      </p>
+
+      <p *ngIf="address.references">
+        <strong>Referencias:</strong> {{ address.references }}
+      </p>
+
+      <button
+        class="outline"
+        (click)="openEditAddressModal(address)"
+      >
+        Editar
+      </button>
     </div>
+
+    <button
+      class="primary"
+      style="margin-top: 1rem"
+      (click)="openNewAddressModal()"
+    >
+      Añadir nueva
+    </button>
   </div>
+</div>
+
+<!-- ===================== -->
+<!-- MODAL -->
+<!-- ===================== -->
+
+<div
+  class="modal-backdrop"
+  *ngIf="showAddressModal"
+  (click)="closeModal()"
+></div>
+
+<div
+  class="modal"
+  *ngIf="showAddressModal"
+  (click)="$event.stopPropagation()"
+>
+  <h3 class="modal-title">
+    {{ isEditMode ? 'Editar dirección' : 'Nueva dirección' }}
+  </h3>
+
+  <form class="modal-form">
+
+    <div class="form-group">
+      <label>Nombre del receptor</label>
+      <input
+        type="text"
+        [(ngModel)]="addressForm.receiver_name"
+        name="receiver_name"
+        placeholder="Ej. Juan Pérez"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Teléfono</label>
+      <input
+        type="text"
+        [(ngModel)]="addressForm.phone"
+        name="phone"
+        placeholder="Ej. 9991234567"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Calle</label>
+      <input
+        type="text"
+        [(ngModel)]="addressForm.street"
+        name="street"
+        placeholder="Ej. Calle 18 #45"
+      />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Ciudad</label>
+        <input
+          type="text"
+          [(ngModel)]="addressForm.city"
+          name="city"
+          placeholder="Ej. Tepakan"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Estado</label>
+        <input
+          type="text"
+          [(ngModel)]="addressForm.state"
+          name="state"
+          placeholder="Ej. Campeche"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Código postal</label>
+      <input
+        type="text"
+        [(ngModel)]="addressForm.postal_code"
+        name="postal_code"
+        placeholder="Ej. 24905"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Referencias (opcional)</label>
+      <input
+        type="text"
+        [(ngModel)]="addressForm.references"
+        name="references"
+        placeholder="Frente al parque"
+      />
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="outline" (click)="closeModal()">
+        Cancelar
+      </button>
+      <button type="button" class="primary" (click)="saveAddress()">
+        Guardar
+      </button>
+    </div>
+
+  </form>
 </div>

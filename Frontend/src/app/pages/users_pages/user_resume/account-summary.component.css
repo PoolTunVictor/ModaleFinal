@@ -1,8 +1,17 @@
-.orders{
-  font-family: 'Josefin Slab', serif;
+/* ===================== */
+/* GLOBAL FIX */
+/* ===================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-h2 {
-  margin-bottom: 1rem;
+
+/* ===================== */
+/* ORDERS */
+/* ===================== */
+.orders {
+  font-family: 'Josefin Slab', serif;
 }
 
 table {
@@ -55,6 +64,9 @@ tbody tr {
   cursor: pointer;
 }
 
+/* ===================== */
+/* GRID */
+/* ===================== */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -64,12 +76,8 @@ tbody tr {
 
 .card {
   border: 1px solid #eee;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 1.5rem;
-}
-
-.card h3 {
-  margin-bottom: 1rem;
 }
 
 .link {
@@ -78,26 +86,114 @@ tbody tr {
   cursor: pointer;
 }
 
+/* ===================== */
+/* ADDRESSES */
+/* ===================== */
+.address-box {
+  border: 1px solid #f3f4f6;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
 .address-title {
   font-weight: 600;
 }
 
-.buttons {
+/* ===================== */
+/* MODAL */
+/* ===================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 22px;
+  width: 100%;
+  max-width: 460px;
+  z-index: 1001;
+  font-family: 'Josefin Slab', serif;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+.modal-title {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+/* FORM */
+.modal-form {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.modal-form input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  font-family: 'Josefin Slab', serif;
+}
+
+.modal-form input:focus {
+  outline: none;
+  border-color: #f9a8d4;
+  box-shadow: 0 0 0 3px rgba(249, 168, 212, 0.35);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ACTIONS */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 1.5rem;
 }
 
 .outline {
   background: transparent;
-  border: 1px solid #ddd;
-  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  padding: 8px 18px;
   border-radius: 999px;
+  cursor: pointer;
 }
 
 .primary {
   background: #f9a8d4;
   border: none;
-  padding: 8px 16px;
+  padding: 8px 22px;
   border-radius: 999px;
+  cursor: pointer;
+}
+
+.primary:hover {
+  background: #f472b6;
 }

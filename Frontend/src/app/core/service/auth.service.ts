@@ -1,69 +1,74 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://modalefinal.onrender.com'
+
+  private apiUrl = 'https://modalefinal.onrender.com';
 
   constructor(private http: HttpClient) {}
 
   login(loginData: { email: string; password: string; remember: boolean }): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.apiUrl}/auth/login`, loginData, { headers });  // Nota: Agregué /auth porque tu namespace es "auth"
+
+    return this.http
+      .post<any>(`${this.apiUrl}/auth/login`, loginData, { headers })
+      .pipe(
+        tap(res => {
+          if (loginData.remember) {
+            localStorage.setItem('access_token', res.access_token);
+            localStorage.setItem('user', JSON.stringify(res.user));
+          } else {
+            sessionStorage.setItem('access_token', res.access_token);
+            sessionStorage.setItem('user', JSON.stringify(res.user));
+          }
+        })
+      );
   }
 
   // ===============================
-// AUTH STATE
-// ===============================
-isLoggedIn(): boolean {
-  const token =
-    localStorage.getItem('access_token') ||
-    sessionStorage.getItem('access_token');
+  // AUTH STATE
+  // ===============================
+  isLoggedIn(): boolean {
+    const token =
+      localStorage.getItem('access_token') ||
+      sessionStorage.getItem('access_token');
 
-  const user =
-    localStorage.getItem('user') ||
-    sessionStorage.getItem('user');
+    const user =
+      localStorage.getItem('user') ||
+      sessionStorage.getItem('user');
 
-  return !!token && !!user;
-}
-
-isAdmin(): boolean {
-  const user = localStorage.getItem('user');
-  if (!user) return false;
-
-  return JSON.parse(user).role === 'admin';
-}
-
-  // Método para obtener el token actual
-  getToken(): string | null {
-    return localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+    return !!token && !!user;
   }
 
-  // Método para logout
+  isAdmin(): boolean {
+    const user = localStorage.getItem('user');
+    if (!user) return false;
+
+    return JSON.parse(user).role === 'admin';
+  }
+
+  getToken(): string | null {
+    return (
+      localStorage.getItem('access_token') ||
+      sessionStorage.getItem('access_token')
+    );
+  }
+
   logout(): void {
     localStorage.removeItem('access_token');
     sessionStorage.removeItem('access_token');
     localStorage.removeItem('user');
-  }
-
-  private decodeToken(token: string): any {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload;
-    } catch {
-      return null;
-    }
+    sessionStorage.removeItem('user');
   }
 
   register(registerData: { email: string; password: string; phone?: string }) {
-    return this.http.post(
-      `${this.apiUrl}/auth/register`,
-      registerData
-    );
+    return this.http.post(`${this.apiUrl}/auth/register`, registerData);
   }
+
   // ===============================
   // USER (fuente de verdad)
   // ===============================

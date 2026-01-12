@@ -1,47 +1,146 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AddressService } from '../../../core/service/address.service';
+import { AuthService } from '../../../core/service/auth.service';
+import { OrderService } from '../../../core/service/order.service';
 
 @Component({
   selector: 'app-account-summary',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './account-summary.component.html',
   styleUrls: ['./account-summary.component.css']
 })
-export class AccountSummaryComponent {
+export class AccountSummaryComponent implements OnInit {
 
-  orders = [
-    {
-      id: '#ORD-7829',
-      date: '24 Oct, 2023',
-      status: 'Entregado',
-      total: 124.50,
-      action: 'Ver detalles'
-    },
-    {
-      id: '#ORD-7830',
-      date: '02 Nov, 2023',
-      status: 'En proceso',
-      total: 45.00,
-      action: 'Rastrear pedido'
-    },
-    {
-      id: '#ORD-7812',
-      date: '15 Oct, 2023',
-      status: 'Enviado',
-      total: 280.00,
-      action: 'Rastrear paquete'
+  // =========================
+  // USER
+  // =========================
+  user: any = null;
+
+  // =========================
+  // ORDERS
+  // =========================
+  orders: any[] = [];
+  isLoadingOrders = true;
+
+  // =========================
+  // ADDRESSES
+  // =========================
+  addresses: any[] = [];
+  isLoadingAddress = true;
+
+  // =========================
+  // MODAL
+  // =========================
+  showAddressModal = false;
+  isEditMode = false;
+  editingAddressId: number | null = null;
+
+  addressForm: any = {
+    receiver_name: '',
+    phone: '',
+    street: '',
+    city: '',
+    state: '',
+    postal_code: '',
+    references: ''
+  };
+
+  constructor(
+    private addressService: AddressService,
+    private authService: AuthService,
+    private orderService: OrderService
+  ) {}
+
+  ngOnInit() {
+    this.user = this.authService.getUser();
+    this.loadOrders();
+    this.loadAddresses();
+  }
+
+  // =========================
+  // LOAD ORDERS
+  // =========================
+  loadOrders() {
+    this.isLoadingOrders = true;
+    this.orderService.getMyOrders().subscribe({
+      next: (orders) => {
+        this.orders = orders;
+        this.isLoadingOrders = false;
+      },
+      error: () => this.isLoadingOrders = false
+    });
+  }
+
+  // =========================
+  // LOAD ADDRESSES
+  // =========================
+  loadAddresses() {
+    this.isLoadingAddress = true;
+
+    this.addressService.getMyAddresses().subscribe({
+      next: (addresses) => {
+        this.addresses = addresses;
+        this.isLoadingAddress = false;
+      },
+      error: () => this.isLoadingAddress = false
+    });
+  }
+
+  // =========================
+  // MODAL ACTIONS
+  // =========================
+  openNewAddressModal() {
+    this.isEditMode = false;
+    this.editingAddressId = null;
+    this.resetForm();
+    this.showAddressModal = true;
+  }
+
+  openEditAddressModal(address: any) {
+    this.isEditMode = true;
+    this.editingAddressId = address.id;
+    this.addressForm = { ...address };
+    this.showAddressModal = true;
+  }
+
+  closeModal() {
+    this.showAddressModal = false;
+    this.resetForm();
+  }
+
+  resetForm() {
+    this.addressForm = {
+      receiver_name: '',
+      phone: '',
+      street: '',
+      city: '',
+      state: '',
+      postal_code: '',
+      references: ''
+    };
+  }
+
+  // =========================
+  // SAVE ADDRESS
+  // =========================
+  saveAddress() {
+    if (this.isEditMode && this.editingAddressId) {
+      this.addressService
+        .updateAddress(this.editingAddressId, this.addressForm)
+        .subscribe(() => {
+          this.loadAddresses();
+          this.closeModal();
+        });
+    } else {
+      this.addressService
+        .createAddress(this.addressForm)
+        .subscribe(() => {
+          this.loadAddresses();
+          this.closeModal();
+        });
     }
-  ];
-
-  user = {
-    name: 'Jaqueline Uc',
-    email: 'jaqui@gmail.com',
-    phone: '9962003955'
-  };
-
-  address = {
-    title: 'Casa',
-    text: 'Calle 18 SN La Soledad, Pomuch, Campeche, México. 24810'
-  };
+  }
 }

@@ -42,4 +42,19 @@ export class AddressService {
     // 👇 AQUÍ ESTÁ LA CLAVE
     return this.http.post<Address>(this.apiUrl, address, { headers });
   }
+
+// =========================
+// ACTUALIZAR DIRECCIÓN
+// =========================
+  updateAddress(id: number, address: any) {
+  const token = this.authService.getToken();
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.put<any>(`${this.apiUrl}/${id}`, address, { headers });
+}
+
 }

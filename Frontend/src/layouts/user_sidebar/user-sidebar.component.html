@@ -1,10 +1,7 @@
-<aside class="sidebar-card">
+<aside class="sidebar-card" *ngIf="user">
 
   <!-- Breadcrumb -->
-  <p class="breadcrumb">
-    Inicio / Mi Cuenta / <strong>Mi perfil</strong>
-  </p>
-  
+
   <!-- User info -->
   <div class="user-info">
     <img
@@ -12,7 +9,8 @@
       alt="Avatar"
       class="avatar"
     />
-    <h3>Jaqueline Uc No se baña</h3>
+    <h3>{{ displayName }}</h3>
+    <small>{{ user.email }}</small>
   </div>
 
   <!-- Menu -->
@@ -31,21 +29,14 @@
       <i class="fas fa-box"></i>
       Pedidos
     </a>
-
-    <a routerLink="/addresses" routerLinkActive="active">
-      <i class="fas fa-map-marker-alt"></i>
-      Direcciones
-    </a>
   </nav>
 
   <!-- Logout -->
   <div class="logout">
-    <a href="#">
+    <button (click)="logout()">
       <i class="fas fa-sign-out-alt"></i>
       Cerrar Sesión
-    </a>
+    </button>
   </div>
-  
+
 </aside>
-
-
