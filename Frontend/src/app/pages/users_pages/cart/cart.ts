@@ -198,7 +198,7 @@ export class CartComponent implements OnInit {
     this.orderService.createOrder(this.selectedAddressId).subscribe({
       next: () => {
         alert('Pedido generado correctamente');
-
+        this.cartService.clear();
         this.router.navigate(['/mis-pedidos']);
       },
       error: (err) => {
