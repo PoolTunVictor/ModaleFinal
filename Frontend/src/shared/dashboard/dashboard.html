@@ -1,11 +1,21 @@
 <aside class="sidebar">
 
   <!-- Usuario -->
-  <div class="user-section">
-    <img src="./assets/Aziel.jpg" alt="Avatar" class="avatar">
+  <div class="user-section" *ngIf="user">
+    <img
+      src="./assets/user-placeholder.png"
+      alt="Avatar"
+      class="avatar"
+    >
+
     <div class="user-info">
-      <span class="user-name">Aziel Hidalgo</span>
-      <span class="user-role">Administrador</span>
+      <span class="user-name">
+        {{ user.email.split('@')[0] }}
+      </span>
+
+      <span class="user-role">
+        {{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}
+      </span>
     </div>
   </div>
 
