@@ -43,8 +43,13 @@
         {{ order.status }}
       </span>
 
+      <!-- ✅ PREVIEW DE IMÁGENES -->
       <div class="items">
-        <img *ngFor="let img of order.items" [src]="img" alt="producto">
+        <img
+          *ngFor="let img of order.previewImages"
+          [src]="img"
+          alt="producto"
+        />
         <span *ngIf="order.extra > 0">+{{ order.extra }}</span>
       </div>
 
@@ -61,7 +66,12 @@
 <!-- ========================= -->
 <!-- MODAL DETALLE PEDIDO -->
 <!-- ========================= -->
-<div class="modal-backdrop" *ngIf="selectedOrder" (click)="closeModal()"></div>
+
+<div
+  class="modal-backdrop"
+  *ngIf="selectedOrder"
+  (click)="closeModal()">
+</div>
 
 <div class="order-modal" *ngIf="selectedOrder">
   <div class="modal-header">
@@ -76,9 +86,10 @@
       <p><strong>Estado:</strong> {{ selectedOrder.status }}</p>
     </div>
 
+    <!-- ✅ ITEMS COMPLETOS -->
     <div class="order-items">
-
       <div class="order-item" *ngFor="let item of selectedOrder.fullItems">
+
         <img [src]="item.product_image" alt="producto">
 
         <div class="item-info">
@@ -86,8 +97,8 @@
           <p>Cantidad: {{ item.quantity }}</p>
           <p class="price">${{ item.subtotal }}</p>
         </div>
-      </div>
 
+      </div>
     </div>
 
     <div class="order-total">

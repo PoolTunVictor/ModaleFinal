@@ -18,7 +18,7 @@ export class OrdersComponent implements OnInit {
 
   orders: any[] = [];
 
-  // 🔥 NUEVO → pedido seleccionado para el modal
+  // 🔥 Pedido seleccionado (modal)
   selectedOrder: any = null;
 
   constructor(
@@ -48,23 +48,26 @@ export class OrdersComponent implements OnInit {
 
         this.orders = res.map(order => {
 
-          const images = order.items
-            ?.map((item: any) => item.product_image)
+          // 🔥 IMÁGENES PARA LA TABLA (solo URLs)
+          const previewImages = order.items
+            .map((item: any) => item.product_image)
             .filter((img: string | null) => !!img)
             .slice(0, 3);
 
           return {
-            ...order, // 🔥 conservamos todo el pedido
             id: order.order_number,
             date: new Date(order.created_at).toLocaleDateString('es-MX', {
               day: '2-digit',
               month: 'short',
               year: 'numeric'
             }),
-            statusLabel: this.mapStatus(order.status),
-            itemsPreview: images,
-            extra: order.items.length - images.length,
-            action: 'Ver detalles'
+            status: this.mapStatus(order.status),
+            total: order.total,
+
+            // ✅ SEPARACIÓN CORRECTA
+            previewImages,                 // tabla
+            extra: order.items.length - previewImages.length,
+            fullItems: order.items         // modal
           };
         });
 
@@ -97,7 +100,7 @@ export class OrdersComponent implements OnInit {
       return this.orders;
     }
     return this.orders.filter(
-      order => order.statusLabel === this.selectedFilter
+      order => order.status === this.selectedFilter
     );
   }
 
