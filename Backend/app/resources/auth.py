@@ -1,28 +1,24 @@
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
-from werkzeug.utils import secure_filename
-import os
 
 from app.extensions import db
 from app.models.user import User
 
 api = Namespace("auth", description="Autenticación")
 
-UPLOAD_FOLDER = "uploads/avatars"
+register_model = api.model("Register", {
+    "email": fields.String(required=True, example="user@mail.com"),
+    "password": fields.String(required=True, example="123456"),
+    "phone": fields.String(example="9999999999")
+})
 
-
-# =========================
-# REGISTER
-# =========================
 @api.route("/register")
 class Register(Resource):
-
+    @api.expect(register_model, validate=True)
     def post(self):
-        # 👇 multipart/form-data
-        data = request.form
-        file = request.files.get("avatar")  # 👈 OPCIONAL
+        data = request.get_json() or {}
 
         email = data.get("email")
         password = data.get("password")
@@ -34,22 +30,10 @@ class Register(Resource):
         if User.query.filter_by(email=email).first():
             return {"message": "Usuario ya existe"}, 400
 
-        avatar_url = None
-
-        # 🖼️ Guardar avatar SOLO si viene
-        if file:
-            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(file_path)
-
-            avatar_url = f"/{UPLOAD_FOLDER}/{filename}"
-
         user = User(
             email=email,
             phone=phone,
-            password=generate_password_hash(password),
-            avatar=avatar_url
+            password=generate_password_hash(password)
         )
 
         db.session.add(user)
@@ -57,13 +41,14 @@ class Register(Resource):
 
         return {"message": "Usuario creado"}, 201
 
+login_model = api.model("Login", {
+    "email": fields.String(required=True, example="user@mail.com"),
+    "password": fields.String(required=True, example="123456")
+})
 
-# =========================
-# LOGIN
-# =========================
 @api.route("/login")
 class Login(Resource):
-
+    @api.expect(login_model, validate=True)
     def post(self):
         data = request.get_json() or {}
 
@@ -88,7 +73,6 @@ class Login(Resource):
             "user": {
                 "id": user.id,
                 "email": user.email,
-                "role": user.role,
-                "avatar": user.avatar  # 👈 NUEVO
+                "role": user.role
             }
         }

@@ -34,8 +34,3 @@ class User(db.Model):
         backref="user",
         cascade="all, delete-orphan"
     )
-    
-    avatar = db.Column(
-        db.String(255),
-        nullable=True
-    )
