@@ -5,7 +5,7 @@
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="input-group">
-        <label for="email">Correo electrónico o usuario</label>
+        <label for="email">Correo electrónico</label>
         <input
           type="text"
           id="email"
@@ -13,7 +13,7 @@
           formControlName="email"
         />
         <span class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-          El correo o usuario es obligatorio.
+          El correo electrónico es obligatorio.
         </span>
       </div>
       
@@ -68,14 +68,18 @@
         </span>
       </div>
 
-      <button type="submit" [disabled]="registerForm.invalid || isLoading">
-        {{ isLoading ? 'Creando...' : 'Crear cuenta' }}
-      </button>
+    <button
+      type="submit"
+      class="btn-primary"
+      [disabled]="registerForm.invalid || isLoading"
+    >
+      {{ isLoading ? 'Creando...' : 'Crear cuenta' }}
+    </button>
     </form>
 
     <div class="register">
       <span>¿Ya tienes cuenta?</span>
-      <a routerLink="/" class="link">Iniciar sesión</a>
+      <a routerLink="/login" class="link">Iniciar sesión</a>
     </div>
   </div>
 </div>
