@@ -13,6 +13,11 @@ export class Users implements OnInit {
 
   users: any[] = [];
   isLoading = true;
+  // Modal
+  showConfirmModal = false;
+  confirmTitle = '';
+  confirmMessage = '';
+  confirmAction: (() => void) | null = null;
 
   constructor(private userService: UserService) {}
 
@@ -39,19 +44,26 @@ export class Users implements OnInit {
   // CAMBIAR ROL
   // =========================
   changeRole(user: any, event: Event) {
-    const newRole = (event.target as HTMLSelectElement).value;
+    const select = event.target as HTMLSelectElement;
+    const newRole = select.value;
 
-    // optimista: actualiza UI primero
-    const previousRole = user.role;
-    user.role = newRole;
+    if (newRole === user.role) return;
 
-    this.userService.updateUserRole(user.id, newRole).subscribe({
-      error: () => {
-        alert('Error al cambiar el rol');
-        user.role = previousRole; // rollback
+    // revertimos visualmente hasta confirmar
+    select.value = user.role;
+
+    this.openConfirmModal(
+      'Confirmar cambio de rol',
+      `¿Estás seguro de cambiar el rol de "${user.email}" a "${newRole === 'admin' ? 'Administrador' : 'Cliente'}"?`,
+      () => {
+        this.userService.updateUserRole(user.id, newRole).subscribe({
+          next: () => user.role = newRole,
+          error: () => alert('Error al cambiar rol')
+        });
       }
-    });
+    );
   }
+
 
   // helpers visuales
   getRoleLabel(role: string): string {
@@ -65,21 +77,38 @@ export class Users implements OnInit {
   // ELIMINAR USUARIO
   // =========================
   deleteUser(user: any) {
-
-    const confirmDelete = confirm(
-      `¿Seguro que deseas eliminar al usuario ${user.email}?`
-    );
-
-    if (!confirmDelete) return;
-
-    this.userService.deleteUser(user.id).subscribe({
-      next: () => {
-        // eliminar de la tabla sin recargar
-        this.users = this.users.filter(u => u.id !== user.id);
-      },
-      error: () => {
-        alert('Error al eliminar usuario');
+    this.openConfirmModal(
+      'Eliminar usuario',
+      `¿Estás seguro de eliminar al usuario "${user.email}"? Esta acción no se puede deshacer.`,
+      () => {
+        this.userService.deleteUser(user.id).subscribe({
+          next: () => {
+            this.users = this.users.filter(u => u.id !== user.id);
+          },
+          error: () => alert('Error al eliminar usuario')
+        });
       }
-    });
+    );
   }
+
+
+  openConfirmModal(title: string, message: string, action: () => void) {
+    this.confirmTitle = title;
+    this.confirmMessage = message;
+    this.confirmAction = action;
+    this.showConfirmModal = true;
+  }
+
+  closeConfirmModal() {
+    this.showConfirmModal = false;
+    this.confirmAction = null;
+  }
+
+  confirm() {
+    if (this.confirmAction) {
+      this.confirmAction();
+    }
+    this.closeConfirmModal();
+  }
+
 }

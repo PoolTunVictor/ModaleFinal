@@ -184,3 +184,25 @@
     Tu carrito está vacío 🛒
   </p>
 </ng-template>
+<!-- ================= MODAL ================= -->
+<div *ngIf="showModal">
+  <div class="modal-backdrop" (click)="closeModal()"></div>
+
+  <div class="login-modal">
+    <div class="modal-header">
+      <h3>{{ modalTitle }}</h3>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <p>{{ modalMessage }}</p>
+
+      <button
+        class="checkout-btn"
+        style="margin-top: 10px"
+        (click)="confirmModal()">
+        Aceptar
+      </button>
+    </div>
+  </div>
+</div>

@@ -28,6 +28,14 @@ export class CartComponent implements OnInit {
 
   showAddressForm = false;
 
+  // =========================
+  // MODAL
+  // =========================
+  showModal = false;
+  modalTitle = '';
+  modalMessage = '';
+  modalAction: (() => void) | null = null;
+
   newAddress = {
     receiver_name: '',
     phone: '',
@@ -139,7 +147,10 @@ export class CartComponent implements OnInit {
     // 🟢 Logueado → guardar normal
     this.addressService.createAddress(this.newAddress).subscribe({
       next: (createdAddress) => {
-        alert('Dirección guardada correctamente');
+        this.openModal(
+          'Dirección guardada',
+          'La dirección se guardó correctamente.'
+        );
 
         this.showAddressForm = false;
 
@@ -197,13 +208,38 @@ export class CartComponent implements OnInit {
 
     this.orderService.createOrder(this.selectedAddressId).subscribe({
       next: () => {
-        alert('Pedido generado correctamente');
-        this.cartService.clear();
-        this.router.navigate(['/mis-pedidos']);
+        this.openModal(
+          'Pedido generado',
+          'Tu pedido fue creado correctamente.',
+          () => {
+            this.cartService.clear();
+            this.router.navigate(['/mis-pedidos']);
+          }
+        );
       },
       error: (err) => {
         alert(err.error?.message || 'Error al generar pedido');
       }
     });
   }
+
+  openModal(title: string, message: string, action?: () => void) {
+    this.modalTitle = title;
+    this.modalMessage = message;
+    this.modalAction = action || null;
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.modalAction = null;
+  }
+
+  confirmModal() {
+    if (this.modalAction) {
+      this.modalAction();
+    }
+    this.closeModal();
+  }
+
 }

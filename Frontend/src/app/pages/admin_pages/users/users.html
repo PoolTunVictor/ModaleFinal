@@ -138,3 +138,23 @@
   </div>
 
 </div>
+<!-- ================= MODAL CONFIRMACIÓN ================= -->
+
+<div class="modal-backdrop" *ngIf="showConfirmModal" (click)="closeConfirmModal()"></div>
+
+<div class="confirm-modal" *ngIf="showConfirmModal">
+  <h3>{{ confirmTitle }}</h3>
+
+  <p>{{ confirmMessage }}</p>
+
+  <div class="modal-actions">
+    <button class="btn-outline" (click)="closeConfirmModal()">
+      Cancelar
+    </button>
+
+
+    <button class="btn-primary danger" (click)="confirm()">
+      Confirmar
+    </button>
+  </div>
+</div>
