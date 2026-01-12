@@ -113,12 +113,13 @@
           </div>
         </div>
 
-        <!-- 🟢 CON DIRECCIONES -->
-        <div *ngIf="!isLoadingAddresses && addresses.length > 0">
+        <!-- 🟢 USUARIO LOGUEADO CON DIRECCIONES -->
+        <div>
 
           <label>Dirección de envío</label>
           <select [(ngModel)]="selectedAddressId">
             <option [ngValue]="null">Selecciona una dirección</option>
+
             <option
               *ngFor="let address of addresses"
               [ngValue]="address.id">
@@ -126,6 +127,33 @@
             </option>
           </select>
 
+          <!-- ➕ AGREGAR OTRA DIRECCIÓN -->
+          <button
+            type="button"
+            class="add-address-btn"
+            (click)="showAddressForm = !showAddressForm">
+            ➕ Agregar otra dirección
+          </button>
+
+          <!-- 📝 FORMULARIO INLINE -->
+          <div *ngIf="showAddressForm" class="address-form">
+
+            <input placeholder="Nombre del receptor" [(ngModel)]="newAddress.receiver_name">
+            <input placeholder="Teléfono" [(ngModel)]="newAddress.phone">
+            <input placeholder="Calle" [(ngModel)]="newAddress.street">
+            <input placeholder="Ciudad" [(ngModel)]="newAddress.city">
+            <input placeholder="Estado" [(ngModel)]="newAddress.state">
+            <input placeholder="Código postal" [(ngModel)]="newAddress.postal_code">
+            <input placeholder="Referencias" [(ngModel)]="newAddress.references">
+
+            <button
+              class="checkout-btn"
+              (click)="saveAddress()">
+              Guardar dirección
+            </button>
+          </div>
+
+          <!-- TOTAL -->
           <div class="summary-total">
             <span>Total</span>
             <strong>${{ getTotal() }}</strong>
@@ -136,7 +164,9 @@
             (click)="generateOrder()">
             GENERAR PEDIDO
           </button>
+
         </div>
+
 
       </ng-container>
 
