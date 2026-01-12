@@ -59,7 +59,7 @@ def generate_order_number():
 class OrderList(Resource):
 
     # =========================
-    # GET MIS PEDIDOS
+    # GET PEDIDOS (CLIENTE / ADMIN)
     # =========================
     @jwt_required()
     def get(self):
@@ -67,49 +67,29 @@ class OrderList(Resource):
         role = claims.get("role")
         user_id = int(get_jwt_identity())
 
-        print("\n==============================")
-        print("📦 GET /orders")
-        print("👤 USER ID:", user_id)
-        print("🔐 ROLE:", role)
-        print("==============================")
-
         if role == "admin":
             orders = Order.query.order_by(Order.created_at.desc()).all()
         else:
-            orders = Order.query.filter_by(user_id=user_id)\
-                .order_by(Order.created_at.desc()).all()
+            orders = (
+                Order.query
+                .filter_by(user_id=user_id)
+                .order_by(Order.created_at.desc())
+                .all()
+            )
 
         response = []
 
         for order in orders:
-            print("\n🧾 ORDER:", order.id, order.order_number)
             items = []
 
             order_items = OrderItem.query.filter_by(order_id=order.id).all()
-            print("📦 ITEMS DEL PEDIDO:", len(order_items))
 
             for item in order_items:
-                print("\n🔎 ORDER_ITEM")
-                print("➡ product_id:", item.product_id)
-                print("➡ product_name:", item.product_name)
-
-                # 🔍 BUSCAR IMAGEN PRINCIPAL
                 main_image = (
                     ProductImage.query
                     .filter_by(product_id=item.product_id, is_main=True)
                     .first()
                 )
-
-                if main_image:
-                    print("🖼️ IMAGEN ENCONTRADA:", main_image.url)
-                else:
-                    print("❌ NO HAY IMAGEN PRINCIPAL PARA ESTE PRODUCTO")
-
-                    # DEBUG EXTRA: cuántas imágenes existen
-                    total_imgs = ProductImage.query.filter_by(
-                        product_id=item.product_id
-                    ).count()
-                    print("📊 TOTAL IMÁGENES DEL PRODUCTO:", total_imgs)
 
                 items.append({
                     "product_id": item.product_id,
@@ -119,6 +99,9 @@ class OrderList(Resource):
                     "subtotal": item.subtotal
                 })
 
+            # =========================
+            # RESPUESTA FINAL (CON USUARIO)
+            # =========================
             response.append({
                 "id": order.id,
                 "order_number": order.order_number,
@@ -126,10 +109,17 @@ class OrderList(Resource):
                 "subtotal": order.subtotal,
                 "total": order.total,
                 "created_at": order.created_at.isoformat(),
+
+                # 🔥 USUARIO (NUEVO)
+                "user": {
+                    "id": order.user.id,
+                    "name": order.user.name,
+                    "email": order.user.email
+                },
+
                 "items": items
             })
 
-        print("\n✅ RESPUESTA FINAL ENVIADA")
         return response, 200
 
     # =========================
