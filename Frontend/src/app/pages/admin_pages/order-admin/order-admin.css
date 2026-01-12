@@ -53,3 +53,110 @@ th, td {
 .actions button.delete {
   background: #fee2e2;
 }
+
+/* BOTÓN IMPRIMIR */
+.actions .print {
+  background: #e0f2fe;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* MODAL */
+.print-modal {
+  max-width: 600px;
+}
+
+/* FICHA */
+.print-sheet {
+  font-family: 'Josefin Slab', serif;
+}
+
+.print-sheet section {
+  margin-bottom: 1rem;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.print-table th,
+.print-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.total {
+  text-align: right;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+/* BACKDROP */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 600px;
+
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+
+  z-index: 1000;
+  box-shadow: 0 20px 40px rgba(0,0,0,.2);
+}
+
+.modal-content {
+  overflow-y: auto;
+  padding-right: 6px;
+  max-height: calc(90vh - 140px);
+}
+
+/* TÍTULO */
+.modal-title {
+  margin-bottom: 1rem;
+}
+
+/* BOTONES */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.modal-actions .outline {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-actions .primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}

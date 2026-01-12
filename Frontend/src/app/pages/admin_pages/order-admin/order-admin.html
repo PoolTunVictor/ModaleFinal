@@ -22,26 +22,17 @@
     <tbody>
       <tr *ngFor="let order of orders">
 
-        <!-- ID -->
         <td>#{{ order.id }}</td>
 
-        <!-- USUARIO -->
-      <td>
-        <strong>{{ order.user?.email.split('@')[0] }}</strong><br>
-        <small>{{ order.user?.email }}</small>
-      </td>
-
-        <!-- FECHA -->
         <td>
-          {{ order.created_at | date:'dd/MM/yyyy' }}
+          <strong>{{ order.user?.email.split('@')[0] }}</strong><br>
+          <small>{{ order.user?.email }}</small>
         </td>
 
-        <!-- TOTAL -->
-        <td>
-          ${{ order.total }}
-        </td>
+        <td>{{ order.created_at | date:'dd/MM/yyyy' }}</td>
 
-        <!-- ESTADO -->
+        <td>${{ order.total }}</td>
+
         <td>
           <select
             #statusSelect
@@ -55,8 +46,15 @@
           </select>
         </td>
 
-        <!-- ACCIONES -->
         <td class="actions">
+          <button
+            class="print"
+            title="Imprimir ficha"
+            (click)="openPrintModal(order)"
+          >
+            🖨️
+          </button>
+
           <button
             class="delete"
             title="Eliminar pedido"
@@ -70,9 +68,99 @@
     </tbody>
   </table>
 
-  <!-- Sin pedidos -->
   <p *ngIf="!isLoading && orders.length === 0">
     No hay pedidos registrados.
   </p>
+
+</div>
+
+<!-- ===================== -->
+<!-- MODAL FICHA -->
+<!-- ===================== -->
+
+<div
+  class="modal-backdrop"
+  *ngIf="showPrintModal"
+  (click)="closePrintModal()"
+></div>
+
+<div
+  class="modal print-modal"
+  *ngIf="showPrintModal && selectedOrder"
+  (click)="$event.stopPropagation()"
+>
+
+  <!-- HEADER -->
+  <h2 class="modal-title">📦 Ficha de Entrega</h2>
+
+  <!-- CONTENIDO CON SCROLL -->
+  <div class="modal-content">
+
+    <div id="printArea" class="print-sheet">
+
+      <!-- CLIENTE -->
+      <section>
+        <h3>👤 Cliente</h3>
+        <p><strong>Email:</strong> {{ selectedOrder.user.email }}</p>
+        <p><strong>Teléfono:</strong> {{ selectedOrder.address.phone }}</p>
+      </section>
+
+      <hr />
+
+      <!-- DIRECCIÓN -->
+      <section>
+        <h3>📍 Dirección</h3>
+        <p>
+          {{ selectedOrder.address.street }},
+          {{ selectedOrder.address.city }},
+          {{ selectedOrder.address.state }},
+          {{ selectedOrder.address.postal_code }}
+        </p>
+
+        <p *ngIf="selectedOrder.address.references">
+          <strong>Referencias:</strong>
+          {{ selectedOrder.address.references }}
+        </p>
+      </section>
+
+      <hr />
+
+      <!-- PEDIDO -->
+      <section>
+        <h3>🧾 Pedido</h3>
+        <p><strong>ID:</strong> #{{ selectedOrder.id }}</p>
+        <p>
+          <strong>Fecha:</strong>
+          {{ selectedOrder.created_at | date:'dd/MM/yyyy' }}
+        </p>
+
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cant.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of selectedOrder.items">
+              <td>{{ item.product_name }}</td>
+              <td>{{ item.quantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="total">
+          <strong>Total:</strong> ${{ selectedOrder.total }}
+        </p>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- BOTONES FIJOS -->
+  <div class="modal-actions">
+    <button class="outline" (click)="closePrintModal()">Cerrar</button>
+    <button class="primary" (click)="print()">Imprimir ficha</button>
+  </div>
 
 </div>

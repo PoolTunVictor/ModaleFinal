@@ -14,6 +14,9 @@ export class OrderAdmin implements OnInit {
   orders: any[] = [];
   isLoading = true;
 
+  showPrintModal = false;
+  selectedOrder: any = null;
+
   constructor(private adminOrderService: AdminOrderService) {}
 
   ngOnInit() {
@@ -45,5 +48,26 @@ export class OrderAdmin implements OnInit {
     this.adminOrderService.deleteOrder(orderId).subscribe(() => {
       this.loadOrders();
     });
+  }
+
+  openPrintModal(order: any) {
+    this.adminOrderService.getOrderDetail(order.id).subscribe({
+      next: (fullOrder) => {
+        this.selectedOrder = fullOrder;
+        this.showPrintModal = true;
+      }
+    });
+  }
+
+
+  closePrintModal() {
+    this.showPrintModal = false;
+    this.selectedOrder = null;
+  }
+
+  print() {
+    setTimeout(() => {
+      window.print();
+    }, 300);
   }
 }

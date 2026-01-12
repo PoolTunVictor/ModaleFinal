@@ -1,6 +1,74 @@
-/* You can add global styles to this file, and also import other style files */
-html, body{
+@media print {
+
+  /* Reset general */
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+    font-family: 'Josefin Slab', serif;
+  }
+
+  /* Oculta todo */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Muestra solo la ficha */
+  #printArea,
+  #printArea * {
+    visibility: visible;
+  }
+
+  /* Contenedor de impresión */
+  #printArea {
+    position: relative;           /* 🔥 NO absolute */
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* Elimina modal visual */
+  .modal-backdrop,
+  .modal-actions {
+    display: none !important;
+  }
+
+  .modal {
+    position: static;
+    box-shadow: none;
     padding: 0;
     margin: 0;
-    height: 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Tablas */
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .print-table th,
+  .print-table td {
+    border: 1px solid #000;
+    padding: 6px;
+    font-size: 12px;
+    word-break: break-word;
+  }
+
+  /* Evitar cortes feos */
+  section {
+    page-break-inside: avoid;
+  }
+
+  /* Tamaño real de hoja */
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
 }

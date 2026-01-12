@@ -38,4 +38,10 @@ export class AdminOrderService {
       this.getHeaders()
     );
   }
+  getOrderDetail(orderId: number) {
+    return this.http.get<any>(
+      `${this.apiUrl}/${orderId}`,
+      this.getHeaders()
+    );
+  }
 }
