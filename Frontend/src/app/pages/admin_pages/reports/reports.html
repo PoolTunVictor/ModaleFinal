@@ -36,10 +36,10 @@
 
   </div>
 
-  <!-- Chart (placeholder, no se toca aún) -->
+  <!-- Chart -->
   <div class="chart-card">
     <h3>Tendencia de Ventas (últimos 30 días)</h3>
-    <div class="chart-placeholder"></div>
+    <canvas id="salesChart"></canvas>
   </div>
 
   <!-- Table -->
@@ -52,27 +52,18 @@
           <th>Producto</th>
           <th>Unidades</th>
           <th>Ingresos Totales</th>
-          <th>Margen de Ganancia</th>
         </tr>
       </thead>
 
       <tbody>
         <tr *ngFor="let p of report.products">
-
           <td class="product-cell">
-            <div>
-              <strong>{{ p.name }}</strong>
-            </div>
+            <strong>{{ p.name }}</strong>
           </td>
-
           <td>{{ p.units }}</td>
-
           <td>
             ${{ p.revenue | number:'1.2-2' }}
           </td>
-
-          <td>—</td>
-
         </tr>
       </tbody>
     </table>

@@ -32,4 +32,10 @@ export class AdminReportService {
       this.getHeaders()
     );
   }
+  getSalesByDay() {
+  return this.http.get<any[]>(
+    `${this.apiUrl}/sales-by-day`,
+    this.getHeaders()
+  );
+}
 }
