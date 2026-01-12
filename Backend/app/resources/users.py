@@ -85,3 +85,4 @@ class UserDelete(Resource):
         db.session.commit()
 
         return {"message": "Usuario eliminado correctamente"}, 200
+    
