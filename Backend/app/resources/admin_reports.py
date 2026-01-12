@@ -16,8 +16,9 @@ class AdminReportSummary(Resource):
 
     @admin_required
     def get(self):
+
         # =========================
-        # TOTALES
+        # TOTALES GENERALES
         # =========================
         total_sales = db.session.query(
             func.coalesce(func.sum(Order.total), 0)
@@ -28,14 +29,13 @@ class AdminReportSummary(Resource):
         ).scalar()
 
         # =========================
-        # PRODUCTOS VENDIDOS
+        # PRODUCTOS VENDIDOS (UNIDADES)
         # =========================
         products_query = (
             db.session.query(
                 Product.id,
                 Product.name,
-                func.sum(OrderItem.quantity).label("units"),
-                func.sum(OrderItem.quantity * OrderItem.price).label("revenue")
+                func.sum(OrderItem.quantity).label("units")
             )
             .join(OrderItem, OrderItem.product_id == Product.id)
             .group_by(Product.id)
@@ -48,7 +48,7 @@ class AdminReportSummary(Resource):
                 "id": p.id,
                 "name": p.name,
                 "units": int(p.units),
-                "revenue": float(p.revenue)
+                "revenue": None  # no existe price en OrderItem
             }
             for p in products_query
         ]
