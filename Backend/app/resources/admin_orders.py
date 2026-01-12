@@ -37,6 +37,53 @@ class AdminOrderList(Resource):
 
 
 # =========================
+# DETALLE DE PEDIDO (PARA FICHA)
+# =========================
+
+@api.route("/<int:order_id>")
+class AdminOrderDetail(Resource):
+
+    @admin_required
+    def get(self, order_id):
+        """Detalle completo de un pedido (admin)"""
+        order = Order.query.get_or_404(order_id)
+
+        return {
+            "id": order.id,
+            "status": order.status,
+            "subtotal": order.subtotal,
+            "total": order.total,
+            "created_at": order.created_at.isoformat(),
+
+            # 👤 USUARIO
+            "user": {
+                "id": order.user.id,
+                "email": order.user.email
+            },
+
+            # 📍 DIRECCIÓN
+            "address": {
+                "street": order.address.street,
+                "city": order.address.city,
+                "state": order.address.state,
+                "postal_code": order.address.postal_code,
+                "phone": order.address.phone,
+                "references": order.address.references
+            },
+
+            # 🧾 ITEMS
+            "items": [
+                {
+                    "product_name": item.product_name,
+                    "quantity": item.quantity,
+                    "subtotal": item.subtotal
+                }
+                for item in order.items
+            ]
+        }, 200
+
+
+# =========================
 # CAMBIAR ESTADO DEL PEDIDO
 # =========================
 
