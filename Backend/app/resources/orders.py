@@ -113,7 +113,6 @@ class OrderList(Resource):
                 # 🔥 USUARIO (NUEVO)
                 "user": {
                     "id": order.user.id,
-                    "name": order.user.name,
                     "email": order.user.email
                 },
 
