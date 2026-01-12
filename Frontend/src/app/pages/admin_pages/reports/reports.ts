@@ -16,7 +16,7 @@ export class Reports implements OnInit {
 
   report: any = null;
   isLoading = true;
-  salesChart: Chart | null = null;
+  salesChart: any;
 
   constructor(
     private adminReportService: AdminReportService
@@ -24,18 +24,14 @@ export class Reports implements OnInit {
 
   ngOnInit(): void {
     this.loadReport();
-
-    // Esperamos a que el HTML ya esté renderizado
-    setTimeout(() => {
-      this.loadSalesChart();
-    }, 0);
+    this.loadSalesChart();
   }
 
-  loadReport(): void {
+  loadReport() {
     this.isLoading = true;
 
     this.adminReportService.getSummary().subscribe({
-      next: (data: any) => {
+      next: (data) => {
         this.report = data;
         this.isLoading = false;
       },
@@ -45,23 +41,19 @@ export class Reports implements OnInit {
     });
   }
 
-  loadSalesChart(): void {
-    this.adminReportService.getSalesByDay().subscribe((data: any[]) => {
+  loadSalesChart() {
+    this.adminReportService.getSalesByDay().subscribe(data => {
 
-      const labels = data.map((d: any) => d.date);
-      const totals = data.map((d: any) => d.total);
+      const labels = data.map(d => d.date);
+      const totals = data.map(d => d.total);
 
-      const canvas = document.getElementById('salesChart') as HTMLCanvasElement | null;
-
-      if (!canvas) {
-        return;
-      }
+      const ctx = document.getElementById('salesChart') as HTMLCanvasElement;
 
       if (this.salesChart) {
         this.salesChart.destroy();
       }
 
-      this.salesChart = new Chart(canvas, {
+      this.salesChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels,

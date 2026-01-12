@@ -7,24 +7,27 @@
   <!-- Loading -->
   <p *ngIf="isLoading">Cargando reportes...</p>
 
-  <!-- KPIs -->
-  <div class="kpis" *ngIf="!isLoading && report">
+  <!-- ================= KPIs ================= -->
+  <div class="kpis" *ngIf="!isLoading">
 
+    <!-- Ventas Totales -->
     <div class="kpi-card">
       <span class="kpi-title">VENTAS TOTALES</span>
       <span class="kpi-value green">
-        ${{ report.total_sales | number:'1.2-2' }}
+        ${{ report?.total_sales | number:'1.2-2' }}
       </span>
     </div>
 
+    <!-- Órdenes -->
     <div class="kpi-card">
       <span class="kpi-title">ÓRDENES</span>
       <span class="kpi-value">
-        {{ report.total_orders }}
+        {{ report?.total_orders }}
       </span>
     </div>
 
-    <div class="kpi-card" *ngIf="report.top_product">
+    <!-- Producto más vendido -->
+    <div class="kpi-card" *ngIf="report?.top_product">
       <span class="kpi-title">PRODUCTO TOP</span>
       <span class="kpi-value green">
         {{ report.top_product.name }}
@@ -36,13 +39,7 @@
 
   </div>
 
-  <!-- Chart -->
-  <div class="chart-card">
-    <h3>Tendencia de Ventas (últimos 30 días)</h3>
-    <canvas id="salesChart"></canvas>
-  </div>
-
-  <!-- Table -->
+  <!-- ================= TABLA ================= -->
   <div class="table-card" *ngIf="!isLoading && report">
     <h3>Productos con Mejor Rendimiento</h3>
 
@@ -60,7 +57,9 @@
           <td class="product-cell">
             <strong>{{ p.name }}</strong>
           </td>
+
           <td>{{ p.units }}</td>
+
           <td>
             ${{ p.revenue | number:'1.2-2' }}
           </td>
