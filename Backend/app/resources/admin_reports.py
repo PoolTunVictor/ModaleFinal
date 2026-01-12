@@ -11,15 +11,18 @@ api = Namespace(
     description="Reportes administrativos basados en pedidos"
 )
 
+# =========================
+# RESUMEN GENERAL
+# =========================
 @api.route("/summary")
 class AdminReportSummary(Resource):
 
     @admin_required
     def get(self):
 
-        # =========================
-        # TOTALES GENERALES
-        # =========================
+        # -------------------------
+        # KPIs GENERALES
+        # -------------------------
         total_sales = db.session.query(
             func.coalesce(func.sum(Order.total), 0)
         ).scalar()
@@ -28,16 +31,21 @@ class AdminReportSummary(Resource):
             func.count(Order.id)
         ).scalar()
 
-        # =========================
-        # PRODUCTOS VENDIDOS (UNIDADES)
-        # =========================
+        # -------------------------
+        # PRODUCTOS VENDIDOS
+        # -------------------------
         products_query = (
             db.session.query(
                 Product.id,
                 Product.name,
-                func.sum(OrderItem.quantity).label("units")
+                func.sum(OrderItem.quantity).label("units"),
+                func.coalesce(
+                    func.sum(OrderItem.quantity * Product.price),
+                    0
+                ).label("revenue")
             )
             .join(OrderItem, OrderItem.product_id == Product.id)
+            .join(Product, Product.id == OrderItem.product_id)
             .group_by(Product.id)
             .order_by(func.sum(OrderItem.quantity).desc())
             .all()
@@ -48,7 +56,7 @@ class AdminReportSummary(Resource):
                 "id": p.id,
                 "name": p.name,
                 "units": int(p.units),
-                "revenue": None  # no existe price en OrderItem
+                "revenue": float(p.revenue)
             }
             for p in products_query
         ]
@@ -60,3 +68,35 @@ class AdminReportSummary(Resource):
             "least_product": products[-1] if products else None,
             "products": products
         }, 200
+
+
+# =========================
+# VENTAS POR DÍA (GRÁFICA)
+# =========================
+@api.route("/sales-by-day")
+class AdminReportSalesByDay(Resource):
+
+    @admin_required
+    def get(self):
+        """
+        Ventas agrupadas por día.
+        SIN filtro de fechas para evitar gráficas vacías.
+        """
+
+        results = (
+            db.session.query(
+                func.date(Order.created_at).label("date"),
+                func.sum(Order.total).label("total")
+            )
+            .group_by(func.date(Order.created_at))
+            .order_by(func.date(Order.created_at))
+            .all()
+        )
+
+        return [
+            {
+                "date": r.date.strftime("%Y-%m-%d"),
+                "total": float(r.total)
+            }
+            for r in results
+        ], 200
