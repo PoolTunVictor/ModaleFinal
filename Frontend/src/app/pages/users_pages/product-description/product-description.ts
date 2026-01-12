@@ -58,7 +58,7 @@ export class ProductDescriptionComponent {
       .subscribe((products: Product[]) => {
         this.recommendedProducts = products
           .filter(p => p.id !== this.product?.id)
-          .slice(0, 4);
+          .slice(0, 7);
       });
   }
 
