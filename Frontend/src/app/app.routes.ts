@@ -25,6 +25,7 @@ import { Inventory } from './pages/admin_pages/inventory/inventory';
 import { Reports } from './pages/admin_pages/reports/reports';
 import { Users } from './pages/admin_pages/users/users';
 import { EditProduct } from './pages/admin_pages/edit-product/edit-product';
+import { OrderAdmin } from './pages/admin_pages/order-admin/order-admin';
 
 
 export const routes: Routes = [
@@ -58,6 +59,7 @@ export const routes: Routes = [
       { path: 'edit-product/:id', component: EditProduct },
       { path: 'reports', component: Reports },
       { path: 'users', component: Users },
+      {path:  'order_admin', component: OrderAdmin},
       { path: '', redirectTo: 'inicio', pathMatch: 'full' }
     ]
   },

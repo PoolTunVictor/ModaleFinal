@@ -1,1 +1,71 @@
-<p>order-admin works!</p>
+<h1 class="title">GESTIÓN DE PEDIDOS</h1>
+<p class="subtitle">Administra todos los pedidos</p>
+
+<div class="card">
+
+  <!-- Loading -->
+  <p *ngIf="isLoading">Cargando pedidos...</p>
+
+  <!-- Tabla -->
+  <table *ngIf="!isLoading && orders.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let order of orders">
+
+        <td>#{{ order.id }}</td>
+
+        <td>{{ order.user_id }}</td>
+
+        <td>
+          {{ order.created_at | date:'dd/MM/yyyy' }}
+        </td>
+
+        <td>
+          ${{ order.total }}
+        </td>
+
+        <!-- ESTADO -->
+        <td>
+          <select
+            #statusSelect
+            class="status-select"
+            [value]="order.status"
+            (change)="changeStatus(order.id, statusSelect.value)"
+          >
+            <option value="pendiente">Pendiente</option>
+            <option value="en camino">En camino</option>
+            <option value="entregado">Entregado</option>
+          </select>
+        </td>
+
+        <!-- ACCIONES -->
+        <td class="actions">
+          <button
+            class="delete"
+            title="Eliminar pedido"
+            (click)="deleteOrder(order.id)"
+          >
+            🗑️
+          </button>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Sin pedidos -->
+  <p *ngIf="!isLoading && orders.length === 0">
+    No hay pedidos registrados.
+  </p>
+
+</div>
