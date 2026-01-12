@@ -1,74 +1,31 @@
 @media print {
 
-  /* Reset general */
-  * {
-    box-sizing: border-box;
+  /* 🔥 Quitar scroll del modal en impresión */
+  .modal,
+  .modal-content {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
   }
 
-  body {
-    margin: 0;
-    padding: 0;
-    background: white;
-    font-family: 'Josefin Slab', serif;
-  }
-
-  /* Oculta todo */
-  body * {
-    visibility: hidden;
-  }
-
-  /* Muestra solo la ficha */
-  #printArea,
-  #printArea * {
-    visibility: visible;
-  }
-
-  /* Contenedor de impresión */
+  /* 🔥 Asegurar que se imprima TODO el contenido */
   #printArea {
-    position: relative;           /* 🔥 NO absolute */
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0;
+    position: static !important;
+    width: 100% !important;
+    padding: 0 !important;
   }
 
-  /* Elimina modal visual */
-  .modal-backdrop,
-  .modal-actions {
-    display: none !important;
-  }
-
-  .modal {
-    position: static;
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Tablas */
-  .print-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .print-table th,
-  .print-table td {
-    border: 1px solid #000;
-    padding: 6px;
-    font-size: 12px;
-    word-break: break-word;
-  }
-
-  /* Evitar cortes feos */
+  /* 🔥 Evitar que se corten secciones */
   section {
     page-break-inside: avoid;
   }
 
-  /* Tamaño real de hoja */
-  @page {
-    size: A4;
-    margin: 15mm;
+  table {
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
   }
 }
