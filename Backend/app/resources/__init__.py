@@ -6,6 +6,7 @@ from .address import api as addresses_ns
 from .orders import api as orders_ns
 from .order_items import api as order_items_ns
 from .checkout import api as checkout_ns
+from app.resources.users import api as users_ns
 
 def register_namespaces(api):
     api.add_namespace(auth_ns, path="/auth")
@@ -16,4 +17,5 @@ def register_namespaces(api):
     api.add_namespace(orders_ns, path="/orders")
     api.add_namespace(order_items_ns, path="/order-items")
     api.add_namespace(checkout_ns, path="/checkout")
+    api.add_namespace(users_ns, path="/users")
     
