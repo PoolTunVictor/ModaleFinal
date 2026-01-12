@@ -100,7 +100,15 @@
           <td>—</td>
 
           <!-- Acciones -->
-          <td class="actions">›</td>
+          <td class="actions">
+            <button
+              class="icon-btn danger"
+              (click)="deleteUser(user)"
+              title="Eliminar usuario"
+            >
+              🗑
+            </button>
+          </td>
 
         </tr>
 

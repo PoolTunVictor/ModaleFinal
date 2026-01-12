@@ -61,4 +61,25 @@ export class Users implements OnInit {
   getRoleClass(role: string): string {
     return role === 'admin' ? 'admin' : 'viewer';
   }
+  // =========================
+  // ELIMINAR USUARIO
+  // =========================
+  deleteUser(user: any) {
+
+    const confirmDelete = confirm(
+      `¿Seguro que deseas eliminar al usuario ${user.email}?`
+    );
+
+    if (!confirmDelete) return;
+
+    this.userService.deleteUser(user.id).subscribe({
+      next: () => {
+        // eliminar de la tabla sin recargar
+        this.users = this.users.filter(u => u.id !== user.id);
+      },
+      error: () => {
+        alert('Error al eliminar usuario');
+      }
+    });
+  }
 }
