@@ -26,7 +26,6 @@ export class CartComponent implements OnInit {
   selectedAddressId: number | null = null;
   isLoadingAddresses = true;
 
-  // 👉 formulario inline
   showAddressForm = false;
 
   newAddress = {
@@ -40,7 +39,6 @@ export class CartComponent implements OnInit {
     is_default: false
   };
 
-
   constructor(
     public cartService: CartService,
     private orderService: OrderService,
@@ -53,11 +51,31 @@ export class CartComponent implements OnInit {
   // INIT
   // =========================
   ngOnInit() {
+
+    // 🔁 PASO 2 — Restaurar dirección guardada
+    const draftAddress = localStorage.getItem('draftAddress');
+    if (draftAddress) {
+      this.newAddress = JSON.parse(draftAddress);
+      this.showAddressForm = true;
+    }
+
     if (this.authService.isLoggedIn()) {
       this.loadAddresses();
     } else {
       this.isLoadingAddresses = false;
     }
+  }
+
+  // =========================
+  // LOGIN HELPERS (para HTML)
+  // =========================
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  goToLogin() {
+    localStorage.setItem('redirectAfterLogin', '/carrito');
+    this.router.navigate(['/login']);
   }
 
   // =========================
@@ -70,7 +88,6 @@ export class CartComponent implements OnInit {
       next: (res) => {
         this.addresses = res;
 
-        // seleccionar default si existe
         const defaultAddress = this.addresses.find(a => a.is_default);
         if (defaultAddress) {
           this.selectedAddressId = defaultAddress.id;
@@ -86,7 +103,7 @@ export class CartComponent implements OnInit {
   }
 
   // =========================
-  // GUARDAR DIRECCIÓN (INLINE)
+  // GUARDAR DIRECCIÓN
   // =========================
   saveAddress() {
 
@@ -111,6 +128,15 @@ export class CartComponent implements OnInit {
       return;
     }
 
+    // 🔐 PASO 1 — No logueado → guardar borrador y redirigir
+    if (!this.authService.isLoggedIn()) {
+      localStorage.setItem('draftAddress', JSON.stringify(this.newAddress));
+      localStorage.setItem('redirectAfterLogin', '/carrito');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // 🟢 Logueado → guardar normal
     this.addressService.createAddress(this.newAddress).subscribe({
       next: (createdAddress) => {
         alert('Dirección guardada correctamente');
@@ -128,12 +154,12 @@ export class CartComponent implements OnInit {
           is_default: false
         };
 
-        this.loadAddresses();
+        // 🧹 limpiar borrador
+        localStorage.removeItem('draftAddress');
 
-        // 🔥 seleccionar la nueva
+        this.loadAddresses();
         this.selectedAddressId = createdAddress.id;
       }
-
     });
   }
 
@@ -153,20 +179,17 @@ export class CartComponent implements OnInit {
   // =========================
   generateOrder() {
 
-    // 🔐 login
     if (!this.authService.isLoggedIn()) {
       localStorage.setItem('redirectAfterLogin', '/carrito');
       this.router.navigate(['/login']);
       return;
     }
 
-    // 🛒 carrito vacío
     if (this.cartItems.length === 0) {
       alert('El carrito está vacío');
       return;
     }
 
-    // 🏠 dirección seleccionada
     if (!this.selectedAddressId) {
       alert('Selecciona o crea una dirección de envío');
       return;
@@ -175,6 +198,7 @@ export class CartComponent implements OnInit {
     this.orderService.createOrder(this.selectedAddressId).subscribe({
       next: () => {
         alert('Pedido generado correctamente');
+
         this.router.navigate(['/mis-pedidos']);
       },
       error: (err) => {
