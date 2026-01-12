@@ -80,14 +80,16 @@
           </td>
 
           <!-- Rol -->
-          <td>
-            <span
-              class="role"
-              [ngClass]="getRoleClass(user.role)"
-            >
-              {{ getRoleLabel(user.role) }}
-            </span>
-          </td>
+        <td>
+          <select
+            class="role-select"
+            [value]="user.role"
+            (change)="changeRole(user, $event)"
+          >
+            <option value="admin">Administrador</option>
+            <option value="cliente">Cliente</option>
+          </select>
+        </td>
 
           <!-- Estado -->
           <td>

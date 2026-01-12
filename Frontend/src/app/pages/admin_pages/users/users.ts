@@ -35,6 +35,24 @@ export class Users implements OnInit {
     });
   }
 
+  // =========================
+  // CAMBIAR ROL
+  // =========================
+  changeRole(user: any, event: Event) {
+    const newRole = (event.target as HTMLSelectElement).value;
+
+    // optimista: actualiza UI primero
+    const previousRole = user.role;
+    user.role = newRole;
+
+    this.userService.updateUserRole(user.id, newRole).subscribe({
+      error: () => {
+        alert('Error al cambiar el rol');
+        user.role = previousRole; // rollback
+      }
+    });
+  }
+
   // helpers visuales
   getRoleLabel(role: string): string {
     return role === 'admin' ? 'Administrador' : 'Cliente';

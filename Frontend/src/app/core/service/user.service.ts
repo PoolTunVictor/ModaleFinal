@@ -27,4 +27,22 @@ export class UserService {
 
     return this.http.get<any[]>(this.apiUrl, { headers });
   }
+
+  // =========================
+  // CAMBIAR ROL DE USUARIO
+  // =========================
+  updateUserRole(userId: number, role: string): Observable<any> {
+    const token = this.authService.getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put(
+      `${this.apiUrl}/${userId}/role`,
+      { role },
+      { headers }
+    );
+  }
 }
