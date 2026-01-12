@@ -20,6 +20,11 @@
     width: auto;
 }
 
+.nav-link {
+  cursor: pointer;
+  user-select: none;
+}
+
 .nav-links {
     display: flex;
     list-style: none;

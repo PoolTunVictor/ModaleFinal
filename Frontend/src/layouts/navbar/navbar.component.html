@@ -57,8 +57,13 @@
     </li>
 
     <li>
-      <a routerLink="/perfil" (click)="toggleMenu()">
-        <i class="fas fa-user"></i> Mi cuenta
+      <a
+        class="nav-link"
+        routerLink="/perfil"
+        (click)="toggleMenu()"
+      >
+        <i class="fas fa-user"></i>
+        {{ isLoggedIn() ? 'Mi cuenta' : 'Iniciar sesión' }}
       </a>
     </li>
   </ul>

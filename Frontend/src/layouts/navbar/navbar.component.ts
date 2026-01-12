@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../app/core/service/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,12 +16,32 @@ export class NavbarComponent {
   menuOpen = false;
   searchTerm = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
+  // =========================
+  // AUTH HELPERS
+  // =========================
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  // =========================
+  // MENU
+  // =========================
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 
+  closeMenu() {
+    this.menuOpen = false;
+  }
+
+  // =========================
+  // SEARCH
+  // =========================
   clearSearch() {
     this.searchTerm = '';
   }
@@ -33,5 +54,18 @@ export class NavbarComponent {
     });
 
     this.menuOpen = false;
+  }
+
+  // =========================
+  // ACCOUNT ACTION
+  // =========================
+  goToAccount() {
+    this.menuOpen = false;
+
+    if (this.isLoggedIn()) {
+      this.router.navigate(['/perfil']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }
