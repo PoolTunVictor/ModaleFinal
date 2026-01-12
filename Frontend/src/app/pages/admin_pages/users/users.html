@@ -1,43 +1,40 @@
 <div class="users-page">
 
-  <!-- Header -->
+  <!-- ================= HEADER ================= -->
   <div class="header">
     <div>
       <h1 class="title">GESTIÓN DE USUARIOS</h1>
       <p class="subtitle">
-        Administra el acceso y los permisos de los miembros del equipo.
+        Administra el acceso y los permisos de los usuarios registrados.
       </p>
     </div>
 
-    <button class="btn-primary">
+    <button class="btn-primary" disabled>
       <span class="material-symbols-outlined">add</span>
       Agregar Usuario
     </button>
   </div>
 
-  <!-- Filters -->
+  <!-- ================= FILTROS ================= -->
   <div class="filters-card">
 
     <div class="search-box">
       <span class="material-symbols-outlined">search</span>
-      <input type="text" placeholder="Buscar por nombre o correo electrónico...">
+      <input
+        type="text"
+        placeholder="Buscar por correo electrónico..."
+        disabled
+      >
     </div>
 
     <div class="filters">
-      <select>
+      <select disabled>
         <option>Todos los roles</option>
         <option>Administrador</option>
-        <option>Editor</option>
-        <option>Espectador</option>
+        <option>Cliente</option>
       </select>
 
-      <select>
-        <option>Todos los estados</option>
-        <option>Activo</option>
-        <option>Inactivo</option>
-      </select>
-
-      <button class="btn-outline">
+      <button class="btn-outline" disabled>
         <span class="material-symbols-outlined">download</span>
         Exportar
       </button>
@@ -45,7 +42,7 @@
 
   </div>
 
-  <!-- Table -->
+  <!-- ================= TABLA ================= -->
   <div class="table-card">
 
     <table class="users-table">
@@ -59,75 +56,72 @@
         </tr>
       </thead>
 
-      <tbody>
+      <!-- ⏳ LOADING -->
+      <tbody *ngIf="isLoading">
         <tr>
+          <td colspan="5" class="loading-cell">
+            Cargando usuarios...
+          </td>
+        </tr>
+      </tbody>
+
+      <!-- ✅ USUARIOS -->
+      <tbody *ngIf="!isLoading">
+
+        <tr *ngFor="let user of users">
+
+          <!-- Usuario -->
           <td class="user-cell">
-            <img src="/assets/user1.jpg">
+            <img src="/assets/user-placeholder.png" alt="avatar">
             <div>
-              <strong>Ana García</strong>
-              <small>ana.garcia@empresa.com</small>
+              <strong>{{ user.email.split('@')[0] }}</strong>
+              <small>{{ user.email }}</small>
             </div>
           </td>
-          <td><span class="role admin">Administrador</span></td>
-          <td><span class="status active">Activo</span></td>
-          <td>Hace 2 horas</td>
+
+          <!-- Rol -->
+          <td>
+            <span
+              class="role"
+              [ngClass]="getRoleClass(user.role)"
+            >
+              {{ getRoleLabel(user.role) }}
+            </span>
+          </td>
+
+          <!-- Estado -->
+          <td>
+            <span class="status active">Activo</span>
+          </td>
+
+          <!-- Último acceso -->
+          <td>—</td>
+
+          <!-- Acciones -->
           <td class="actions">›</td>
+
         </tr>
 
-        <tr>
-          <td class="user-cell">
-            <img src="/assets/user2.jpg">
-            <div>
-              <strong>Carlos Ruiz</strong>
-              <small>carlos.ruiz@empresa.com</small>
-            </div>
+        <!-- SIN USUARIOS -->
+        <tr *ngIf="users.length === 0">
+          <td colspan="5" class="loading-cell">
+            No hay usuarios registrados
           </td>
-          <td><span class="role editor">Editor</span></td>
-          <td><span class="status active">Activo</span></td>
-          <td>Ayer</td>
-          <td class="actions">›</td>
         </tr>
 
-        <tr>
-          <td class="user-cell">
-            <img src="/assets/user3.jpg">
-            <div>
-              <strong>María González</strong>
-              <small>maria.gonzalez@empresa.com</small>
-            </div>
-          </td>
-          <td><span class="role viewer">Espectador</span></td>
-          <td><span class="status active">Activo</span></td>
-          <td>04 Oct 2023</td>
-          <td class="actions">›</td>
-        </tr>
-
-        <tr>
-          <td class="user-cell">
-            <img src="/assets/user4.jpg">
-            <div>
-              <strong>Roberto Díaz</strong>
-              <small>roberto.diaz@empresa.com</small>
-            </div>
-          </td>
-          <td><span class="role viewer">Espectador</span></td>
-          <td><span class="status inactive">Inactivo</span></td>
-          <td>Nunca</td>
-          <td class="actions">›</td>
-        </tr>
       </tbody>
     </table>
 
-    <!-- Footer table -->
+    <!-- ================= FOOTER TABLA ================= -->
     <div class="table-footer">
-      <span>Mostrando 1 a 4 de 24 resultados</span>
+      <span>
+        Mostrando {{ users.length }} usuario(s)
+      </span>
 
       <div class="pagination">
-        <button>‹</button>
+        <button disabled>‹</button>
         <button class="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>›</button>
+        <button disabled>›</button>
       </div>
     </div>
 
