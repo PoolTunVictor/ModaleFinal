@@ -64,3 +64,24 @@ class UserRole(Resource):
             "email": user.email,
             "role": user.role
         }, 200
+
+# =========================
+# ELIMINAR USUARIO
+# =========================
+@api.route("/<int:user_id>")
+class UserDelete(Resource):
+
+    @jwt_required()
+    def delete(self, user_id):
+        claims = get_jwt()
+
+        # 🔐 solo admin
+        if claims.get("role") != "admin":
+            return {"message": "Acceso no autorizado"}, 403
+
+        user = User.query.get_or_404(user_id)
+
+        db.session.delete(user)
+        db.session.commit()
+
+        return {"message": "Usuario eliminado correctamente"}, 200
