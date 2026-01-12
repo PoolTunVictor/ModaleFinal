@@ -7,27 +7,24 @@
   <!-- Loading -->
   <p *ngIf="isLoading">Cargando reportes...</p>
 
-  <!-- ================= KPIs ================= -->
-  <div class="kpis" *ngIf="!isLoading">
+  <!-- KPIs -->
+  <div class="kpis" *ngIf="!isLoading && report">
 
-    <!-- Ventas Totales -->
     <div class="kpi-card">
       <span class="kpi-title">VENTAS TOTALES</span>
       <span class="kpi-value green">
-        ${{ report?.total_sales | number:'1.2-2' }}
+        ${{ report.total_sales | number:'1.2-2' }}
       </span>
     </div>
 
-    <!-- Órdenes -->
     <div class="kpi-card">
       <span class="kpi-title">ÓRDENES</span>
       <span class="kpi-value">
-        {{ report?.total_orders }}
+        {{ report.total_orders }}
       </span>
     </div>
 
-    <!-- Producto más vendido -->
-    <div class="kpi-card" *ngIf="report?.top_product">
+    <div class="kpi-card" *ngIf="report.top_product">
       <span class="kpi-title">PRODUCTO TOP</span>
       <span class="kpi-value green">
         {{ report.top_product.name }}
@@ -39,7 +36,13 @@
 
   </div>
 
-  <!-- ================= TABLA ================= -->
+  <!-- Chart (placeholder, no se toca aún) -->
+  <div class="chart-card">
+    <h3>Tendencia de Ventas (últimos 30 días)</h3>
+    <div class="chart-placeholder"></div>
+  </div>
+
+  <!-- Table -->
   <div class="table-card" *ngIf="!isLoading && report">
     <h3>Productos con Mejor Rendimiento</h3>
 
@@ -49,13 +52,17 @@
           <th>Producto</th>
           <th>Unidades</th>
           <th>Ingresos Totales</th>
+          <th>Margen de Ganancia</th>
         </tr>
       </thead>
 
       <tbody>
         <tr *ngFor="let p of report.products">
+
           <td class="product-cell">
-            <strong>{{ p.name }}</strong>
+            <div>
+              <strong>{{ p.name }}</strong>
+            </div>
           </td>
 
           <td>{{ p.units }}</td>
@@ -63,6 +70,9 @@
           <td>
             ${{ p.revenue | number:'1.2-2' }}
           </td>
+
+          <td>—</td>
+
         </tr>
       </tbody>
     </table>
