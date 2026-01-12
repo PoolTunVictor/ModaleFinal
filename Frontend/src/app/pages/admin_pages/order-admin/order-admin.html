@@ -26,9 +26,10 @@
         <td>#{{ order.id }}</td>
 
         <!-- USUARIO -->
-<td>
-  <strong>{{ order.user?.email }}</strong>
-</td>
+      <td>
+        <strong>{{ order.user?.email.split('@')[0] }}</strong><br>
+        <small>{{ order.user?.email }}</small>
+      </td>
 
         <!-- FECHA -->
         <td>
