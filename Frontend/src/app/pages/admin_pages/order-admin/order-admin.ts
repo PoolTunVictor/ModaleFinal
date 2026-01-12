@@ -66,8 +66,51 @@ export class OrderAdmin implements OnInit {
   }
 
   print() {
+    const printContent = document.getElementById('printArea');
+    if (!printContent) return;
+
+    const win = window.open('', '', 'width=900,height=650');
+
+    win!.document.write(`
+      <html>
+        <head>
+          <title>Ficha de Entrega</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+            }
+
+            section {
+              page-break-inside: avoid;
+              margin-bottom: 16px;
+            }
+
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+
+            th, td {
+              border: 1px solid #000;
+              padding: 6px;
+            }
+          </style>
+        </head>
+        <body>
+          ${printContent.innerHTML}
+        </body>
+      </html>
+    `);
+
+    win!.document.close();
+    win!.focus();
+
     setTimeout(() => {
-      window.print();
+      win!.print();
+      win!.close();
     }, 300);
   }
+
+
 }

@@ -1,31 +1,46 @@
 @media print {
 
-  /* 🔥 Quitar scroll del modal en impresión */
-  .modal,
-  .modal-content {
-    overflow: visible !important;
-    max-height: none !important;
-    height: auto !important;
+  /* 🔥 Ocultar todo */
+  body * {
+    display: none !important;
   }
 
-  /* 🔥 Asegurar que se imprima TODO el contenido */
+  /* 🔥 Mostrar solo el área de impresión */
+  #printArea,
+  #printArea * {
+    display: block !important;
+  }
+
+  /* 🔥 Forzar layout normal */
   #printArea {
     position: static !important;
     width: 100% !important;
-    padding: 0 !important;
+    padding: 20px;
   }
 
-  /* 🔥 Evitar que se corten secciones */
+  /* 🔥 Evitar cortes feos */
   section {
     page-break-inside: avoid;
   }
 
   table {
-    page-break-inside: auto;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #000;
+    padding: 6px;
   }
 
   tr {
     page-break-inside: avoid;
-    page-break-after: auto;
+  }
+
+  /* 🔥 Eliminar modal, fondo y botones */
+  .modal,
+  .modal-backdrop,
+  .modal-actions {
+    display: none !important;
   }
 }
