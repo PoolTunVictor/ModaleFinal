@@ -1,18 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../core/service/user.service';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './users.html',
   styleUrl: './users.css'
 })
 export class Users implements OnInit {
 
   users: any[] = [];
+  filteredUsers: any[] = [];
+
   isLoading = true;
+
+  // filtros
+  searchEmail = '';
+  roleFilter: 'all' | 'admin' | 'cliente' = 'all';
+
   // Modal
   showConfirmModal = false;
   confirmTitle = '';
@@ -31,6 +39,7 @@ export class Users implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (res) => {
         this.users = res;
+        this.applyFilters();
         this.isLoading = false;
       },
       error: () => {
@@ -38,6 +47,27 @@ export class Users implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  // =========================
+  // FILTROS
+  // =========================
+  applyFilters() {
+    let result = [...this.users];
+
+    // filtro por correo
+    if (this.searchEmail.trim() !== '') {
+      result = result.filter(user =>
+        user.email.toLowerCase().includes(this.searchEmail.toLowerCase())
+      );
+    }
+
+    // filtro por rol
+    if (this.roleFilter !== 'all') {
+      result = result.filter(user => user.role === this.roleFilter);
+    }
+
+    this.filteredUsers = result;
   }
 
   // =========================
@@ -57,22 +87,16 @@ export class Users implements OnInit {
       `¿Estás seguro de cambiar el rol de "${user.email}" a "${newRole === 'admin' ? 'Administrador' : 'Cliente'}"?`,
       () => {
         this.userService.updateUserRole(user.id, newRole).subscribe({
-          next: () => user.role = newRole,
+          next: () => {
+            user.role = newRole;
+            this.applyFilters();
+          },
           error: () => alert('Error al cambiar rol')
         });
       }
     );
   }
 
-
-  // helpers visuales
-  getRoleLabel(role: string): string {
-    return role === 'admin' ? 'Administrador' : 'Cliente';
-  }
-
-  getRoleClass(role: string): string {
-    return role === 'admin' ? 'admin' : 'viewer';
-  }
   // =========================
   // ELIMINAR USUARIO
   // =========================
@@ -84,6 +108,7 @@ export class Users implements OnInit {
         this.userService.deleteUser(user.id).subscribe({
           next: () => {
             this.users = this.users.filter(u => u.id !== user.id);
+            this.applyFilters();
           },
           error: () => alert('Error al eliminar usuario')
         });
@@ -91,7 +116,9 @@ export class Users implements OnInit {
     );
   }
 
-
+  // =========================
+  // MODAL
+  // =========================
   openConfirmModal(title: string, message: string, action: () => void) {
     this.confirmTitle = title;
     this.confirmMessage = message;
@@ -110,5 +137,4 @@ export class Users implements OnInit {
     }
     this.closeConfirmModal();
   }
-
 }

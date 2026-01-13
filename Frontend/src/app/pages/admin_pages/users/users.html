@@ -8,11 +8,6 @@
         Administra el acceso y los permisos de los usuarios registrados.
       </p>
     </div>
-
-    <button class="btn-primary" disabled>
-      <span class="material-symbols-outlined">add</span>
-      Agregar Usuario
-    </button>
   </div>
 
   <!-- ================= FILTROS ================= -->
@@ -23,21 +18,17 @@
       <input
         type="text"
         placeholder="Buscar por correo electrónico..."
-        disabled
+        [(ngModel)]="searchEmail"
+        (input)="applyFilters()"
       >
     </div>
 
     <div class="filters">
-      <select disabled>
-        <option>Todos los roles</option>
-        <option>Administrador</option>
-        <option>Cliente</option>
+      <select [(ngModel)]="roleFilter" (change)="applyFilters()">
+        <option value="all">Todos los roles</option>
+        <option value="admin">Administrador</option>
+        <option value="cliente">Cliente</option>
       </select>
-
-      <button class="btn-outline" disabled>
-        <span class="material-symbols-outlined">download</span>
-        Exportar
-      </button>
     </div>
 
   </div>
@@ -51,8 +42,6 @@
           <th>Usuario</th>
           <th>Rol</th>
           <th>Estado</th>
-          <th>Último acceso</th>
-          <th>Acciones</th>
         </tr>
       </thead>
 
@@ -68,7 +57,7 @@
       <!-- ✅ USUARIOS -->
       <tbody *ngIf="!isLoading">
 
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of filteredUsers">
 
           <!-- Usuario -->
           <td class="user-cell">
@@ -80,16 +69,16 @@
           </td>
 
           <!-- Rol -->
-        <td>
-          <select
-            class="role-select"
-            [value]="user.role"
-            (change)="changeRole(user, $event)"
-          >
-            <option value="admin">Administrador</option>
-            <option value="cliente">Cliente</option>
-          </select>
-        </td>
+          <td>
+            <select
+              class="role-select"
+              [value]="user.role"
+              (change)="changeRole(user, $event)"
+            >
+              <option value="admin">Administrador</option>
+              <option value="cliente">Cliente</option>
+            </select>
+          </td>
 
           <!-- Estado -->
           <td>
@@ -113,9 +102,9 @@
         </tr>
 
         <!-- SIN USUARIOS -->
-        <tr *ngIf="users.length === 0">
+        <tr *ngIf="filteredUsers.length === 0">
           <td colspan="5" class="loading-cell">
-            No hay usuarios registrados
+            No hay usuarios que coincidan con el filtro
           </td>
         </tr>
 
@@ -125,19 +114,15 @@
     <!-- ================= FOOTER TABLA ================= -->
     <div class="table-footer">
       <span>
-        Mostrando {{ users.length }} usuario(s)
+        Mostrando {{ filteredUsers.length }} usuario(s)
       </span>
 
-      <div class="pagination">
-        <button disabled>‹</button>
-        <button class="active">1</button>
-        <button disabled>›</button>
-      </div>
     </div>
 
   </div>
 
 </div>
+
 <!-- ================= MODAL CONFIRMACIÓN ================= -->
 
 <div class="modal-backdrop" *ngIf="showConfirmModal" (click)="closeConfirmModal()"></div>
@@ -151,7 +136,6 @@
     <button class="btn-outline" (click)="closeConfirmModal()">
       Cancelar
     </button>
-
 
     <button class="btn-primary danger" (click)="confirm()">
       Confirmar
