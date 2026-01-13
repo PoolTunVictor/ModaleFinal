@@ -3,27 +3,13 @@
     <img src="assets/logo.png" alt="Logo" class="logo">
 
     <div class="search-container">
-      <!-- 🔍 Buscar al hacer click -->
-      <span class="search-icon" (click)="search()">
-        <i class="fas fa-search"></i>
-      </span>
-
       <!-- ⌨️ Buscar al presionar Enter -->
       <input
         type="text"
         placeholder="Buscar..."
         [(ngModel)]="searchTerm"
-        (keyup.enter)="search()"
+        (ngModelChange)="onSearchChange($event)"
       >
-
-      <!-- ❌ Limpiar búsqueda -->
-      <span
-        class="clear-icon"
-        *ngIf="searchTerm"
-        (click)="clearSearch()"
-      >
-        <i class="fas fa-times"></i>
-      </span>
     </div>
   </div>
 

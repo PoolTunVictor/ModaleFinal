@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../app/core/service/auth.service';
 import { CartService } from '../../app/core/service/cart.service';
 
@@ -19,6 +19,7 @@ export class NavbarComponent {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private cartService: CartService
   ) {}
@@ -44,19 +45,26 @@ export class NavbarComponent {
   // =========================
   // SEARCH
   // =========================
-  clearSearch() {
-    this.searchTerm = '';
-  }
+  onSearchChange(value: string) {
+    this.searchTerm = value;
 
-  search() {
-    if (!this.searchTerm.trim()) return;
+    // Si está vacío → limpiar búsqueda
+    if (!value.trim()) {
+      this.router.navigate(['/buscar'], {
+        queryParams: { q: null },
+        queryParamsHandling: 'merge'
+      });
+      return;
+    }
 
+    // 🔥 SIEMPRE navegar a /buscar
     this.router.navigate(['/buscar'], {
-      queryParams: { q: this.searchTerm }
+      queryParams: { q: value },
+      queryParamsHandling: 'merge'
     });
-
-    this.menuOpen = false;
   }
+
+
 
   // =========================
   // ACCOUNT ACTION
