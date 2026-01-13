@@ -64,17 +64,79 @@
 
       <h3>DETALLE DEL PEDIDO</h3>
 
-      <!-- 🔴 NO LOGUEADO -->
-      <div *ngIf="!isLoggedIn">
-        <p>
-          Para guardar la dirección y continuar con tu compra
-          primero debes registrarte o iniciar sesión.
-        </p>
+  <!-- 🔴 NO LOGUEADO -->
+  <div *ngIf="!isLoggedIn">
 
-        <button class="checkout-btn" (click)="goToLogin()">
-          Ir a registro
+    <p>
+      Para guardar la dirección y continuar con tu compra
+      primero debes registrarte o iniciar sesión.
+    </p>
+
+    <button class="checkout-btn" (click)="goToLogin()">
+      Ir a registro
+    </button>
+
+    <!-- 📝 FORMULARIO NUEVA DIRECCIÓN (MISMO DISEÑO) -->
+    <div class="address-form-card" style="margin-top: 20px">
+
+      <h4 class="address-title">Nueva dirección</h4>
+
+      <div class="address-form">
+
+        <input
+          type="text"
+          placeholder="Nombre del receptor"
+          [(ngModel)]="newAddress.receiver_name"
+        />
+
+        <input
+          type="text"
+          placeholder="Teléfono"
+          [(ngModel)]="newAddress.phone"
+        />
+
+        <input
+          type="text"
+          placeholder="Calle"
+          [(ngModel)]="newAddress.street"
+        />
+
+        <input
+          type="text"
+          placeholder="Ciudad"
+          [(ngModel)]="newAddress.city"
+        />
+
+        <input
+          type="text"
+          placeholder="Estado"
+          [(ngModel)]="newAddress.state"
+        />
+
+        <input
+          type="text"
+          placeholder="Código postal"
+          [(ngModel)]="newAddress.postal_code"
+        />
+
+        <textarea
+          rows="3"
+          placeholder="Referencias"
+          [(ngModel)]="newAddress.references"
+        ></textarea>
+
+        <button
+          class="checkout-btn"
+          (click)="saveAddress()"
+        >
+          Guardar dirección
         </button>
+
       </div>
+    </div>
+
+  </div>
+
 
       <!-- 🟢 LOGUEADO -->
       <ng-container *ngIf="isLoggedIn">
@@ -150,6 +212,7 @@
         </div>
 
         <!-- 🟢 LOGUEADO CON DIRECCIONES -->
+<!-- 🟢 LOGUEADO CON DIRECCIONES -->
 <div *ngIf="!isLoadingAddresses && addresses.length > 0">
 
   <label class="section-label">Dirección de envío</label>
@@ -172,65 +235,63 @@
     ➕ Agregar otra dirección
   </button>
 
-  <!-- 📝 FORMULARIO ESTILIZADO -->
-  <div class="address-form-card">
+  <!-- 📝 FORMULARIO (SOLO SI showAddressForm = true) -->
+  <div *ngIf="showAddressForm" class="address-form-card">
 
-  <h4 class="address-title">Nueva dirección</h4>
+    <h4 class="address-title">Nueva dirección</h4>
 
-  <div class="address-form">
+    <div class="address-form">
 
-    <input
-      type="text"
-      placeholder="Nombre del receptor"
-      [(ngModel)]="newAddress.receiver_name"
-    />
+      <input
+        type="text"
+        placeholder="Nombre del receptor"
+        [(ngModel)]="newAddress.receiver_name"
+      />
 
-    <input
-      type="text"
-      placeholder="Teléfono"
-      [(ngModel)]="newAddress.phone"
-    />
+      <input
+        type="text"
+        placeholder="Teléfono"
+        [(ngModel)]="newAddress.phone"
+      />
 
-    <input
-      type="text"
-      placeholder="Calle"
-      [(ngModel)]="newAddress.street"
-    />
+      <input
+        type="text"
+        placeholder="Calle"
+        [(ngModel)]="newAddress.street"
+      />
 
-    <input
-      type="text"
-      placeholder="Ciudad"
-      [(ngModel)]="newAddress.city"
-    />
+      <input
+        type="text"
+        placeholder="Ciudad"
+        [(ngModel)]="newAddress.city"
+      />
 
-    <input
-      type="text"
-      placeholder="Estado"
-      [(ngModel)]="newAddress.state"
-    />
+      <input
+        type="text"
+        placeholder="Estado"
+        [(ngModel)]="newAddress.state"
+      />
 
-    <input
-      type="text"
-      placeholder="Código postal"
-      [(ngModel)]="newAddress.postal_code"
-    />
+      <input
+        type="text"
+        placeholder="Código postal"
+        [(ngModel)]="newAddress.postal_code"
+      />
 
-    <textarea
-      rows="3"
-      placeholder="Referencias"
-      [(ngModel)]="newAddress.references"
-    ></textarea>
+      <textarea
+        rows="3"
+        placeholder="Referencias"
+        [(ngModel)]="newAddress.references"
+      ></textarea>
 
-    <button
-      class="checkout-btn"
-      (click)="saveAddress()"
-    >
-      Guardar dirección
-    </button>
+      <button
+        class="checkout-btn"
+        (click)="saveAddress()">
+        Guardar dirección
+      </button>
 
+    </div>
   </div>
-</div>
-
 
   <!-- TOTAL -->
   <div class="summary-total">
@@ -245,7 +306,6 @@
   </button>
 
 </div>
-
 
       </ng-container>
 

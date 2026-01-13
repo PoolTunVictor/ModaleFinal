@@ -329,3 +329,37 @@ quantity-control {
   opacity: 0.9;
 }
 
+.address-form-card {
+  background: #fff;
+  padding: 22px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  margin-top: 16px;
+}
+
+.address-title {
+  font-size: 16px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.address-form input,
+.address-form textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  font-size: 14px;
+  outline: none;
+}
+
+.address-form textarea {
+  resize: none;
+}
+
