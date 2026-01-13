@@ -192,16 +192,14 @@
       placeholder="Código postal"
       [(ngModel)]="newAddress.postal_code"
     />
+    <input
+      placeholder="Referencias"
+      [(ngModel)]="newAddress.references"
+    >
   </div>
 
-  <textarea
-    placeholder="Referencias"
-    rows="3"
-    [(ngModel)]="newAddress.references"
-  ></textarea>
-
   <button
-    class="save-address-btn"
+    class="checkout-btn"
     (click)="saveAddress()"
   >
     Guardar dirección
@@ -278,11 +276,11 @@
         [(ngModel)]="newAddress.postal_code"
       />
 
-      <textarea
-        rows="3"
+      <input
+        type="text"
         placeholder="Referencias"
         [(ngModel)]="newAddress.references"
-      ></textarea>
+      >
 
       <button
         class="checkout-btn"
