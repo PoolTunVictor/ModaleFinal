@@ -53,8 +53,6 @@
     <li class="cart-link">
       <a routerLink="/cart" (click)="toggleMenu()">
         <i class="fas fa-shopping-cart"></i>
-
-        <!-- Badge del carrito -->
         <span class="cart-badge" *ngIf="cartCount > 0">
           {{ cartCount }}
         </span>

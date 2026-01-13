@@ -58,4 +58,7 @@ export class CartService {
   clear() {
     this.items = [];
   }
+  getTotalProducts(): number {
+    return this.items.length;
+  }
 }

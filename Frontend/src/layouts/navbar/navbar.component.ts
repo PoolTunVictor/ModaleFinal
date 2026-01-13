@@ -74,8 +74,6 @@ export class NavbarComponent {
   // CART HELPERS
   // =========================
   get cartCount(): number {
-    return this.cartService
-      .getCart()
-      .reduce((sum, item) => sum + item.quantity, 0);
+    return this.cartService.getTotalProducts();
   }
 }
