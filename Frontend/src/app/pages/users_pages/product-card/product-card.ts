@@ -15,9 +15,7 @@ export class ProductCard {
 
   @Input() product!: Product;
 
-  // 🔔 mensaje flotante
-  showFloatingMessage = false;
-  floatingMessage = '';
+  showAddedModal = false;
 
   constructor(
     private cartService: CartService,
@@ -29,21 +27,22 @@ export class ProductCard {
 
     const ok = this.cartService.addProduct(this.product, 1);
 
-    if (ok) {
-      this.floatingMessage = 'Producto agregado al carrito';
-    } else {
-      this.floatingMessage = 'No hay más stock disponible';
+    if (!ok) {
+      alert('No hay más stock disponible');
+      return;
     }
 
-    this.showFloatingMessage = true;
+    // ✅ mostrar modal
+    this.showAddedModal = true;
+  }
 
-    // ⏱️ ocultar automáticamente
-    setTimeout(() => {
-      this.showFloatingMessage = false;
-    }, 2000);
+  closeAddedModal() {
+    this.showAddedModal = false;
   }
 
   goToDetail() {
     this.router.navigate(['/producto', this.product.id]);
   }
 }
+
+

@@ -40,7 +40,28 @@
 
 </div>
 
-<!-- 🔔 MENSAJE FLOTANTE -->
-<div class="floating-message" *ngIf="showFloatingMessage">
-  {{ floatingMessage }}
+<!-- ================= MODAL PRODUCTO AGREGADO ================= -->
+<div *ngIf="showAddedModal">
+  <div class="modal-backdrop" (click)="closeAddedModal()"></div>
+
+  <div class="login-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Producto agregado</h3>
+      <button class="close-btn" (click)="closeAddedModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <p>
+        <strong>{{ product.name }}</strong><br>
+        fue agregado correctamente al carrito 🛒
+      </p>
+
+      <button
+        class="checkout-btn"
+        style="margin-top: 12px"
+        (click)="closeAddedModal()">
+        Seguir comprando
+      </button>
+    </div>
+  </div>
 </div>

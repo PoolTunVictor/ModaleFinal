@@ -278,3 +278,52 @@
   padding: 20px;
   text-align: center;
 }
+.checkout-btn {
+  background: #12111f;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+}
+/* ================= TOAST SUCCESS ================= */
+.toast-success {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: #2e7d32;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  box-shadow: 0 6px 18px rgba(134, 42, 42, 0.25);
+  z-index: 2000;
+
+  animation: fadeInOut 2s ease forwards;
+}
+
+/* Animación suave */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+}
+

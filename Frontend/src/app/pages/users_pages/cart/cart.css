@@ -234,3 +234,98 @@ quantity-control {
   margin-bottom: 20px;
   color: #555;
 }
+/* ================= DIRECCIONES ================= */
+
+.section-label {
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff4fa3;
+}
+
+.address-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+
+/* ➕ BOTÓN */
+.add-address-btn {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: #ff4fa3;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* CONTENEDOR DEL FORMULARIO */
+.address-form-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 22px;
+  margin-top: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* TÍTULO */
+.address-title {
+  font-family: 'Josefin Slab', serif;
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* FORMULARIO */
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* separación entre inputs */
+}
+
+/* INPUTS */
+.address-form input,
+.address-form textarea {
+  width: 90%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #e5e5e5;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.address-form input:focus,
+.address-form textarea:focus {
+  border-color: #ff7bb5;
+  box-shadow: 0 0 0 2px rgba(255,123,181,0.15);
+}
+
+/* TEXTAREA */
+.address-form textarea {
+  resize: none;
+}
+
+/* BOTÓN */
+.address-form .checkout-btn {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 22px;
+  background: #12111f;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.address-form .checkout-btn:hover {
+  opacity: 0.9;
+}
+
