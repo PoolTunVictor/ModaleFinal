@@ -1,10 +1,8 @@
 <div class="reports-page">
 
-  <!-- Header -->
   <h1 class="title">GESTIÓN DE REPORTES</h1>
   <p class="subtitle">Administra tus reportes.</p>
 
-  <!-- Loading -->
   <p *ngIf="isLoading">Cargando reportes...</p>
 
   <!-- KPIs -->
@@ -19,9 +17,7 @@
 
     <div class="kpi-card">
       <span class="kpi-title">ÓRDENES</span>
-      <span class="kpi-value">
-        {{ report.total_orders }}
-      </span>
+      <span class="kpi-value">{{ report.total_orders }}</span>
     </div>
 
     <div class="kpi-card" *ngIf="report.top_product">
@@ -34,15 +30,29 @@
       </span>
     </div>
 
+    <div class="kpi-card" *ngIf="report.least_product">
+      <span class="kpi-title">MENOS VENDIDO</span>
+      <span class="kpi-value">
+        {{ report.least_product.name }}
+      </span>
+      <span class="kpi-sub">
+        {{ report.least_product.units }} vendidos
+      </span>
+    </div>
+
   </div>
 
-  <!-- Chart (placeholder, no se toca aún) -->
-  <div class="chart-card">
-    <h3>Tendencia de Ventas (últimos 30 días)</h3>
-    <div class="chart-placeholder"></div>
+  <!-- FILTRO DE TABLA -->
+  <div class="table-filter" *ngIf="report">
+    <label>Mostrar:</label>
+    <select [(ngModel)]="tableMode" (change)="applyTableMode()">
+      <option value="top">Top productos</option>
+      <option value="least">Menos vendidos</option>
+      <option value="all">Todos</option>
+    </select>
   </div>
 
-  <!-- Table -->
+  <!-- TABLA -->
   <div class="table-card" *ngIf="!isLoading && report">
     <h3>Productos con Mejor Rendimiento</h3>
 
@@ -50,29 +60,14 @@
       <thead>
         <tr>
           <th>Producto</th>
-          <th>Unidades</th>
-          <th>Ingresos Totales</th>
-          <th>Margen de Ganancia</th>
+          <th>Unidades Vendidas</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr *ngFor="let p of report.products">
-
-          <td class="product-cell">
-            <div>
-              <strong>{{ p.name }}</strong>
-            </div>
-          </td>
-
+        <tr *ngFor="let p of displayedProducts">
+          <td><strong>{{ p.name }}</strong></td>
           <td>{{ p.units }}</td>
-
-          <td>
-            ${{ p.revenue | number:'1.2-2' }}
-          </td>
-
-          <td>—</td>
-
         </tr>
       </tbody>
     </table>

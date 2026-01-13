@@ -159,3 +159,12 @@
 .table-card {
   margin-top: 2rem;
 }
+
+.chart-container {
+  height: 300px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
