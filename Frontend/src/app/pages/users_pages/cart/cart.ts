@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-
+import { RouterModule } from '@angular/router';
 import { CartService } from '../../../core/service/cart.service';
 import { OrderService } from '../../../core/service/order.service';
 import { AuthService } from '../../../core/service/auth.service';
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, BannerComponent, FormsModule],
+  imports: [CommonModule, BannerComponent, FormsModule, RouterModule],
   templateUrl: './cart.html',
   styleUrl: './cart.css'
 })
