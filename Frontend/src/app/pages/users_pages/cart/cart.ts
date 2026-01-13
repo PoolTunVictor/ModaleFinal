@@ -131,7 +131,8 @@ ngOnInit() {
       street,
       city,
       state,
-      postal_code
+      postal_code,
+      references
     } = this.newAddress;
 
     if (
@@ -140,7 +141,8 @@ ngOnInit() {
       !street ||
       !city ||
       !state ||
-      !postal_code
+      !postal_code ||
+      !references
     ) {
       alert('Completa todos los campos de la dirección');
       return;
