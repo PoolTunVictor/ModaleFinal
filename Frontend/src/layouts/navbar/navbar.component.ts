@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../app/core/service/auth.service';
+import { CartService } from '../../app/core/service/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +19,8 @@ export class NavbarComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private cartService: CartService
   ) {}
 
   // =========================
@@ -67,5 +69,13 @@ export class NavbarComponent {
     } else {
       this.router.navigate(['/login']);
     }
+  }
+  // =========================
+  // CART HELPERS
+  // =========================
+  get cartCount(): number {
+    return this.cartService
+      .getCart()
+      .reduce((sum, item) => sum + item.quantity, 0);
   }
 }

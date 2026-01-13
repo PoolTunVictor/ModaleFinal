@@ -50,9 +50,16 @@
       </a>
     </li>
 
-    <li>
+    <li class="cart-link">
       <a routerLink="/cart" (click)="toggleMenu()">
-        <i class="fas fa-shopping-cart"></i> Carrito
+        <i class="fas fa-shopping-cart"></i>
+
+        <!-- Badge del carrito -->
+        <span class="cart-badge" *ngIf="cartCount > 0">
+          {{ cartCount }}
+        </span>
+
+        Carrito
       </a>
     </li>
 
