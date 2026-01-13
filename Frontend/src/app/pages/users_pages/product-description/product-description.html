@@ -20,7 +20,16 @@
     <div class="product-info">
       <h1>{{ p.name }}</h1>
       <p class="price">$ {{ p.price }}</p>
-      <p class="description">{{ p.description }}</p>
+
+      <div class="description">
+    <h3>Características</h3>
+
+    <ul>
+      <li *ngFor="let feature of features">
+        {{ feature }}
+      </li>
+    </ul>
+    </div>
 
       <p class="stock" *ngIf="p.stock > 0">
         Stock disponible: {{ p.stock }}
@@ -64,5 +73,31 @@
       ></app-product-card>
     </div>
   </section>
+
+  <!-- ================= MODAL PRODUCTO AGREGADO ================= -->
+<div *ngIf="showAddedModal">
+  <div class="modal-backdrop" (click)="closeAddedModal()"></div>
+
+  <div class="login-modal">
+    <div class="modal-header">
+      <h3>Producto agregado</h3>
+      <button class="close-btn" (click)="closeAddedModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <p>
+        <strong>{{ product?.name }}</strong><br>
+        fue agregado correctamente al carrito 🛒
+      </p>
+
+      <button
+        class="checkout-btn"
+        style="margin-top: 10px"
+        (click)="closeAddedModal()">
+        Seguir comprando
+      </button>
+    </div>
+  </div>
+</div>
 
 </section>

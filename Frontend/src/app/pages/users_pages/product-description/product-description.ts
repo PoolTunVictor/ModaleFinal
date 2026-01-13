@@ -21,6 +21,8 @@ export class ProductDescriptionComponent {
 
   product?: Product;
   recommendedProducts: Product[] = [];
+  features: string[] = [];
+
 
   quantity = 1;
   loading = true;
@@ -28,6 +30,7 @@ export class ProductDescriptionComponent {
   // 🔴 MODAL STOCK
   showStockModal = false;
   stockMessage = '';
+  showAddedModal = false;
 
   constructor(
     private cartService: CartService,
@@ -44,6 +47,13 @@ export class ProductDescriptionComponent {
         this.productService.getProductById(id).subscribe(product => {
           this.product = product;
           this.loading = false;
+           // 🔥 CONVERTIR DESCRIPCIÓN A LISTA
+          this.features = product.description
+            ? product.description
+                .split('\n')           // separa por saltos de línea
+                .map(f => f.trim())
+                .filter(f => f.length > 0)
+            : [];
 
           this.recommendedProducts = [];
           this.loadRecommended(product.category_id);
@@ -85,19 +95,30 @@ export class ProductDescriptionComponent {
   }
 
   // 🛒 AGREGAR AL CARRITO
-  addToCart() {
-    if (!this.product) return;
+    addToCart() {
+      if (!this.product) return;
 
-    const ok = this.cartService.addProduct(this.product, this.quantity);
+      const ok = this.cartService.addProduct(this.product, this.quantity);
 
-    if (!ok) {
-      this.stockMessage = 'No hay suficiente stock disponible para agregar esta cantidad.';
-      this.showStockModal = true;
+      if (!ok) {
+        this.stockMessage = 'No hay suficiente stock disponible para agregar esta cantidad.';
+        this.showStockModal = true;
+        return;
+      }
+
+      // ✅ PRODUCTO AGREGADO CORRECTAMENTE
+      this.showAddedModal = true;
+
+      // opcional: reset cantidad
+      this.quantity = 1;
     }
-  }
 
   // ❌ CERRAR MODAL
   closeModal() {
     this.showStockModal = false;
   }
+
+  closeAddedModal() {
+  this.showAddedModal = false;
+}
 }
