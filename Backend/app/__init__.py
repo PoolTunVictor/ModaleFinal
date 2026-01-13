@@ -53,11 +53,18 @@ def create_app():
     # =========================
     CORS(
         app,
-        resources={r"/*": {"origins": "http://localhost:4200"}},
+        resources={r"/*": {
+            "origins": [
+                "http://localhost:4200",
+                "https://modale.shop",
+                "https://www.modale.shop"
+            ]
+        }},
         supports_credentials=True,
         allow_headers=["Content-Type", "Authorization"],
         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     )
+
 
     # =========================
     # 🔴 FIX DEFINITIVO PARA JWT + OPTIONS
@@ -66,11 +73,20 @@ def create_app():
     def handle_preflight():
         if request.method == "OPTIONS":
             response = app.make_response("")
-            response.headers["Access-Control-Allow-Origin"] = "http://localhost:4200"
+            origin = request.headers.get("Origin")
+
+            if origin in [
+                "http://localhost:4200",
+                "https://modale.shop",
+                "https://www.modale.shop"
+            ]:
+                response.headers["Access-Control-Allow-Origin"] = origin
+
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
             response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
             response.headers["Access-Control-Allow-Credentials"] = "true"
             return response
+
 
     # =========================
     # INIT DB + ADMIN
