@@ -92,8 +92,8 @@ def create_app():
                 print("ℹ️ Aún no hay tablas (falta migración). Saltando creación de admin.")
             else:
                 # Valores por defecto del administrador
-                admin_email = os.getenv("ADMIN_EMAIL", "Admin")
-                admin_password = os.getenv("ADMIN_PASSWORD", "Admin123")
+                admin_email = os.getenv("ADMIN_EMAIL", "admin@admin.com")
+                admin_password = os.getenv("ADMIN_PASSWORD", "admin123")
 
                 if not User.query.filter_by(email=admin_email).first():
                     admin = User(
