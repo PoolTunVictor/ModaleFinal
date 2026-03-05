@@ -1,8 +1,9 @@
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api
-from sqlalchemy import text
 from werkzeug.security import generate_password_hash
+from sqlalchemy import inspect
+import os
 
 from app.models.user import User
 from app.utils.cloudinary import init_cloudinary
@@ -10,6 +11,12 @@ from .config import Config
 from .extensions import db, migrate, jwt
 from .resources import register_namespaces
 
+
+ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+    "https://modale.shop",
+    "https://www.modale.shop",
+]
 
 def create_app():
     app = Flask(__name__)
@@ -22,7 +29,7 @@ def create_app():
     migrate.init_app(app, db)
     jwt.init_app(app)
 
-    # =======================
+    # =========================
     # CLOUDINARY
     # =========================
     init_cloudinary(app)
@@ -40,73 +47,67 @@ def create_app():
                 "type": "apiKey",
                 "in": "header",
                 "name": "Authorization",
-                "description": 'Bearer <token>'
+                "description": "Bearer <token>",
             }
         },
-        security="Bearer Auth"
+        security="Bearer Auth",
     )
-
     register_namespaces(api)
 
     # =========================
-    # CORS (DESPUÉS DE RESTX)
+    # CORS
     # =========================
     CORS(
         app,
-        resources={r"/*": {
-            "origins": [
-                "http://localhost:4200",
-                "https://modale.shop",
-                "https://www.modale.shop"
-            ]
-        }},
+        resources={r"/*": {"origins": ALLOWED_ORIGINS}},
         supports_credentials=True,
         allow_headers=["Content-Type", "Authorization"],
-        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     )
 
-
     # =========================
-    # 🔴 FIX DEFINITIVO PARA JWT + OPTIONS
+    # PRE-FLIGHT OPTIONS
     # =========================
     @app.before_request
     def handle_preflight():
         if request.method == "OPTIONS":
             response = app.make_response("")
             origin = request.headers.get("Origin")
-
-            if origin in [
-                "http://localhost:4200",
-                "https://modale.shop",
-                "https://www.modale.shop"
-            ]:
+            if origin in ALLOWED_ORIGINS:
                 response.headers["Access-Control-Allow-Origin"] = origin
-
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
             response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
             response.headers["Access-Control-Allow-Credentials"] = "true"
             return response
 
-
     # =========================
-    # INIT DB + ADMIN
+    # INIT ADMIN (SOLO SI YA HAY TABLAS)
     # =========================
     with app.app_context():
         try:
-            db.session.execute(text("SELECT 1 FROM users LIMIT 1"))
-        except Exception:
-            print("⚠️ Tablas no existen, creando automáticamente...")
-            db.create_all()
+            inspector = inspect(db.engine)
+            tables = set(inspector.get_table_names())
+            if "users" not in tables:
+                print("ℹ️ Aún no hay tablas (falta migración). Saltando creación de admin.")
+            else:
+                admin_email = os.getenv("ADMIN_EMAIL", "admin@admin.com")
+                admin_password = os.getenv("ADMIN_PASSWORD")  # recomienda ponerlo en Render
 
-        if not User.query.filter_by(email="admin@admin.com").first():
-            admin = User(
-                email="admin@admin.com",
-                phone="0000000000",
-                password=generate_password_hash("admin123"),
-                role="admin"
-            )
-            db.session.add(admin)
-            db.session.commit()
-            print("✅ Usuario admin creado")
+                if admin_password:
+                    if not User.query.filter_by(email=admin_email).first():
+                        admin = User(
+                            email=admin_email,
+                            phone="0000000000",
+                            password=generate_password_hash(admin_password),
+                            role="admin",
+                        )
+                        db.session.add(admin)
+                        db.session.commit()
+                        print("✅ Usuario admin creado")
+                else:
+                    print("ℹ️ ADMIN_PASSWORD no definido; no se crea admin automáticamente.")
+        except Exception as e:
+            db.session.rollback()
+            print("❌ Error en init admin:", e)
 
     return app
