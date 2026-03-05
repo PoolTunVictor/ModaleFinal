@@ -87,25 +87,27 @@ def create_app():
         try:
             inspector = inspect(db.engine)
             tables = set(inspector.get_table_names())
+
             if "users" not in tables:
                 print("ℹ️ Aún no hay tablas (falta migración). Saltando creación de admin.")
             else:
-                admin_email = os.getenv("ADMIN_EMAIL", "admin@admin.com")
-                admin_password = os.getenv("ADMIN_PASSWORD")  # recomienda ponerlo en Render
+                # Valores por defecto del administrador
+                admin_email = os.getenv("ADMIN_EMAIL", "Admin")
+                admin_password = os.getenv("ADMIN_PASSWORD", "Admin123")
 
-                if admin_password:
-                    if not User.query.filter_by(email=admin_email).first():
-                        admin = User(
-                            email=admin_email,
-                            phone="0000000000",
-                            password=generate_password_hash(admin_password),
-                            role="admin",
-                        )
-                        db.session.add(admin)
-                        db.session.commit()
-                        print("✅ Usuario admin creado")
+                if not User.query.filter_by(email=admin_email).first():
+                    admin = User(
+                        email=admin_email,
+                        phone="0000000000",
+                        password=generate_password_hash(admin_password),
+                        role="admin",
+                    )
+                    db.session.add(admin)
+                    db.session.commit()
+                    print("✅ Usuario admin creado")
                 else:
-                    print("ℹ️ ADMIN_PASSWORD no definido; no se crea admin automáticamente.")
+                    print("ℹ️ El usuario admin ya existe")
+
         except Exception as e:
             db.session.rollback()
             print("❌ Error en init admin:", e)
