@@ -14,8 +14,8 @@ from .resources import register_namespaces
 
 ALLOWED_ORIGINS = [
     "http://localhost:4200",
-    "https://modale.shop",
-    "https://www.modale.shop",
+    "https://modale.click",
+    "https://www.modale.click",
 ]
 
 def create_app():
